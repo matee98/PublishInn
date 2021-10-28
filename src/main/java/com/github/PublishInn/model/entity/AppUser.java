@@ -1,5 +1,6 @@
 package com.github.PublishInn.model.entity;
 
+import com.github.PublishInn.model.entity.token.ConfirmationToken;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,27 +20,31 @@ import java.util.Collections;
 @Entity
 public class AppUser implements UserDetails {
 
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     private Long id;
-    private String name;
     private String username;
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
-    private boolean locked;
-    private boolean enabled;
+    private boolean locked = false;
+    private boolean enabled = false;
 
-    public AppUser(String name, String username, String email, String password,
-                   AppUserRole appUserRole, boolean locked, boolean enabled) {
-        this.name = name;
+    public AppUser(String username, String email, String password,
+                   AppUserRole appUserRole) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
-        this.locked = locked;
-        this.enabled = enabled;
     }
 
     @Override
