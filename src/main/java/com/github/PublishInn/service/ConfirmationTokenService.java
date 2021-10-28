@@ -5,6 +5,9 @@ import com.github.PublishInn.model.repository.ConfirmationTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 public class ConfirmationTokenService {
@@ -13,5 +16,17 @@ public class ConfirmationTokenService {
 
     public void saveConfirmationToken(ConfirmationToken token) {
         confirmationTokenRepository.save(token);
+    }
+
+    public Optional<ConfirmationToken> getToken(String token) {
+        return confirmationTokenRepository.findByToken(token);
+    }
+
+    public void setConfirmedAtToken(String token) {
+        Optional<ConfirmationToken> confirmationToken = confirmationTokenRepository.findByToken(token);
+        confirmationToken.ifPresent(tok -> {
+            tok.setConfirmedAt(LocalDateTime.now());
+            confirmationTokenRepository.save(tok);
+        });
     }
 }

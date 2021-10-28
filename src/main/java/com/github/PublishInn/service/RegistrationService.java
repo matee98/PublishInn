@@ -3,18 +3,26 @@ package com.github.PublishInn.service;
 import com.github.PublishInn.dto.UserRegisterDto;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.AppUserRole;
+import com.github.PublishInn.model.entity.token.ConfirmationToken;
 import com.github.PublishInn.validation.EmailValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
 public class RegistrationService {
 
     private static final String EMAIL_NOT_VALID = "Email not valid";
+    private static final String TOKEN_NOT_FOUND_MSG = "Token not found";
+    private static final String EMAIL_ALREADY_CONFIRMED_MSG = "Email has been already confirmed";
+    private static final String TOKEN_EXPIRED_MSG = "Token has been expired already";
 
     private final EmailValidator emailValidator;
     private final AppUserService appUserService;
+    private final ConfirmationTokenService confirmationTokenService;
 
     public String register(UserRegisterDto model) {
         boolean isEmailValid = emailValidator.test(model.getEmail());
@@ -29,5 +37,25 @@ public class RegistrationService {
                         AppUserRole.USER
                 )
         );
+    }
+
+    @Transactional
+    public String confirmToken(String token) {
+        ConfirmationToken confirmationToken = confirmationTokenService
+                .getToken(token)
+                .orElseThrow(() ->
+                        new IllegalStateException(TOKEN_NOT_FOUND_MSG));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException(EMAIL_ALREADY_CONFIRMED_MSG);
+        }
+
+        if (LocalDateTime.now().isAfter(confirmationToken.getExpiresAt())) {
+            throw new IllegalStateException(TOKEN_EXPIRED_MSG);
+        }
+
+        confirmationTokenService.setConfirmedAtToken(token);
+        appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
+        return "confirmed";
     }
 }
