@@ -29,7 +29,7 @@ public class EmailService implements EmailSender{
             helper.setText(emailContent, true);
             helper.setTo(to);
             helper.setSubject(emailSubject);
-            helper.setFrom("publishinn@p.lodz.pl");
+            helper.setFrom("publishinn2021@gmail.com");
             mailSender.send(mimeMessage);
         }
         catch (MessagingException e) {
