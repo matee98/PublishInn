@@ -16,7 +16,7 @@ import javax.mail.internet.MimeMessage;
 public class EmailService implements EmailSender{
 
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
-    private final static String ERROR_WHILE_SENDING_EMAIL_MSG = "Failed to sen email";
+    private final static String ERROR_WHILE_SENDING_EMAIL_MSG = "Failed to send email";
 
     private final JavaMailSender mailSender;
 

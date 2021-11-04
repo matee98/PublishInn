@@ -42,12 +42,12 @@ public class RegistrationService {
                         AppUserRole.USER
                 )
         );
-        emailSender.send(
-                model.getEmail(),
-                EmailBuilder.buildEmail(
-                        model.getUsername(),
-                        CONFIRMATION_LINK + token),
-                "Email confirmation");
+//        emailSender.send(
+//                model.getEmail(),
+//                EmailBuilder.buildEmail(
+//                        model.getUsername(),
+//                        CONFIRMATION_LINK + token),
+//                "Email confirmation");
 
         return token;
     }

@@ -1,6 +1,7 @@
 package com.github.PublishInn.service;
 
 import com.github.PublishInn.model.entity.AppUser;
+import com.github.PublishInn.model.entity.AppUserRole;
 import com.github.PublishInn.model.entity.token.ConfirmationToken;
 import com.github.PublishInn.model.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +35,10 @@ public class AppUserService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 String.format(USER_NOT_FOUND_MSG, username)));
+    }
+
+    public List<AppUser> findAllUsers() {
+        return userRepository.findAll();
     }
 
     public String signUpUser(AppUser appUser) {
@@ -64,5 +70,16 @@ public class AppUserService implements UserDetailsService {
             user.setEnabled(true);
             userRepository.save(user);
         });
+    }
+
+    public void grantRoleToAppUser(Long userId, String role) {
+        Optional<AppUser> user = userRepository.findById(userId);
+        user.ifPresentOrElse(appUser -> {
+            appUser.setAppUserRole(AppUserRole.valueOf(role));
+            userRepository.save(appUser);
+        },
+                () -> {
+            throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
+                });
     }
 }
