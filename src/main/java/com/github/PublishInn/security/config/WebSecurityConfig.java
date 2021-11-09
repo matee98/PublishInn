@@ -2,6 +2,7 @@ package com.github.PublishInn.security.config;
 
 import com.github.PublishInn.security.filter.CustomAuthenticationFilter;
 import com.github.PublishInn.security.filter.CustomAuthorizationFilter;
+import com.github.PublishInn.security.provider.JWTTokenProvider;
 import com.github.PublishInn.service.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +25,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AppUserService appUserService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JWTTokenProvider tokenProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), tokenProvider);
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http
                 .csrf().disable();
@@ -41,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .addFilter(customAuthenticationFilter);
         http
-                .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new CustomAuthorizationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
