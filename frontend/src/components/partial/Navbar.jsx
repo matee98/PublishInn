@@ -38,8 +38,12 @@ class NavigationBar extends Component {
                             <Button variant="outline-success">Szukaj</Button>
                         </Form>
                         <div>
-                            <Button variant="outline-success">Zaloguj</Button>
-                            <Button variant="outline-success">Zarejestruj</Button>
+                            <Nav.Link href="/login" className="d-inline-block p-1">
+                                <Button variant="outline-success">Zaloguj</Button>
+                            </Nav.Link>
+                            <Nav.Link href="/signUp" className="d-inline-block p-1">
+                                <Button variant="outline-success">Zarejestruj</Button>
+                            </Nav.Link>
                         </div>
                     </Navbar.Collapse>
                 </Container>
