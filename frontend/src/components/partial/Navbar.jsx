@@ -27,21 +27,21 @@ class NavigationBar extends Component {
                             <Nav.Link href="#" disabled>
                                 Link
                             </Nav.Link>
+                            <Form className="d-flex mx-3">
+                                <FormControl
+                                    type="search"
+                                    placeholder="Szukaj..."
+                                    className="me-2"
+                                    aria-label="Search"
+                                />
+                                <Button variant="outline-success">Szukaj</Button>
+                            </Form>
                         </Nav>
-                        <Form className="d-flex me-auto">
-                            <FormControl
-                                type="search"
-                                placeholder="Szukaj..."
-                                className="me-2"
-                                aria-label="Search"
-                            />
-                            <Button variant="outline-success">Szukaj</Button>
-                        </Form>
                         <div>
                             <Nav.Link href="/login" className="d-inline-block p-1">
                                 <Button variant="outline-success">Zaloguj</Button>
                             </Nav.Link>
-                            <Nav.Link href="/signUp" className="d-inline-block p-1">
+                            <Nav.Link href="/register" className="d-inline-block p-1">
                                 <Button variant="outline-success">Zarejestruj</Button>
                             </Nav.Link>
                         </div>
