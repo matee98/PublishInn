@@ -1,5 +1,6 @@
 import {useState} from "react";
-import {Button, Form} from "react-bootstrap";
+import {Button, Form, Nav} from "react-bootstrap";
+import axios from 'axios';
 import "./Login.css"
 
 function Login() {
@@ -8,6 +9,25 @@ function Login() {
 
     function handleSubmit(event) {
         event.preventDefault();
+
+        const params = new URLSearchParams()
+        params.append('username', username)
+        params.append('password', password)
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }
+
+        axios.post('login', params, config)
+            .then(r => {
+                localStorage.setItem('token', r.data.access_token);
+                localStorage.setItem('refreshToken', r.data.refresh_token);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     function validateForm() {
@@ -29,7 +49,6 @@ function Login() {
                 <Form.Group size="lg" controlId="password">
                     <Form.Label>Hasło</Form.Label>
                     <Form.Control
-                        autoFocus
                         type="password"
                         value={password}
                         onChange={(event => setPassword(event.target.value))}
@@ -38,6 +57,10 @@ function Login() {
                 <Button block size="lg" type="submit" disabled={!validateForm()}>
                     Zaloguj
                 </Button>
+                <p>
+                    Nie masz konta?
+                    <Nav.Link href="/register" className="d-inline-block">Zarejestruj się</Nav.Link>
+                </p>
             </Form>
         </div>
     )

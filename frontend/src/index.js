@@ -4,6 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router} from 'react-router-dom';
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:8080/api/";
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
 
 ReactDOM.render(
   <React.StrictMode>
