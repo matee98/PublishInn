@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/users")
 @AllArgsConstructor
+@RequestMapping("api/users")
 public class UserController {
     private final AppUserService userService;
 

@@ -1,6 +1,5 @@
 package com.github.PublishInn.service;
 
-import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.security.provider.JWTTokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

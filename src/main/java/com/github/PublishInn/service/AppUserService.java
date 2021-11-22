@@ -1,10 +1,13 @@
 package com.github.PublishInn.service;
 
+import com.github.PublishInn.dto.UserInfoDto;
+import com.github.PublishInn.dto.mappers.AppUserMapper;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.AppUserRole;
 import com.github.PublishInn.model.entity.token.ConfirmationToken;
 import com.github.PublishInn.model.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +38,15 @@ public class AppUserService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 String.format(USER_NOT_FOUND_MSG, username)));
+    }
+
+    public UserInfoDto getUserAccountInfo(String username) {
+        Optional<AppUser> user = userRepository.findByUsername(username);
+        AppUserMapper mapper = Mappers.getMapper(AppUserMapper.class);
+        return mapper.toUserInfoDto(user.orElseThrow( () ->
+                new UsernameNotFoundException(
+                        String.format(USER_NOT_FOUND_MSG, username)
+                )));
     }
 
     public List<AppUser> findAllUsers() {
