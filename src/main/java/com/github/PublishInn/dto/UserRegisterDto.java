@@ -1,17 +1,16 @@
 package com.github.PublishInn.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class UserRegisterDto {
-    private final String username;
-    private final String email;
-    private final String password;
+    private String username;
+    private String email;
+    private String password;
 
 }

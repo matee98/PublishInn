@@ -1,13 +1,20 @@
 import {useState} from "react";
-import {Button, Form, Nav} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 import axios from 'axios';
 import "./Login.css"
+import {Link, useHistory} from "react-router-dom";
+import jwt from 'jwt-decode';
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const history = useHistory();
 
-    function handleSubmit(event) {
+    const handleRefresh = () => {
+        window.location.reload();
+    }
+
+    async function handleSubmit(event) {
         event.preventDefault();
 
         const params = new URLSearchParams()
@@ -20,10 +27,15 @@ function Login() {
             }
         }
 
-        axios.post('login', params, config)
-            .then(r => {
-                localStorage.setItem('token', r.data.access_token);
-                localStorage.setItem('refreshToken', r.data.refresh_token);
+        await axios.post('login', params, config)
+            .then((res) => {
+                localStorage.setItem('token', res.data.access_token)
+                localStorage.setItem('refreshToken', res.data.refresh_token)
+                const user = jwt(res.data.access_token)
+                localStorage.setItem('username', user.sub)
+                localStorage.setItem('userRole', user.roles[0])
+                handleRefresh();
+                history.push("/");
             })
             .catch(err => {
                 console.log(err);
@@ -59,7 +71,7 @@ function Login() {
                 </Button>
                 <p>
                     Nie masz konta?
-                    <Nav.Link href="/register" className="d-inline-block">Zarejestruj się</Nav.Link>
+                    <Link to="/register" className="d-inline-block mx-1">Zarejestruj się</Link>
                 </p>
             </Form>
         </div>

@@ -2,15 +2,27 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.content {
+  width: 80%;
+  background-color: white;
+  min-height: 88vh;
+  margin: auto;
+  border-radius: 20px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.footer {
+  background-color: wheat;
+  border-top:2px solid saddlebrown;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  font-size: 25px;
 }
 
 .App-header {

@@ -1,15 +1,31 @@
 import {useState} from "react";
 import {Button, Form} from "react-bootstrap";
 import "./SignUp.css"
+import axios from "axios";
+import {Redirect} from "react-router-dom";
 
 export default function SignUp() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [repeatedPassword, setRepeatedPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [registered, setRegistered] = useState(false);
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
+
+        await axios.post('registration', {
+            username,
+            email,
+            password
+        })
+            .then(() => {
+                alert("Konto zostało zarejestrowane")
+                setRegistered(true);
+            })
+            .catch(err => {
+                alert(err.message)
+            })
     }
 
     function validateForm() {
@@ -17,6 +33,10 @@ export default function SignUp() {
             && password.length > 0
             && password === repeatedPassword
             && email.length > 0;
+    }
+
+    if(registered) {
+        return <Redirect to="/login"/>
     }
 
     return (

@@ -1,8 +1,45 @@
 import {Component} from "react";
 import {Button, Container, Form, FormControl, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 class NavigationBar extends Component {
+
+    handleRefresh = () => {
+        window.location.reload();
+    }
+
+    handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('userRole');
+        this.handleRefresh();
+    }
+
     render() {
+        let authPanel;
+        if (localStorage.getItem('username')) {
+            authPanel =
+            <div>
+                <Link to="/account/info" className="d-inline-block p-1">
+                    <Button variant="outline-success">Moje konto</Button>
+                </Link>
+                <Link to="/" className="d-inline-block p-1">
+                    <Button variant="outline-success" onClick={this.handleLogout}>Wyloguj</Button>
+                </Link>
+            </div>
+        } else {
+            authPanel =
+        <div>
+            <Link to="/login" className="d-inline-block p-1">
+                <Button variant="outline-success">Zaloguj</Button>
+            </Link>
+            <Link to="/register" className="d-inline-block p-1">
+                <Button variant="outline-success">Zarejestruj</Button>
+            </Link>
+        </div>
+        }
+
         return(
             <Navbar bg="light" expand="lg">
                 <Container fluid>
@@ -14,7 +51,9 @@ class NavigationBar extends Component {
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
-                            <Nav.Link href="#action1">Home</Nav.Link>
+                            <Nav.Link>
+                                <Link to="/" className="text-decoration-none text-secondary">Home</Link>
+                            </Nav.Link>
                             <Nav.Link href="#action2">Link</Nav.Link>
                             <NavDropdown title="Link" id="navbarScrollingDropdown">
                                 <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
@@ -27,6 +66,11 @@ class NavigationBar extends Component {
                             <Nav.Link href="#" disabled>
                                 Link
                             </Nav.Link>
+                            {localStorage.getItem('userRole') === 'ADMIN' &&
+                            <Nav.Link href="/accounts">
+                            Zarządzaj użytkownikami
+                            </Nav.Link>
+                            }
                             <Form className="d-flex mx-3">
                                 <FormControl
                                     type="search"
@@ -37,14 +81,7 @@ class NavigationBar extends Component {
                                 <Button variant="outline-success">Szukaj</Button>
                             </Form>
                         </Nav>
-                        <div>
-                            <Nav.Link href="/login" className="d-inline-block p-1">
-                                <Button variant="outline-success">Zaloguj</Button>
-                            </Nav.Link>
-                            <Nav.Link href="/register" className="d-inline-block p-1">
-                                <Button variant="outline-success">Zarejestruj</Button>
-                            </Nav.Link>
-                        </div>
+                        {authPanel}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
