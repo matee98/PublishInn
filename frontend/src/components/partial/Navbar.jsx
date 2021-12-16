@@ -1,6 +1,7 @@
 import {Component} from "react";
 import {Button, Container, Form, FormControl, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import logo from '../../assets/logo.png'
 
 class NavigationBar extends Component {
 
@@ -41,9 +42,13 @@ class NavigationBar extends Component {
         }
 
         return(
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="light" expand="lg" className="border-bottom border-secondary">
                 <Container fluid>
-                    <Navbar.Brand href="/">Navbar scroll</Navbar.Brand>
+                    <Navbar.Brand>
+                        <Link to = "/">
+                            <img src={logo} alt="Logo"/>
+                        </Link>
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
                         <Nav

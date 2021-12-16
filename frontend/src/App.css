@@ -24,7 +24,7 @@
 
 .notification-wrapper {
   position: fixed;
-  top: 65px;
+  top: 80px;
   right: 10px;
   width: 300px;
 }
@@ -83,6 +83,11 @@
 .notification-item.error {
   background-color: #d81515;
   color: white;
+}
+
+.bg-light {
+  --bs-bg-opacity: 1;
+  background-color: rgba(229,229,229,255)!important;
 }
 
 .notification-item.success .bar {
