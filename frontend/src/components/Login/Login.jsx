@@ -45,11 +45,19 @@ function Login() {
                 })
             })
             .catch(err => {
-                dispatch({
-                    type: "ERROR",
-                    message: err.message,
-                    title: "Error"
-                });
+                if (err.response) {
+                    dispatch({
+                        type: "ERROR",
+                        message: "Dane logowania są niepoprawne",
+                        title: "Error"
+                    });
+                } else if (err.request) {
+                    dispatch({
+                        type: "ERROR",
+                        message: err.message,
+                        title: "Error"
+                    })
+                }
             })
     }
 
