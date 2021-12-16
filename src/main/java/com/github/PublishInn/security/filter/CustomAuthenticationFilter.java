@@ -1,6 +1,7 @@
 package com.github.PublishInn.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.PublishInn.exceptions.AuthValidationException;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.security.provider.JWTTokenProvider;
 import lombok.AllArgsConstructor;
@@ -51,5 +52,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         tokens.put("refresh_token", refreshToken);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        super.unsuccessfulAuthentication(request, response, AuthValidationException.invalidCredentials());
     }
 }
