@@ -4,11 +4,13 @@ import axios from 'axios';
 import "./Login.css"
 import {Link, useHistory} from "react-router-dom";
 import jwt from 'jwt-decode';
+import {useNotification} from "../partial/Notifications/NotificationProvider";
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const history = useHistory();
+    const dispatch = useNotification();
 
     const handleRefresh = () => {
         window.location.reload();
@@ -36,9 +38,18 @@ function Login() {
                 localStorage.setItem('userRole', user.roles[0])
                 handleRefresh();
                 history.push("/");
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Zalogowano pomyślnie",
+                    title: "Success"
+                })
             })
             .catch(err => {
-                console.log(err);
+                dispatch({
+                    type: "ERROR",
+                    message: err.message,
+                    title: "Error"
+                });
             })
     }
 

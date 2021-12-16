@@ -10,12 +10,6 @@
   border-radius: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .footer {
   background-color: wheat;
   border-top:2px solid saddlebrown;
@@ -26,25 +20,75 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.notification-wrapper {
+  position: fixed;
+  top: 65px;
+  right: 10px;
+  width: 300px;
+}
+
+
+.notification-item {
+  padding: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0, 0.4);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  width: 300px;
+  animation: SlideLeft 0.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes SlideLeft {
+  0% {
+    margin-left: 120%;
+  }
+
+  100% {
+    margin-left: 0;
+  }
+}
+
+@keyframes SlideRight {
+  0% {
+    margin-left: 0;
+  }
+
+  100% {
+    margin-left: 120%;
+  }
+}
+
+.notification-item.exit {
+  animation: SlideRight 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.notification-item p {
+  margin: 0;
+  padding: 10px;
+}
+
+.notification-item .bar {
+  height: 10px;
+}
+
+.notification-item.success {
+  background-color: green;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.notification-item.error {
+  background-color: #d81515;
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.notification-item.success .bar {
+  background-color: white;
+}
+
+.notification-item.error .bar {
+  background-color: white;
 }
