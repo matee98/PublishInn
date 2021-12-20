@@ -19,9 +19,9 @@ public class UserController {
         return userService.findAllUsers();
     }
 
-    @GetMapping("/{id}")
-    public UserInfoDto getUserAccountInfo(@PathVariable Long id) {
-        return userService.getUserAccountInfo(id);
+    @GetMapping("/{username}")
+    public UserInfoDto getUserAccountInfo(@PathVariable String username) {
+        return userService.getUserAccountInfo(username);
     }
 
     @PatchMapping("/grantRole/{id}")

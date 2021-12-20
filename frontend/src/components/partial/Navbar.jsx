@@ -72,8 +72,10 @@ class NavigationBar extends Component {
                                 Link
                             </Nav.Link>
                             {localStorage.getItem('userRole') === 'ADMIN' &&
-                            <Nav.Link href="/accounts">
-                            Zarządzaj użytkownikami
+                            <Nav.Link>
+                                <Link to="/accounts" className="text-decoration-none text-secondary">
+                                    Zarządzaj użytkownikami
+                                </Link>
                             </Nav.Link>
                             }
                             <Form className="d-flex mx-3">

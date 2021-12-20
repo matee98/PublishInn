@@ -6,6 +6,7 @@ import NotFound from "./components/commonPages/NotFound";
 import SignUp from "./components/SignUp/SignUp";
 import AccountInfo from "./components/AccountInfo/AccountInfo";
 import UsersAccountsList from "./components/UsersAccountsList/UsersAccountsList";
+import OtherAccountInfo from "./components/OtherAccountInfo/OtherAccountInfo";
 
 export default class Routes extends Component{
     render() {
@@ -25,6 +26,9 @@ export default class Routes extends Component{
                 </Route>
                 <Route exact path="/accounts">
                     <UsersAccountsList />
+                </Route>
+                <Route path='/users/:username'>
+                    <OtherAccountInfo />
                 </Route>
                 <Route>
                     <NotFound />

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import DataTable from 'react-data-table-component';
 import {Button, Col, Container, Row} from "react-bootstrap";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 function UsersAccountsList(props) {
     const [data, setData] = useState([
@@ -47,7 +48,9 @@ function UsersAccountsList(props) {
             selector: 'details',
             cell: row => {
                 return (
-                    <Button className="btn-sm">Szczegóły</Button>
+                    <Link to={`/users/${row.username}`}>
+                        <Button className="btn-sm">Szczegóły</Button>
+                    </Link>
                 )
             }
         }

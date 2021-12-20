@@ -1,7 +1,9 @@
 import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import axios from "axios";
 
-export default function AccountInfo() {
+export default function OtherAccountInfo() {
+    const { username } = useParams();
     const [data, setData] = useState({
         username: "",
         mailAddress: "",
@@ -11,7 +13,7 @@ export default function AccountInfo() {
     });
 
     useEffect(() => {
-        axios.get("/account/info")
+        axios.get(`/users/${username}`)
             .then((res) => {
                 setData({
                     ...res.data,
