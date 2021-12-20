@@ -1,5 +1,6 @@
 package com.github.PublishInn.controller;
 
+import com.github.PublishInn.dto.UserInfoDto;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.service.AppUserService;
 import lombok.AllArgsConstructor;
@@ -14,8 +15,13 @@ public class UserController {
     private final AppUserService userService;
 
     @GetMapping
-    public List<AppUser> findAllUsers() {
+    public List<UserInfoDto> findAllUsers() {
         return userService.findAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public UserInfoDto getUserAccountInfo(@PathVariable Long id) {
+        return userService.getUserAccountInfo(id);
     }
 
     @PatchMapping("/grantRole/{id}")

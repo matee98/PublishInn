@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -49,8 +50,22 @@ public class AppUserService implements UserDetailsService {
                 )));
     }
 
-    public List<AppUser> findAllUsers() {
-        return userRepository.findAll();
+    public UserInfoDto getUserAccountInfo(Long id) {
+        Optional<AppUser> user = userRepository.findById(id);
+        AppUserMapper mapper = Mappers.getMapper(AppUserMapper.class);
+        return mapper.toUserInfoDto(user.orElseThrow( () ->
+                new UsernameNotFoundException(
+                        String.format(USER_NOT_FOUND_MSG, id)
+                )));
+    }
+
+    public List<UserInfoDto> findAllUsers() {
+        List<AppUser> users = userRepository.findAll();
+        AppUserMapper mapper = Mappers.getMapper(AppUserMapper.class);
+        return users
+                .stream()
+                .map(mapper::toUserInfoDto)
+                .collect(Collectors.toList());
     }
 
     public String signUpUser(AppUser appUser) {
