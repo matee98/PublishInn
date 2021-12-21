@@ -109,4 +109,26 @@ public class AppUserService implements UserDetailsService {
             throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
                 });
     }
+
+    public void blockUser(String username) {
+        Optional<AppUser> user = userRepository.findByUsername(username);
+        user.ifPresentOrElse(appUser -> {
+            appUser.setLocked(true);
+            userRepository.save(appUser);
+        },
+                () -> {
+                    throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
+                });
+    }
+
+    public void unblockUser(String username) {
+        Optional<AppUser> user = userRepository.findByUsername(username);
+        user.ifPresentOrElse(appUser -> {
+                    appUser.setLocked(false);
+                    userRepository.save(appUser);
+                },
+                () -> {
+                    throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
+                });
+    }
 }

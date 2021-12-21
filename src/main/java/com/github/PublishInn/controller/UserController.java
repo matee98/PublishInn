@@ -28,4 +28,14 @@ public class UserController {
     public void grantRoleToUser(@PathVariable Long id, @RequestBody String role) {
         userService.grantRoleToAppUser(id, role);
     }
+
+    @PatchMapping("/block/{username}")
+    public void blockUser(@PathVariable String username) {
+        userService.blockUser(username);
+    }
+
+    @PatchMapping("/unblock/{username}")
+    public void unblockUser(@PathVariable String username) {
+        userService.unblockUser(username);
+    }
 }

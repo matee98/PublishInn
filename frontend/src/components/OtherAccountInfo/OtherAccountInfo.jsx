@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import axios from "axios";
+import {useNotification} from "../partial/Notifications/NotificationProvider";
 
 export default function OtherAccountInfo() {
     const { username } = useParams();
@@ -11,8 +12,13 @@ export default function OtherAccountInfo() {
         enabled: false,
         locked: false
     });
+    const dispatch = useNotification();
 
     useEffect(() => {
+        fetchData()
+    }, [])
+
+    const fetchData = () => {
         axios.get(`/users/${username}`)
             .then((res) => {
                 setData({
@@ -21,7 +27,29 @@ export default function OtherAccountInfo() {
                     userRole: res.data.appUserRole,
                 });
             })
-    }, [])
+    }
+
+    const lockUser = () => {
+        axios.patch(`/users/block/${username}`)
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Konto zostało zablokowane",
+                    title: "Success"
+                })
+            })
+    }
+
+    const unlockUser = () => {
+        axios.patch(`/users/unblock/${username}`)
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Konto zostało odblokowane",
+                    title: "Success"
+                })
+            })
+    }
 
     return(
         <div className="container-fluid">
@@ -48,7 +76,12 @@ export default function OtherAccountInfo() {
                             <button className="btn btn-primary profile-button" type="button">Edytuj profil</button>
                         </Link>
                     </div>
-                    <div className="mt-2 float-start"><button className="btn btn-primary profile-button" type="button">Zablokuj użytkownika</button></div>
+                    <div className="mt-2 float-start">
+                        {data.locked ?
+                            <button className="btn btn-primary profile-button" type="button" onClick={unlockUser}>Odblokuj użytkownika</button>
+                        :
+                            <button className="btn btn-primary profile-button" type="button" onClick={lockUser}>Zablokuj użytkownika</button>}
+                    </div>
                 </div>
             </div>
         </div>
