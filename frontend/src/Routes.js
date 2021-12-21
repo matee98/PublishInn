@@ -7,6 +7,7 @@ import SignUp from "./components/SignUp/SignUp";
 import AccountInfo from "./components/AccountInfo/AccountInfo";
 import UsersAccountsList from "./components/UsersAccountsList/UsersAccountsList";
 import OtherAccountInfo from "./components/OtherAccountInfo/OtherAccountInfo";
+import EditAccount from "./components/EditAccount/EditAccount";
 
 export default class Routes extends Component{
     render() {
@@ -27,8 +28,11 @@ export default class Routes extends Component{
                 <Route exact path="/accounts">
                     <UsersAccountsList />
                 </Route>
-                <Route path='/users/:username'>
+                <Route path='/users/info/:username'>
                     <OtherAccountInfo />
+                </Route>
+                <Route path='/users/edit/:username'>
+                    <EditAccount />
                 </Route>
                 <Route>
                     <NotFound />

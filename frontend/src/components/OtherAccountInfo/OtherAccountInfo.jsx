@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 
 export default function OtherAccountInfo() {
@@ -24,7 +24,7 @@ export default function OtherAccountInfo() {
     }, [])
 
     return(
-        <div className="container rounded bg-white mt-5 mb-5">
+        <div className="container-fluid">
             <div className="row">
                 <div className="col-md-3 border-right">
                     <div className="d-flex flex-column align-items-center text-center p-3 py-5"><img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" /><span class="font-weight-bold">{data.username}</span><span> </span></div>
@@ -40,8 +40,15 @@ export default function OtherAccountInfo() {
                             <div className="flex-md-row-reverse"><label className="labels float-start">Konto potwierdzone</label><label className="labels float-end">{data.enabled ? "TAK" : "NIE"}</label></div>
                             <div className="flex-md-row-reverse"><label className="labels float-start">Konto zablokowane</label><label className="labels float-end">{data.locked ? "TAK" : "NIE"}</label></div>
                         </div>
-                        <div className="mt-5 text-center"><button className="btn btn-primary profile-button" type="button">Edytuj profil</button></div>
                     </div>
+                </div>
+                <div className="col-md-2 border-right">
+                    <div className="mt-5 float-start">
+                        <Link to={`/users/edit/${username}`}>
+                            <button className="btn btn-primary profile-button" type="button">Edytuj profil</button>
+                        </Link>
+                    </div>
+                    <div className="mt-2 float-start"><button className="btn btn-primary profile-button" type="button">Zablokuj użytkownika</button></div>
                 </div>
             </div>
         </div>

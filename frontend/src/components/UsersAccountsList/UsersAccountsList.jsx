@@ -4,11 +4,12 @@ import {Button, Col, Container, Row} from "react-bootstrap";
 import axios from "axios";
 import {Link} from "react-router-dom";
 
-function UsersAccountsList(props) {
+function UsersAccountsList() {
     const [data, setData] = useState([
         {
             username: "",
             email: "",
+            appUserRole: "",
             enabled: true,
             locked: false
         }
@@ -23,6 +24,11 @@ function UsersAccountsList(props) {
         {
             name: 'E-mail',
             selector: 'email',
+            sortable: true,
+        },
+        {
+            name: 'Rola użytkownika',
+            selector: 'appUserRole',
             sortable: true,
         },
         {
@@ -48,7 +54,7 @@ function UsersAccountsList(props) {
             selector: 'details',
             cell: row => {
                 return (
-                    <Link to={`/users/${row.username}`}>
+                    <Link to={`/users/info/${row.username}`}>
                         <Button className="btn-sm">Szczegóły</Button>
                     </Link>
                 )
