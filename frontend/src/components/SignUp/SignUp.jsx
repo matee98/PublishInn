@@ -3,6 +3,7 @@ import {Button, Form} from "react-bootstrap";
 import "./SignUp.css"
 import axios from "axios";
 import {Redirect} from "react-router-dom";
+import {useNotification} from "../partial/Notifications/NotificationProvider";
 
 export default function SignUp() {
     const [username, setUsername] = useState("");
@@ -10,21 +11,34 @@ export default function SignUp() {
     const [repeatedPassword, setRepeatedPassword] = useState("");
     const [email, setEmail] = useState("");
     const [registered, setRegistered] = useState(false);
+    const dispatch = useNotification();
+
+    const instance = axios.create();
+    delete instance.defaults.headers.common["Authorization"];
 
     async function handleSubmit(event) {
         event.preventDefault();
 
-        await axios.post('registration', {
-            username,
-            email,
-            password
+        await instance.post('registration/',
+            {
+                username,
+                email,
+                password
         })
             .then(() => {
-                alert("Konto zostało zarejestrowane")
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Konto zostało zarejestrowane. Sprawdź swoją pocztę.",
+                    title: "Success"
+                })
                 setRegistered(true);
             })
             .catch(err => {
-                alert(err.message)
+                dispatch({
+                    type: "ERROR",
+                    message: err.message,
+                    title: "Error"
+                })
             })
     }
 
