@@ -1,5 +1,6 @@
 package com.github.PublishInn.service;
 
+import com.github.PublishInn.dto.UserDetailsEditDto;
 import com.github.PublishInn.dto.UserInfoDto;
 import com.github.PublishInn.dto.mappers.AppUserMapper;
 import com.github.PublishInn.model.entity.AppUser;
@@ -99,8 +100,8 @@ public class AppUserService implements UserDetailsService {
         });
     }
 
-    public void grantRoleToAppUser(Long userId, String role) {
-        Optional<AppUser> user = userRepository.findById(userId);
+    public void grantRoleToAppUser(String username, String role) {
+        Optional<AppUser> user = userRepository.findByUsername(username);
         user.ifPresentOrElse(appUser -> {
             appUser.setAppUserRole(AppUserRole.valueOf(role));
             userRepository.save(appUser);
@@ -125,6 +126,18 @@ public class AppUserService implements UserDetailsService {
         Optional<AppUser> user = userRepository.findByUsername(username);
         user.ifPresentOrElse(appUser -> {
                     appUser.setLocked(false);
+                    userRepository.save(appUser);
+                },
+                () -> {
+                    throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
+                });
+    }
+
+    public void editUserAccountDetails(String username, UserDetailsEditDto model) {
+        Optional<AppUser> user = userRepository.findByUsername(username);
+        user.ifPresentOrElse(appUser -> {
+                    appUser.setEmail(model.getMailAddress());
+                    appUser.setAppUserRole(AppUserRole.valueOf(model.getUserRole()));
                     userRepository.save(appUser);
                 },
                 () -> {

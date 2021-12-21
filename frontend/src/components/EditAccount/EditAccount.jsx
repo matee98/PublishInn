@@ -2,25 +2,43 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {AppRoles} from "../helpers/AppRoles";
+import {useNotification} from "../partial/Notifications/NotificationProvider";
 
 export default function EditAccount() {
     const { username } = useParams();
     const [data, setData] = useState({
-        username: "",
         mailAddress: "",
         userRole: ""
     });
+    const dispatch = useNotification();
 
     useEffect(() => {
         axios.get(`/users/${username}`)
             .then((res) => {
                 setData({
-                    ...res.data,
                     mailAddress: res.data.email,
                     userRole: res.data.appUserRole,
                 });
             })
     }, [])
+
+    const saveChanges = () => {
+        axios.put(`/users/edit/${username}`, data)
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Zmiany zostały zapisane",
+                    title: "Success"
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type: "ERROR",
+                    message: err.message,
+                    title: "Error"
+                })
+            })
+    }
 
 
     return(
@@ -37,16 +55,19 @@ export default function EditAccount() {
                         <div className="row mt-3">
                             <div className="flex-md-row-reverse">
                                 <label className="labels float-start">Adres e-mail</label>
-                                <input type="email" id="userMail" value={data.mailAddress} className="form-control" />
+                                <input type="email" id="userMail" value={data.mailAddress}
+                                       onChange={(event => setData({...data, mailAddress: event.target.value}))}
+                                       className="form-control" />
                             </div>
                             <div className="flex-md-row-reverse">
                                 <label className="labels float-start">Rola użytkownika</label>
-                                <select className="form-select" value={data.userRole}>
+                                <select className="form-select" value={data.userRole}
+                                onChange={(event => setData({...data, userRole: event.target.value}))}>
                                     <option value="ADMIN">{AppRoles[0]}</option>
                                     <option value="MODERATOR">{AppRoles[1]}</option>
                                     <option value="USER">{AppRoles[2]}</option>
                                 </select>
-                                <button className="btn btn-primary profile-button mt-2" type="button">Zapisz</button>
+                                <button className="btn btn-primary profile-button mt-2" type="button" onClick={saveChanges}>Zapisz</button>
                             </div>
                         </div>
                     </div>
