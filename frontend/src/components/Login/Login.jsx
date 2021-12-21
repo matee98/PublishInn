@@ -48,7 +48,7 @@ function Login() {
                 if (err.response) {
                     dispatch({
                         type: "ERROR",
-                        message: "Dane logowania są niepoprawne",
+                        message: "Dane logowania są niepoprawne lub konto nie jest aktywne",
                         title: "Error"
                     });
                 } else if (err.request) {

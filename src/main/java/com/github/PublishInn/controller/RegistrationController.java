@@ -16,6 +16,7 @@ public class RegistrationController {
     public String register(@RequestBody UserRegisterDto model) {
         return registrationService.register(model);
     }
+    //todo: return information about existing username or email
 
     @GetMapping("/confirm")
     public String confirm(@RequestParam("token") String token) {
