@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
+import {useDialogPermanentChange} from "../partial/CriticalOperations/CriticalOperationsProvider";
 
 export default function OtherAccountInfo() {
     const { username } = useParams();
@@ -13,6 +14,7 @@ export default function OtherAccountInfo() {
         locked: false
     });
     const dispatch = useNotification();
+    const dispatchDialog = useDialogPermanentChange();
 
     useEffect(() => {
         fetchData()
@@ -80,7 +82,13 @@ export default function OtherAccountInfo() {
                         {data.locked ?
                             <button className="btn btn-primary profile-button" type="button" onClick={unlockUser}>Odblokuj użytkownika</button>
                         :
-                            <button className="btn btn-primary profile-button" type="button" onClick={lockUser}>Zablokuj użytkownika</button>}
+                            <button className="btn btn-primary profile-button" type="button" onClick={() => {
+                                dispatchDialog({
+                                    callbackOnSave:() => {
+                                        lockUser()
+                                    }
+                                })
+                            }}>Zablokuj użytkownika</button>}
                     </div>
                 </div>
             </div>
