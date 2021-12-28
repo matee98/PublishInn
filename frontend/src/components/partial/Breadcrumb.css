@@ -1,0 +1,8 @@
+.breadcrumb-item-nonactive{
+    color: #e57337;
+    text-decoration: none;
+}
+
+.breadcrumb-item-nonactive:hover {
+    color: #e57337;
+}

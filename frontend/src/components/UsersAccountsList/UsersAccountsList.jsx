@@ -3,6 +3,7 @@ import DataTable from 'react-data-table-component';
 import {Button, Col, Container, Row} from "react-bootstrap";
 import axios from "axios";
 import {Link} from "react-router-dom";
+import BreadCrumb from "../partial/Breadcrumb";
 
 function UsersAccountsList() {
     const [data, setData] = useState([
@@ -76,6 +77,10 @@ function UsersAccountsList() {
 
     return (
         <div className="container-fluid">
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item active">Lista użytkowników</li>
+            </BreadCrumb>
             <Container>
                 <Row>
                     <Col xs={12} sm={12} md={12} lg={12} xl={12} className={"floating-no-absolute py-4 mx-auto mb-2"}>
