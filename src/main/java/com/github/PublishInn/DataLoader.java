@@ -1,7 +1,7 @@
 package com.github.PublishInn;
 
 import com.github.PublishInn.model.entity.AppUser;
-import com.github.PublishInn.model.entity.AppUserRole;
+import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;

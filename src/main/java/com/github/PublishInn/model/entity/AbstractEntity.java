@@ -12,10 +12,11 @@ import java.time.LocalDateTime;
 public abstract class AbstractEntity {
 
     @Getter
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_on", nullable = false, updatable = false)
     private LocalDateTime createdOn;
 
     @Getter
+    @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
 
     @OneToOne

@@ -1,6 +1,5 @@
 package com.github.PublishInn.dto;
 
-import com.github.PublishInn.model.entity.AppUserRole;
 import lombok.*;
 
 @Getter

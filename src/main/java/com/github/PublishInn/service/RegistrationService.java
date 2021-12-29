@@ -2,9 +2,8 @@ package com.github.PublishInn.service;
 
 import com.github.PublishInn.dto.UserRegisterDto;
 import com.github.PublishInn.model.entity.AppUser;
-import com.github.PublishInn.model.entity.AppUserRole;
+import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.token.ConfirmationToken;
-import com.github.PublishInn.utils.EmailBuilder;
 import com.github.PublishInn.utils.EmailSender;
 import com.github.PublishInn.validation.EmailValidator;
 import lombok.AllArgsConstructor;

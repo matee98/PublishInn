@@ -1,6 +1,6 @@
 package com.github.PublishInn.dto;
 
-import com.github.PublishInn.model.entity.AppUserRole;
+import com.github.PublishInn.model.entity.enums.AppUserRole;
 import lombok.*;
 
 @AllArgsConstructor

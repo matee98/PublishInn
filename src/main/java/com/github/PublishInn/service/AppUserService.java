@@ -4,7 +4,7 @@ import com.github.PublishInn.dto.UserDetailsEditDto;
 import com.github.PublishInn.dto.UserInfoDto;
 import com.github.PublishInn.dto.mappers.AppUserMapper;
 import com.github.PublishInn.model.entity.AppUser;
-import com.github.PublishInn.model.entity.AppUserRole;
+import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.token.ConfirmationToken;
 import com.github.PublishInn.model.repository.UserRepository;
 import lombok.AllArgsConstructor;

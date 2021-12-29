@@ -1,4 +1,4 @@
-package com.github.PublishInn.model.entity;
+package com.github.PublishInn.model.entity.enums;
 
 public enum AppUserRole {
     USER,

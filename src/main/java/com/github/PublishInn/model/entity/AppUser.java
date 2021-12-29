@@ -1,7 +1,6 @@
 package com.github.PublishInn.model.entity;
 
-import com.github.PublishInn.model.entity.token.ConfirmationToken;
-import lombok.EqualsAndHashCode;
+import com.github.PublishInn.model.entity.enums.AppUserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,10 +14,9 @@ import java.util.Collections;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-public class AppUser implements UserDetails {
+public class AppUser extends AbstractEntity implements UserDetails {
 
     @SequenceGenerator(
             name = "user_sequence",
