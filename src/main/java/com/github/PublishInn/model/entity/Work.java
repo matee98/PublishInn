@@ -1,5 +1,6 @@
 package com.github.PublishInn.model.entity;
 
+import com.github.PublishInn.model.entity.enums.WorkStatus;
 import com.github.PublishInn.model.entity.enums.WorkType;
 import lombok.*;
 
@@ -9,7 +10,6 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
@@ -50,6 +50,18 @@ public class Work extends AbstractEntity {
     @Max(value = 10)
     @Digits(integer = 1, fraction = 2)
     private BigDecimal rating;
+
+    @Getter
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private WorkStatus status;
+
+    public Work(WorkType type, String title, String text) {
+        this.type = type;
+        this.title = title;
+        this.text = text;
+        this.status = WorkStatus.WAITING;
+    }
 
     @Override
     public Long getId() {
