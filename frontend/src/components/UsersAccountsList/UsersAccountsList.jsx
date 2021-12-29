@@ -92,7 +92,7 @@ function UsersAccountsList() {
                                 }}>Odśwież</Button>
                             </div>
                             <DataTable className={"rounded-0"}
-                                       noDataComponent="brak wyników"
+                                       noDataComponent="Brak wyników"
                                        columns={columns}
                                        data={data}
                                        subHeader
