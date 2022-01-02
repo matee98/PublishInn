@@ -1,4 +1,6 @@
 import {Component} from "react";
+import {Button} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 export default class Home extends Component{
     render(){
@@ -7,6 +9,11 @@ export default class Home extends Component{
                 <div className="Home">
                     <div className="lander">
                         <h1>Witaj, {localStorage.getItem('username')}</h1>
+                        <Button>
+                            <Link to='/works/new'>
+                                Dodaj pracę
+                            </Link>
+                        </Button>
                     </div>
                 </div>
             );

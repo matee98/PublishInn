@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 public class Work extends AbstractEntity {
 
