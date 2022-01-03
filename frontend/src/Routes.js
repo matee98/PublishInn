@@ -9,6 +9,7 @@ import UsersAccountsList from "./components/UsersAccountsList/UsersAccountsList"
 import OtherAccountInfo from "./components/OtherAccountInfo/OtherAccountInfo";
 import EditAccount from "./components/EditAccount/EditAccount";
 import AddWork from "./components/AddWork/AddWork";
+import WorkReadingView from "./components/WorkReadingView/WorkReadingView";
 
 export default class Routes extends Component{
     render() {
@@ -34,6 +35,9 @@ export default class Routes extends Component{
                 </Route>
                 <Route path='/users/edit/:username'>
                     <EditAccount />
+                </Route>
+                <Route path='/works/:id'>
+                    <WorkReadingView />
                 </Route>
                 <Route path='/works/new'>
                     <AddWork />
