@@ -1,5 +1,6 @@
 package com.github.PublishInn.service;
 
+import com.github.PublishInn.dto.WorkDetailsDto;
 import com.github.PublishInn.dto.WorkSaveDto;
 import com.github.PublishInn.dto.mappers.WorkMapper;
 import com.github.PublishInn.model.entity.AppUser;
@@ -13,8 +14,11 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -31,7 +35,6 @@ public class WorkService {
         user.ifPresentOrElse(appUser -> {
             work.setUserId(appUser.getId());
             work.setCreatedBy(appUser);
-            work.setStatus(WorkStatus.WAITING);
         }, () -> {
             throw new UsernameNotFoundException(
                     String.format(USER_NOT_FOUND_MSG, principal.getName()));
@@ -40,6 +43,16 @@ public class WorkService {
         if (user.get().getAppUserRole() != AppUserRole.USER) {
             throw new IllegalStateException();
         }
+        work.setStatus(WorkStatus.WAITING);
+        work.setRating(BigDecimal.ZERO);
         workRepository.save(work);
+    }
+
+    public List<WorkDetailsDto> findAll() {
+        WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
+        return workRepository.findAll()
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
     }
 }
