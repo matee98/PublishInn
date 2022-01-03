@@ -2,7 +2,6 @@ package com.github.PublishInn.controller;
 
 import com.github.PublishInn.dto.UserDetailsEditDto;
 import com.github.PublishInn.dto.UserInfoDto;
-import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.service.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

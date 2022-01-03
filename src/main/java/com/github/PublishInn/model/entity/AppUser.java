@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,6 +39,8 @@ public class AppUser extends AbstractEntity implements UserDetails {
     private AppUserRole appUserRole;
     private boolean locked = false;
     private boolean enabled = false;
+    @OneToMany(mappedBy = "userId")
+    private List<Work> works;
 
     public AppUser(String username, String email, String password,
                    AppUserRole appUserRole) {

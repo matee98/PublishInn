@@ -1,5 +1,6 @@
 package com.github.PublishInn.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.PublishInn.model.entity.enums.WorkStatus;
 import com.github.PublishInn.model.entity.enums.WorkType;
 import lombok.*;
@@ -43,6 +44,9 @@ public class Work extends AbstractEntity {
     @Column(nullable = false)
     private String text;
 
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private Long userId;
+
     @Getter
     @Setter
     @Min(value = 1)
@@ -54,13 +58,6 @@ public class Work extends AbstractEntity {
     @Setter
     @Enumerated(EnumType.STRING)
     private WorkStatus status;
-
-    public Work(WorkType type, String title, String text) {
-        this.type = type;
-        this.title = title;
-        this.text = text;
-        this.status = WorkStatus.WAITING;
-    }
 
     @Override
     public Long getId() {

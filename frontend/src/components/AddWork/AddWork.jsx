@@ -11,6 +11,24 @@ export default function AddWork() {
     const [content, setContent] = useState("");
     const [comDis, setComDis] = useState(false);
 
+    const [workTypes] = [
+        "CRIME",
+        "DRAMA",
+        "FANTASY",
+        "HORROR",
+        "OTHER",
+        "POEM",
+        "SCI_FI",
+        "THRILLER"
+    ]
+
+    const handleCategoryChoice = (choice) => {
+        setCategory(choice);
+        if (choice === "poetry") {
+            setGenre("POEM")
+        }
+    }
+
     return(
         <div className="container-fluid">
             <BreadCrumb>
@@ -27,7 +45,7 @@ export default function AddWork() {
                     onChange={(event => setTitle(event.target.value))}
                 />
                 <Form.Select value={category}
-                             onChange={(e) => setCategory(e.target.value)}
+                             onChange={(e) => handleCategoryChoice(e.target.value)}
                              className="mb-2">
                     <option value="">Wybierz rodzaj</option>
                     <option value="prose">Proza</option>
@@ -36,9 +54,13 @@ export default function AddWork() {
                 {category === "prose" &&
                     <Form.Select value={genre} onChange={(e) => setGenre(e.target.value)}>
                         <option value="">Wybierz gatunek</option>
-                        <option value="fantasy">Fantasy</option>
-                        <option value="crime">Kryminał</option>
-                        <option value="thriller">Thriller</option>
+                        <option value={workTypes[2]}>Fantasy</option>
+                        <option value={workTypes[3]}>Horror</option>
+                        <option value={workTypes[4]}>Inny</option>
+                        <option value={workTypes[0]}>Kryminał</option>
+                        <option value={workTypes[1]}>Obyczajowy</option>
+                        <option value={workTypes[6]}>Science-fiction</option>
+                        <option value={workTypes[7]}>Thriller</option>
                     </Form.Select>}
                 <MDEditor
                     placeholder="Wpisz tekst..."
