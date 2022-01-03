@@ -28,4 +28,9 @@ public class WorkController {
     public List<WorkDetailsDto> findAll() {
         return workService.findAll();
     }
+
+    @GetMapping("/{id}")
+    public WorkDetailsDto findById(@PathVariable Long id) {
+        return workService.findById(id);
+    }
 }
