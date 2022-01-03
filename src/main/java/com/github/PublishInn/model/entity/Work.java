@@ -41,10 +41,10 @@ public class Work extends AbstractEntity {
     @Setter
     @NotBlank
     @Size(min = 1)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String text;
 
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @JoinColumn(name = "userId")
     private Long userId;
 
     @Getter

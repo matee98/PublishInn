@@ -3,6 +3,9 @@ import React, {useState} from "react";
 import MDEditor from '@uiw/react-md-editor';
 import {Link} from "react-router-dom";
 import BreadCrumb from "../partial/Breadcrumb";
+import axios from "axios";
+import {useNotification} from "../partial/Notifications/NotificationProvider";
+import {useDialogPermanentChange} from "../partial/CriticalOperations/CriticalOperationsProvider";
 
 export default function AddWork() {
     const [title, setTitle] = useState("");
@@ -11,7 +14,10 @@ export default function AddWork() {
     const [content, setContent] = useState("");
     const [comDis, setComDis] = useState(false);
 
-    const [workTypes] = [
+    const dispatch = useNotification();
+    const dispatchDialog = useDialogPermanentChange();
+
+    const workTypes = [
         "CRIME",
         "DRAMA",
         "FANTASY",
@@ -27,6 +33,28 @@ export default function AddWork() {
         if (choice === "poetry") {
             setGenre("POEM")
         }
+    }
+
+    const handleSubmit = () => {
+        axios.post("/works", {
+            title: title,
+            type: genre,
+            text: content
+        })
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Zmiany zostały zapisane",
+                    title: "Success"
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type: "ERROR",
+                    message: err.message,
+                    title: "Error"
+                })
+            })
     }
 
     return(
@@ -84,7 +112,11 @@ export default function AddWork() {
                 </label>
             </FormCheck>
             <Button
-                onClick={() => console.log(content)}>Zapisz</Button>
+                onClick={() => dispatchDialog({
+                    callbackOnSave:() => {
+                        handleSubmit()
+                    }
+                })}>Zapisz</Button>
         </div>
     )
 }
