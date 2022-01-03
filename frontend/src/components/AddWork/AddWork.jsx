@@ -1,4 +1,4 @@
-import {Button, Form} from "react-bootstrap";
+import {Button, Form, FormCheck} from "react-bootstrap";
 import React, {useState} from "react";
 import MDEditor from '@uiw/react-md-editor';
 import {Link} from "react-router-dom";
@@ -6,8 +6,10 @@ import BreadCrumb from "../partial/Breadcrumb";
 
 export default function AddWork() {
     const [title, setTitle] = useState("");
-    const [category, setCategory] = useState()
-    const [content, setContent] = useState("Wpisz tekst...")
+    const [category, setCategory] = useState("");
+    const [genre, setGenre] = useState("");
+    const [content, setContent] = useState("");
+    const [comDis, setComDis] = useState(false);
 
     return(
         <div className="container-fluid">
@@ -24,19 +26,43 @@ export default function AddWork() {
                     className="mb-2"
                     onChange={(event => setTitle(event.target.value))}
                 />
-                <Form.Select>
-                    <option>Wybierz rodzaj</option>
+                <Form.Select value={category}
+                             onChange={(e) => setCategory(e.target.value)}
+                             className="mb-2">
+                    <option value="">Wybierz rodzaj</option>
                     <option value="prose">Proza</option>
                     <option value="poetry">Poezja</option>
                 </Form.Select>
+                {category === "prose" &&
+                    <Form.Select value={genre} onChange={(e) => setGenre(e.target.value)}>
+                        <option value="">Wybierz gatunek</option>
+                        <option value="fantasy">Fantasy</option>
+                        <option value="crime">Kryminał</option>
+                        <option value="thriller">Thriller</option>
+                    </Form.Select>}
                 <MDEditor
-                    className="mt-2"
+                    placeholder="Wpisz tekst..."
+                    className="mt-2 mb-2"
                     value={content}
                     onChange={setContent}
+                    height="550"
                 />
-                <MDEditor.Markdown source={content} />
             </Form.Group>
-            <Button onClick={() => console.log(content)}>Zapisz</Button>
+            <FormCheck className="mb-2">
+                <input
+                    className="form-check-input mx-1"
+                    type="checkbox"
+                    id="comDisCheck"
+                    value={comDis}
+                    onChange={() => setComDis(!comDis)}/>
+                <label
+                    className="form-check-label"
+                    for="comDisCheck">
+                    Wyłącz możliwość komentowania
+                </label>
+            </FormCheck>
+            <Button
+                onClick={() => console.log(content)}>Zapisz</Button>
         </div>
     )
 }
