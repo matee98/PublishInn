@@ -3,14 +3,16 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import MDEditor from "@uiw/react-md-editor";
 import CategoryMenu from "../partial/CategoryMenu";
+import {dateConverter} from "../helpers/DateConverter";
 
 export default function WorkReadingView() {
     const { id } = useParams();
     const [data, setData] = useState({
         title: "",
-        author: "",
+        username: "",
         rating: "",
-        text: ""
+        text: "",
+        createdOn: ""
     });
 
     const instance = axios.create();
@@ -39,6 +41,7 @@ export default function WorkReadingView() {
                 <div className="col-md border-start border-end">
                     <div className="p-3 py-3">
                         <div className="mb-3 align-content-md-start">
+                            <p className="text-end">{dateConverter(data.createdOn, true)}</p>
                             <p className="text-end">Ocena: {data.rating}/10</p>
                             <h2 className="text-center">{data.title}</h2>
                             <MDEditor.Markdown
@@ -50,7 +53,7 @@ export default function WorkReadingView() {
                     </div>
                 </div>
                 <div className="col-2 py-5">
-                    Autor
+                    Autor: {data.username}
                 </div>
             </div>
         </div>
