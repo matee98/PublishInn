@@ -57,19 +57,24 @@ class NavigationBar extends Component {
                             navbarScroll
                         >
                             <Nav.Link>
-                                <Link to="/" className="text-decoration-none text-secondary">Home</Link>
+                                {localStorage.getItem("username") &&
+                                <Link to="/" className="text-decoration-none text-secondary">Panel użytkownika</Link>
+                                }
                             </Nav.Link>
-                            <Nav.Link href="#action2">Link</Nav.Link>
-                            <NavDropdown title="Link" id="navbarScrollingDropdown">
-                                <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
+                            <NavDropdown title="Przeglądaj" id="navbarScrollingDropdown">
+                                <NavDropdown.Item>
+                                    <Link to="/works/prose" className="text-decoration-none text-dark">Proza</Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Link to="/works/poetry" className="text-decoration-none text-dark">Poezja</Link>
+                                </NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action5">
                                     Something else here
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link href="#" disabled>
-                                Link
+                            <Nav.Link>
+                                <Link to="/works/new" className="text-decoration-none text-secondary">Dodaj utwór</Link>
                             </Nav.Link>
                             {localStorage.getItem('userRole') === 'ADMIN' &&
                             <Nav.Link>
