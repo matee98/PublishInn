@@ -47,7 +47,7 @@ public class WorkService {
         if (user.get().getAppUserRole() != AppUserRole.USER) {
             throw new IllegalStateException();
         }
-        //work.setRating(BigDecimal.ZERO);
+        work.setRating(BigDecimal.ZERO);
         workRepository.save(work);
     }
 
@@ -62,9 +62,15 @@ public class WorkService {
     public WorkDetailsDto findById(Long id) {
         WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
         Optional<Work> work = workRepository.findById(id);
-        return mapper.toDto(work.orElseThrow(() ->
-            new NoSuchElementException(
-                    String.format(WORK_NOT_FOUND_MSG, id)
-            )));
+        WorkDetailsDto result = mapper.toDto(work.orElseThrow(() ->
+                new NoSuchElementException(
+                        String.format(WORK_NOT_FOUND_MSG, id)
+                )));
+        userRepository.findById(work.get().getUserId()).ifPresentOrElse((appUser -> {
+            result.setUsername(appUser.getUsername());
+        }), () -> {
+            result.setUsername("unknown");
+        });
+        return result;
     }
 }

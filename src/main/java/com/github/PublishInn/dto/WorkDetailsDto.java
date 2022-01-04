@@ -5,6 +5,7 @@ import com.github.PublishInn.model.entity.enums.WorkType;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,8 +16,9 @@ import java.math.BigDecimal;
 public class WorkDetailsDto {
     private String title;
     private WorkType type;
-    private Long userId;
+    private String username;
     private String text;
     private BigDecimal rating;
     private WorkStatus status;
+    private LocalDateTime createdOn;
 }
