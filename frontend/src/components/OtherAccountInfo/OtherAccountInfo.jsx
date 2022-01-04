@@ -21,7 +21,7 @@ export default function OtherAccountInfo() {
     }, [])
 
     const fetchData = () => {
-        axios.get(`/users/${username}`)
+        axios.get(`/users/admin/${username}`)
             .then((res) => {
                 setData({
                     ...res.data,
@@ -32,7 +32,7 @@ export default function OtherAccountInfo() {
     }
 
     const lockUser = () => {
-        axios.patch(`/users/block/${username}`)
+        axios.patch(`/users/admin/block/${username}`)
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
@@ -43,7 +43,7 @@ export default function OtherAccountInfo() {
     }
 
     const unlockUser = () => {
-        axios.patch(`/users/unblock/${username}`)
+        axios.patch(`/users/admin/unblock/${username}`)
             .then(() => {
                 dispatch({
                     type: "SUCCESS",

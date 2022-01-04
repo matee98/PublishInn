@@ -43,6 +43,6 @@ export const dateConverter = (date, fullDate) => {
     if (fullDate) {
         return `${weekDay}, ${day} ${month} ${year} ${time}`
     } else {
-        return `${weekDay}, ${day} ${month} ${year}`
+        return `${day} ${month} ${year}`
     }
 }

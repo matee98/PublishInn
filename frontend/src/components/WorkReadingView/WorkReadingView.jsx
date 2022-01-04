@@ -1,9 +1,11 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
+import ReactStars from "react-rating-stars-component";
 import axios from "axios";
 import MDEditor from "@uiw/react-md-editor";
 import CategoryMenu from "../partial/CategoryMenu";
 import {dateConverter} from "../helpers/DateConverter";
+import SideUserProfile from "../partial/SideUserProfile";
 
 export default function WorkReadingView() {
     const { id } = useParams();
@@ -15,6 +17,10 @@ export default function WorkReadingView() {
         createdOn: ""
     });
 
+    const [rating, setRating] = useState(0);
+    const ratingChange = (newRating) => {
+        setRating(newRating);
+    }
     const instance = axios.create();
     delete instance.defaults.headers.common["Authorization"];
 
@@ -47,13 +53,36 @@ export default function WorkReadingView() {
                             <MDEditor.Markdown
                                 source={data.text}
                                 style={{
-                                    textAlign: "left"
+                                    textAlign: "left",
+                                    padding: "2px",
+                                    borderBottom: "2px outset"
                                 }}/>
+                            {localStorage.getItem("username") ?
+                                <div>
+                                    <p className="text-start mt-4 fs-5">Oceń utwór:</p>
+                                    <ReactStars
+                                        count={10}
+                                        size={36}
+                                        onChange={ratingChange}
+                                        isHalf={false}
+                                        emptyIcon={<i className="far fa-star"></i>}
+                                        fullIcon={<i className="fa fa-star"></i>}
+                                        activeColor="#ffd700"
+                                    />
+                                </div>
+                                :
+                                <div className="text-start mt-4 fs-5">
+                                    <Link to="/login">
+                                        Zaloguj się
+                                    </Link>
+                                    , aby ocenić utwór
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
                 <div className="col-2 py-5">
-                    Autor: {data.username}
+                    <SideUserProfile username={data.username}/>
                 </div>
             </div>
         </div>

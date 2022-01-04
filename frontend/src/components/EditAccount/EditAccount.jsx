@@ -13,7 +13,7 @@ export default function EditAccount() {
     const dispatch = useNotification();
 
     useEffect(() => {
-        axios.get(`/users/${username}`)
+        axios.get(`/users/admin/${username}`)
             .then((res) => {
                 setData({
                     mailAddress: res.data.email,
@@ -23,7 +23,7 @@ export default function EditAccount() {
     }, [])
 
     const saveChanges = () => {
-        axios.put(`/users/edit/${username}`, data)
+        axios.put(`/users/admin/edit/${username}`, data)
             .then(() => {
                 dispatch({
                     type: "SUCCESS",

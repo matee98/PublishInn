@@ -68,9 +68,8 @@ function UsersAccountsList() {
     }, []);
 
     const fetchData = () => {
-        axios.get("/users")
+        axios.get("/users/admin")
             .then(res => {
-                console.log(res);
                 setData(res.data);
             })
     }
