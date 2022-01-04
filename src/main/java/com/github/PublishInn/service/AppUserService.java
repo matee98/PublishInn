@@ -2,6 +2,7 @@ package com.github.PublishInn.service;
 
 import com.github.PublishInn.dto.UserDetailsEditDto;
 import com.github.PublishInn.dto.UserInfoDto;
+import com.github.PublishInn.dto.UserShortProfileDto;
 import com.github.PublishInn.dto.mappers.AppUserMapper;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.enums.AppUserRole;
@@ -143,5 +144,20 @@ public class AppUserService implements UserDetailsService {
                 () -> {
                     throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
                 });
+    }
+
+    public UserShortProfileDto getShortProfileByUsername(String username) {
+        Optional<AppUser> user = userRepository.findByUsername(username);
+        AppUserMapper mapper = Mappers.getMapper(AppUserMapper.class);
+        UserShortProfileDto result;
+
+        if (user.isPresent()){
+            result = mapper.toUserShortProfileDto(user.get());
+            result.setWorksCount(user.get().getWorks().size());
+        } else {
+            throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
+        }
+
+        return result;
     }
 }
