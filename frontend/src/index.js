@@ -7,6 +7,7 @@ import { BrowserRouter as Router} from 'react-router-dom';
 import axios from "axios";
 import NotificationProvider from "./components/partial/Notifications/NotificationProvider";
 import CriticalOperationProvider from "./components/partial/CriticalOperations/CriticalOperationsProvider";
+import "antd/dist/antd.css"
 
 axios.defaults.baseURL = "http://localhost:8080/api/";
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
