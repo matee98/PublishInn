@@ -1,9 +1,10 @@
 package com.github.PublishInn.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.PublishInn.model.entity.enums.WorkStatus;
 import com.github.PublishInn.model.entity.enums.WorkType;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -57,6 +58,7 @@ public class Work extends AbstractEntity {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
+    @NotNull
     private WorkStatus status;
 
     @Override

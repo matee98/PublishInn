@@ -19,17 +19,15 @@ public abstract class AbstractEntity {
     @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
 
-    @OneToOne
     @Getter
     @Setter
     @JoinColumn(name = "created_by", updatable = false)
-    private AppUser createdBy;
+    private Long createdBy;
 
-    @OneToOne
     @Getter
     @Setter
     @JoinColumn(name = "modified_by")
-    private AppUser modifiedBy;
+    private Long modifiedBy;
 
     @Getter
     @Version
@@ -58,11 +56,11 @@ public abstract class AbstractEntity {
                 .append("version: ")
                 .append(version)
                 .append("createdBy")
-                .append(createdBy == null ? "" : createdBy.getUsername());
+                .append(createdBy == null ? "" : createdBy);
         if (modifiedBy != null) {
             toStringBuilder
                     .append("modifiedBy")
-                    .append(modifiedBy.getUsername());
+                    .append(modifiedBy);
         }
         return toStringBuilder.toString();
     }

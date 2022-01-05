@@ -38,17 +38,12 @@ public class WorkService {
         Optional<AppUser> user = userRepository.findByUsername(principal.getName());
         user.ifPresentOrElse(appUser -> {
             work.setUserId(appUser.getId());
-            work.setCreatedBy(appUser);
+            work.setCreatedBy(appUser.getId());
             work.setStatus(WorkStatus.WAITING);
         }, () -> {
             throw new UsernameNotFoundException(
                     String.format(USER_NOT_FOUND_MSG, principal.getName()));
         });
-
-//        if (user.get().getAppUserRole() != AppUserRole.USER) {
-//            throw new IllegalStateException();
-//        }
-        work.setRating(BigDecimal.ZERO);
         workRepository.save(work);
     }
 
