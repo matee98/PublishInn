@@ -3,16 +3,13 @@ package com.github.PublishInn.controller;
 import com.github.PublishInn.dto.WorkDetailsDto;
 import com.github.PublishInn.dto.WorkInfoDto;
 import com.github.PublishInn.dto.WorkSaveDto;
-import com.github.PublishInn.dto.mappers.WorkMapper;
 import com.github.PublishInn.service.WorkService;
 import lombok.AllArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor

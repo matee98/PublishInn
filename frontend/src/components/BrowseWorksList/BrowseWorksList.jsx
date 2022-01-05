@@ -13,6 +13,7 @@ export default function BrowseWorksList(props) {
     const numEachPage = 3
     const [minValue, setMinValue] = useState(0)
     const [maxValue, setMaxValue] = useState(numEachPage)
+    const [loading, setLoading] = useState(true)
 
     const [data, setData] = useState([{
         id: "",
@@ -38,7 +39,9 @@ export default function BrowseWorksList(props) {
     }, [])
 
     useEffect(() => {
-        console.log(data)
+        if (data[0].title !== "") {
+            setLoading(false)
+        }
     }, [data])
 
     const handleChange = (value) => {
@@ -69,11 +72,12 @@ export default function BrowseWorksList(props) {
                                     style={{
                                         width: "auto"
                                     }}
+                                    loading={loading}
                                 >
                                     <p className="text-start">
                                         Autor: <span><Link to={`/users/profile/${value.username}`}>{value.username}</Link></span>
                                     </p>
-                                    <p className="text-start">Ocena: {value.rating}/10</p>
+                                    <p className="text-start">Ocena: {value.rating !== null ? value.rating : "brak"}</p>
                                     <p className="text-start">Dodano: {dateConverter(value.createdOn, true)}</p>
                                 </Card>
                             )))
