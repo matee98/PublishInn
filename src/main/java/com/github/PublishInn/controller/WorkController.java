@@ -28,8 +28,12 @@ public class WorkController {
     }
 
     @GetMapping()
-    public List<WorkInfoDto> findAllWorkInfo() {
-        return workService.findAllWorkInfo();
+    public List<WorkInfoDto> findAllWorkInfo(@RequestParam(value="type", required = false) String type) {
+        if (type == null) {
+            return workService.findAllWorkInfo();
+        } else {
+            return workService.findWorkInfo(type);
+        }
     }
 
     @GetMapping("/{id}")

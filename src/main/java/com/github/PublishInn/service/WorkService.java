@@ -8,6 +8,7 @@ import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.Work;
 import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.enums.WorkStatus;
+import com.github.PublishInn.model.entity.enums.WorkType;
 import com.github.PublishInn.model.repository.UserRepository;
 import com.github.PublishInn.model.repository.WorkRepository;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,6 +65,21 @@ public class WorkService {
     public List<WorkInfoDto> findAllWorkInfo() {
         WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
         return workRepository.findAll()
+                .stream()
+                .map(work -> {
+                    WorkInfoDto result = mapper.toWorkInfoDto(work);
+                    Optional<AppUser> user = userRepository.findById(work.getUserId());
+                    user.ifPresent(appUser -> result.setUsername(appUser.getUsername()));
+                    return result;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<WorkInfoDto> findWorkInfo(String type) {
+        WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
+        WorkType workType = WorkType.valueOf(type.toUpperCase(Locale.ROOT));
+
+        return workRepository.findAllByTypeEquals(workType)
                 .stream()
                 .map(work -> {
                     WorkInfoDto result = mapper.toWorkInfoDto(work);
