@@ -1,6 +1,7 @@
 package com.github.PublishInn.controller;
 
 import com.github.PublishInn.dto.WorkDetailsDto;
+import com.github.PublishInn.dto.WorkInfoDto;
 import com.github.PublishInn.dto.WorkSaveDto;
 import com.github.PublishInn.dto.mappers.WorkMapper;
 import com.github.PublishInn.service.WorkService;
@@ -24,9 +25,14 @@ public class WorkController {
         workService.saveWork(model, principal);
     }
 
-    @GetMapping
+    @GetMapping("/details")
     public List<WorkDetailsDto> findAll() {
         return workService.findAll();
+    }
+
+    @GetMapping()
+    public List<WorkInfoDto> findAllWorkInfo() {
+        return workService.findAllWorkInfo();
     }
 
     @GetMapping("/{id}")

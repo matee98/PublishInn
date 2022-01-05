@@ -1,6 +1,7 @@
 package com.github.PublishInn.service;
 
 import com.github.PublishInn.dto.WorkDetailsDto;
+import com.github.PublishInn.dto.WorkInfoDto;
 import com.github.PublishInn.dto.WorkSaveDto;
 import com.github.PublishInn.dto.mappers.WorkMapper;
 import com.github.PublishInn.model.entity.AppUser;
@@ -44,9 +45,9 @@ public class WorkService {
                     String.format(USER_NOT_FOUND_MSG, principal.getName()));
         });
 
-        if (user.get().getAppUserRole() != AppUserRole.USER) {
-            throw new IllegalStateException();
-        }
+//        if (user.get().getAppUserRole() != AppUserRole.USER) {
+//            throw new IllegalStateException();
+//        }
         work.setRating(BigDecimal.ZERO);
         workRepository.save(work);
     }
@@ -55,7 +56,25 @@ public class WorkService {
         WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
         return workRepository.findAll()
                 .stream()
-                .map(mapper::toDto)
+                .map(work -> {
+                    WorkDetailsDto result = mapper.toDto(work);
+                    Optional<AppUser> user = userRepository.findById(work.getUserId());
+                    user.ifPresent(appUser -> result.setUsername(appUser.getUsername()));
+                    return result;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<WorkInfoDto> findAllWorkInfo() {
+        WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
+        return workRepository.findAll()
+                .stream()
+                .map(work -> {
+                    WorkInfoDto result = mapper.toWorkInfoDto(work);
+                    Optional<AppUser> user = userRepository.findById(work.getUserId());
+                    user.ifPresent(appUser -> result.setUsername(appUser.getUsername()));
+                    return result;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -66,10 +85,8 @@ public class WorkService {
                 new NoSuchElementException(
                         String.format(WORK_NOT_FOUND_MSG, id)
                 )));
-        userRepository.findById(work.get().getUserId()).ifPresentOrElse((appUser -> {
+        userRepository.findById(work.get().getUserId()).ifPresent(appUser -> {
             result.setUsername(appUser.getUsername());
-        }), () -> {
-            result.setUsername("unknown");
         });
         return result;
     }
