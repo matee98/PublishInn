@@ -5,14 +5,12 @@ import CategoryMenu from "../partial/CategoryMenu";
 import {Button} from "react-bootstrap";
 import {dateConverter} from "../helpers/DateConverter";
 import {Link, useParams} from "react-router-dom";
+import WorksList from "../partial/WorksList/WorksList";
 
 
 export default function BrowseWorksList() {
 
     const {type} = useParams()
-    const numEachPage = 3
-    const [minValue, setMinValue] = useState(0)
-    const [maxValue, setMaxValue] = useState(numEachPage)
     const [loading, setLoading] = useState(true)
 
     const [data, setData] = useState([{
@@ -46,11 +44,6 @@ export default function BrowseWorksList() {
         }
     }, [data])
 
-    const handleChange = (value) => {
-        setMinValue((value - 1) * numEachPage)
-        setMaxValue(value * numEachPage)
-    }
-
     return (
         <div className="container-fluid">
             <div className="row">
@@ -58,38 +51,10 @@ export default function BrowseWorksList() {
                     <CategoryMenu />
                 </div>
                 <div className="col-md border-start border-end">
-                    {
-                        data &&
-                            data.length > 0 &&
-                            data.slice(minValue, maxValue).map((value => (
-                                <Card
-                                    title={value.title}
-                                    extra={
-                                        <Link to={`/works/read/${value.id}`}>
-                                            <Button>
-                                                Czytaj >>>
-                                            </Button>
-                                        </Link>
-                                    }
-                                    style={{
-                                        width: "auto"
-                                    }}
-                                    loading={loading}
-                                >
-                                    <p className="text-start">
-                                        Autor: <span><Link to={`/users/profile/${value.username}`}>{value.username}</Link></span>
-                                    </p>
-                                    <p className="text-start">Ocena: {value.rating !== null ? value.rating : "brak"}</p>
-                                    <p className="text-start">Dodano: {dateConverter(value.createdOn, true)}</p>
-                                </Card>
-                            )))
-                    }
-                    <Pagination
-                        defaultCurrent={1}
-                        defaultPageSize={numEachPage}
-                        onChange={handleChange}
-                        total={data.length}
-                    />
+                    <WorksList
+                        data={data}
+                        loading={loading}
+                        numberEachpage={3} />
                 </div>
             </div>
         </div>
