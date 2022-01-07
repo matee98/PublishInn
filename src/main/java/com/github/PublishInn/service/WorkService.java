@@ -90,6 +90,20 @@ public class WorkService {
                 .collect(Collectors.toList());
     }
 
+    public List<WorkInfoDto> findProseWorkInfo() {
+        WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
+
+        return workRepository.findAllByTypeIsNotLike(WorkType.POEM)
+                .stream()
+                .map(work -> {
+                    WorkInfoDto result = mapper.toWorkInfoDto(work);
+                    Optional<AppUser> user = userRepository.findById(work.getUserId());
+                    user.ifPresent(appUser -> result.setUsername(appUser.getUsername()));
+                    return result;
+                })
+                .collect(Collectors.toList());
+    }
+
     public WorkDetailsDto findById(Long id) {
         WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
         Optional<Work> work = workRepository.findById(id);

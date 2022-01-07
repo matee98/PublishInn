@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface WorkRepository extends JpaRepository<Work, Long> {
     public List<Work> findAllByTypeEquals(WorkType type);
+    public List<Work> findAllByTypeIsNotLike(WorkType type);
 }

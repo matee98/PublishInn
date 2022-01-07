@@ -31,6 +31,8 @@ public class WorkController {
     public List<WorkInfoDto> findAllWorkInfo(@RequestParam(value="type", required = false) String type) {
         if (type == null) {
             return workService.findAllWorkInfo();
+        } else if (type.equals("prose")) {
+            return workService.findProseWorkInfo();
         } else {
             return workService.findWorkInfo(type);
         }

@@ -28,17 +28,10 @@ export default function BrowseWorksList() {
     delete instance.defaults.headers.common["Authorization"];
 
     const fetchData = () => {
-        if (type === "prose") {
-            instance.get(`/works/`)
-                .then((res) => {
-                    setData(res.data)
-                })
-        } else {
-            instance.get(`/works?type=${type}`)
-                .then((res) => {
-                    setData(res.data)
-                })
-        }
+        instance.get(`/works?type=${type}`)
+            .then((res) => {
+                setData(res.data)
+            })
     }
 
     useEffect(() => {
