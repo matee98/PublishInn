@@ -4,12 +4,12 @@ import {Card, Pagination} from "antd";
 import CategoryMenu from "../partial/CategoryMenu";
 import {Button} from "react-bootstrap";
 import {dateConverter} from "../helpers/DateConverter";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 
-export default function BrowseWorksList(props) {
+export default function BrowseWorksList() {
 
-    const genre = props.genre
+    const {type} = useParams()
     const numEachPage = 3
     const [minValue, setMinValue] = useState(0)
     const [maxValue, setMaxValue] = useState(numEachPage)
@@ -28,19 +28,28 @@ export default function BrowseWorksList(props) {
     delete instance.defaults.headers.common["Authorization"];
 
     const fetchData = () => {
-        instance.get('/works')
-            .then((res) => {
-                setData(res.data)
-            })
+        if (type === "prose") {
+            instance.get(`/works/`)
+                .then((res) => {
+                    setData(res.data)
+                })
+        } else {
+            instance.get(`/works?type=${type}`)
+                .then((res) => {
+                    setData(res.data)
+                })
+        }
     }
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [type])
 
     useEffect(() => {
-        if (data[0].title !== "") {
-            setLoading(false)
+        if (data[0] !== undefined) {
+            if (data[0].title !== "") {
+                setLoading(false)
+            }
         }
     }, [data])
 
@@ -63,7 +72,7 @@ export default function BrowseWorksList(props) {
                                 <Card
                                     title={value.title}
                                     extra={
-                                        <Link to={`/works/${value.id}`}>
+                                        <Link to={`/works/read/${value.id}`}>
                                             <Button>
                                                 Czytaj >>>
                                             </Button>

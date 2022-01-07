@@ -63,10 +63,10 @@ class NavigationBar extends Component {
                             </Nav.Link>
                             <NavDropdown title="Przeglądaj" id="navbarScrollingDropdown">
                                 <NavDropdown.Item>
-                                    <Link to="/works/" className="text-decoration-none text-dark">Proza</Link>
+                                    <Link to="/works/prose" className="text-decoration-none text-dark">Proza</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
-                                    <Link to="/works/poetry" className="text-decoration-none text-dark">Poezja</Link>
+                                    <Link to="/works/poem" className="text-decoration-none text-dark">Poezja</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action5">

@@ -13,7 +13,7 @@ export default function CategoryMenu() {
     return (
         <div className="text-start px-3">
             <p className="fs-5">
-                <Link to="" className="text-decoration-none text-dark">
+                <Link to="/works/prose" className="text-decoration-none text-dark">
                     Proza
                 </Link>
                 <span className="clickableIcon">
@@ -29,44 +29,44 @@ export default function CategoryMenu() {
                 dropdown &&
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item">
-                        <Link to="" className="text-decoration-none text-dark">
+                        <Link to="/works/fantasy" className="text-decoration-none text-dark">
                             Fantasy
                         </Link>
                     </li>
                     <li className="list-group-item">
-                        <Link to="" className="text-decoration-none text-dark">
+                        <Link to="/works/horror" className="text-decoration-none text-dark">
                             Horror
                         </Link>
                     </li>
                     <li className="list-group-item">
-                        <Link to="" className="text-decoration-none text-dark">
+                        <Link to="/works/other" className="text-decoration-none text-dark">
                             Inne
                         </Link>
                     </li>
                     <li className="list-group-item">
-                        <Link to="" className="text-decoration-none text-dark">
+                        <Link to="/works/crime" className="text-decoration-none text-dark">
                             Kryminał
                         </Link>
                     </li>
                     <li className="list-group-item">
-                        <Link to="" className="text-decoration-none text-dark">
+                        <Link to="/works/drama" className="text-decoration-none text-dark">
                             Obyczajowe
                         </Link>
                     </li>
                     <li className="list-group-item">
-                        <Link to="" className="text-decoration-none text-dark">
+                        <Link to="/works/sci_fi" className="text-decoration-none text-dark">
                             Science-fiction
                         </Link>
                     </li>
                     <li className="list-group-item">
-                        <Link to="" className="text-decoration-none text-dark">
+                        <Link to="/works/thriller" className="text-decoration-none text-dark">
                             Thriller
                         </Link>
                     </li>
                 </ul>
             }
             <p className="fs-5">
-                <Link to="" className="text-decoration-none text-dark">
+                <Link to="/works/poem" className="text-decoration-none text-dark">
                     Poezja
                 </Link>
             </p>

@@ -37,13 +37,13 @@ export default class Routes extends Component{
                 <Route path='/users/edit/:username'>
                     <EditAccount />
                 </Route>
-                <Route exact path='/works'>
-                    <BrowseWorksList />
-                </Route>
                 <Route exact path='/works/new'>
                     {localStorage.getItem('username') ? <AddWork /> : <Redirect to="/login" />}
                 </Route>
-                <Route path='/works/:id'>
+                <Route exact path='/works/:type'>
+                    <BrowseWorksList />
+                </Route>
+                <Route path='/works/read/:id'>
                     <WorkReadingView />
                 </Route>
                 <Route>
