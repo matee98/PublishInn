@@ -3,15 +3,26 @@ import {useEffect, useState} from "react";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import axios from "axios";
 import {dateConverter} from "../helpers/DateConverter";
+import WorksList from "../partial/WorksList/WorksList";
 
 export default function UserProfile() {
 
     const { username } = useParams();
+    const [loading, setLoading] = useState(true)
     const [data, setData] = useState({
         role: "",
         worksCount: "",
         joinDate: "",
         ratingAverage: ""
+    })
+
+    const [workData, setWorkData] = useState({
+        id: "",
+        title: "",
+        username: "",
+        type: "",
+        rating: "",
+        createdOn: ""
     })
 
     const dispatch = useNotification();
@@ -36,6 +47,11 @@ export default function UserProfile() {
                     })
                 })
         }
+
+        instance.get(`/works/user/${username}`)
+            .then((res) => {
+                setWorkData(res.data)
+            })
     }
 
     useEffect(() => {
@@ -62,6 +78,14 @@ export default function UserProfile() {
             })
         }
     }, [data])
+
+    useEffect(() => {
+        if (workData[0] !== undefined) {
+            if (workData[0].title !== "") {
+                setLoading(false)
+            }
+        }
+    }, [workData])
     return(
         <div className="container-fluid">
             <div className="row">
@@ -78,6 +102,12 @@ export default function UserProfile() {
                             <div className="flex-md-row-reverse"><label className="labels float-start">Rola użytkownika</label><label className="labels float-end">{data.role}</label></div>
                             <div className="flex-md-row-reverse"><label className="labels float-start">Liczba utworów</label><label className="labels float-end">{data.worksCount}</label></div>
                             <div className="flex-md-row-reverse"><label className="labels float-start">Średnia ocen</label><label className="labels float-end">{data.ratingAverage}</label></div>
+                            <div className="mt-2 mb-2 text-start fs-5">Utwory dodane przez tego użytkownika:</div>
+                            <WorksList
+                                data={workData}
+                                loading={loading}
+                                numberEachPage={3}
+                                />
                         </div>
                     </div>
                 </div>

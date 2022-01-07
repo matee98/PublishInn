@@ -38,6 +38,11 @@ public class WorkController {
         }
     }
 
+    @GetMapping("/user/{username}")
+    public List<WorkInfoDto> findWorkInfoByUsername(@PathVariable String username) {
+        return workService.findWorksByUsername(username);
+    }
+
     @GetMapping("/{id}")
     public WorkDetailsDto findById(@PathVariable Long id) {
         return workService.findById(id);

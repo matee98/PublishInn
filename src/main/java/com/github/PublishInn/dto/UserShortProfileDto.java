@@ -2,6 +2,8 @@ package com.github.PublishInn.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,4 +17,5 @@ public class UserShortProfileDto {
     private String userRole;
     private int worksCount;
     private LocalDateTime createdOn;
+    private BigDecimal ratingAverage;
 }

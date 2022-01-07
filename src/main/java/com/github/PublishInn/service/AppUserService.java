@@ -5,6 +5,7 @@ import com.github.PublishInn.dto.UserInfoDto;
 import com.github.PublishInn.dto.UserShortProfileDto;
 import com.github.PublishInn.dto.mappers.AppUserMapper;
 import com.github.PublishInn.model.entity.AppUser;
+import com.github.PublishInn.model.entity.Work;
 import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.token.ConfirmationToken;
 import com.github.PublishInn.model.repository.UserRepository;
@@ -16,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -153,7 +156,13 @@ public class AppUserService implements UserDetailsService {
 
         if (user.isPresent()){
             result = mapper.toUserShortProfileDto(user.get());
-            result.setWorksCount(user.get().getWorks().size());
+            List<Work> userWorks = user.get().getWorks();
+            BigDecimal worksRatingSum = BigDecimal.ZERO;
+            for (Work work : userWorks) {
+                worksRatingSum = worksRatingSum.add(work.getRating());
+            }
+            result.setWorksCount(userWorks.size());
+            result.setRatingAverage(worksRatingSum.divide(BigDecimal.valueOf(userWorks.size())));
         } else {
             throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
         }

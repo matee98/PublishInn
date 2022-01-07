@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.List;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,5 +112,26 @@ public class WorkService {
             result.setUsername(appUser.getUsername());
         });
         return result;
+    }
+
+    public List<WorkInfoDto> findWorksByUsername(String username) {
+        List<Work> resultWorks;
+        WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
+        Optional<AppUser> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            resultWorks = workRepository.findAllByUserIdEquals(user.get().getId());
+        } else {
+            throw new UsernameNotFoundException(
+                    String.format(USER_NOT_FOUND_MSG, username));
+        }
+
+        return resultWorks
+                .stream()
+                .map(work -> {
+                    WorkInfoDto result = mapper.toWorkInfoDto(work);
+                    result.setUsername(username);
+                    return result;
+                })
+                .collect(Collectors.toList());
     }
 }
