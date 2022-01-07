@@ -4,8 +4,11 @@ import {Button, Col, Container, Row} from "react-bootstrap";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import BreadCrumb from "../partial/Breadcrumb";
+import {useNotification} from "../partial/Notifications/NotificationProvider";
 
 function UsersAccountsList() {
+
+    const dispatch = useNotification();
     const [data, setData] = useState([
         {
             username: "",
@@ -71,6 +74,13 @@ function UsersAccountsList() {
         axios.get("/users/admin")
             .then(res => {
                 setData(res.data);
+            })
+            .catch((err) => {
+                dispatch({
+                    type: "ERROR",
+                    message: err.message,
+                    title: "Error"
+                })
             })
     }
 
