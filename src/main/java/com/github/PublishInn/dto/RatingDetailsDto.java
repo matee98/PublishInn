@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 public class RatingDetailsDto {
     private String username;
     private Long workId;
+    private String title;
+    private String authorName;
     private short rate;
     private LocalDateTime createdOn;
     private LocalDateTime modifiedOn;

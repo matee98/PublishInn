@@ -20,7 +20,9 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -44,10 +46,37 @@ public class RatingService {
         return ratingRepository.findRatingByUserIdAndWorkId(user.get().getId(), workId)
                 .map(mapper::fromRating)
                 .map(ratingDetailsDto -> {
+                    Optional<Work> work = workRepository.findById(ratingDetailsDto.getWorkId());
+                    if (work.isPresent()) {
+                        ratingDetailsDto.setTitle(work.get().getTitle());
+                        ratingDetailsDto.setAuthorName(userRepository.getById(work.get().getUserId()).getUsername());
+                    }
                     ratingDetailsDto.setUsername(username);
                     return ratingDetailsDto;
                 })
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    public List<RatingDetailsDto> getRatingsByUsername(String username) {
+        Optional<AppUser> user = userRepository.findByUsername(username);
+        RatingMapper mapper = Mappers.getMapper(RatingMapper.class);
+        if (user.isPresent()) {
+            return ratingRepository.findRatingsByUserId(user.get().getId())
+                    .stream()
+                    .map(rating -> {
+                        RatingDetailsDto result = mapper.fromRating(rating);
+                        Optional<Work> work = workRepository.findById(rating.getWorkId());
+                        if (work.isPresent()) {
+                            result.setTitle(work.get().getTitle());
+                            result.setAuthorName(userRepository.getById(work.get().getUserId()).getUsername());
+                        }
+                        return result;
+                    })
+                    .peek(ratingDetailsDto -> ratingDetailsDto.setUsername(username))
+                    .collect(Collectors.toList());
+        } else {
+            throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username));
+        }
     }
 
     public void addNewRating(@Valid NewRatingDto model, Principal principal) throws RatingException {
@@ -66,6 +95,8 @@ public class RatingService {
         });
         if(ratingRepository.findRatingByUserIdAndWorkId(user.get().getId(), work.get().getId()).isPresent()) {
             throw RatingException.ratingAlreadyExists();
+        } else if(Objects.equals(work.get().getUserId(), user.get().getId())) {
+            throw RatingException.ownWorkRateTry();
         }
         ratingRepository.save(rating);
         calculateWorkRating(rating.getWorkId());
@@ -81,6 +112,7 @@ public class RatingService {
             rating.get().setRate(model.getRate());
             rating.get().setModifiedBy(user.get().getId());
             ratingRepository.save(rating.get());
+            calculateWorkRating(rating.get().getWorkId());
         } else {
             throw new NoSuchElementException(RATING_NOT_FOUND_MSG);
         }
