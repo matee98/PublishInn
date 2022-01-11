@@ -1,8 +1,6 @@
 package com.github.PublishInn.model.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -11,6 +9,8 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @NoArgsConstructor
+@Getter
+@Setter
 public class Rating extends AbstractEntity{
 
     @Id
@@ -25,22 +25,16 @@ public class Rating extends AbstractEntity{
     )
     private Long id;
 
-    @Getter
-    @Setter
     @Min(value = 1)
     @Max(value = 10)
     @NotNull
     private short rate;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, optional = false)
-    @Getter
-    @Setter
-    private Work work;
+    @JoinColumn(name = "work_id", referencedColumnName = "id")
+    private Long workId;
 
-    public Rating(short rate, Work work) {
-        this.rate = rate;
-        this.work = work;
-    }
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private Long userId;
 
     @Override
     public Long getId() {

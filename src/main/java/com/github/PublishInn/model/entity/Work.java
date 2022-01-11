@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,32 +32,27 @@ public class Work extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private WorkType type;
 
-    @Getter
-    @Setter
     @NotBlank
     @Size(min = 1, max = 63)
     @Column(nullable = false)
     private String title;
 
-    @Getter
-    @Setter
     @NotBlank
     @Size(min = 1)
     @Column(nullable = false, columnDefinition = "TEXT")
     private String text;
 
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Long userId;
 
-    @Getter
-    @Setter
+    @OneToMany(mappedBy = "workId")
+    private List<Rating> ratingList;
+
     @Min(value = 1)
     @Max(value = 10)
     @Digits(integer = 1, fraction = 2)
     private BigDecimal rating;
 
-    @Getter
-    @Setter
     @Enumerated(EnumType.STRING)
     @NotNull
     private WorkStatus status;

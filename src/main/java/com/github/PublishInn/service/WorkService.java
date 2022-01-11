@@ -6,20 +6,20 @@ import com.github.PublishInn.dto.WorkSaveDto;
 import com.github.PublishInn.dto.mappers.WorkMapper;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.Work;
-import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.enums.WorkStatus;
 import com.github.PublishInn.model.entity.enums.WorkType;
 import com.github.PublishInn.model.repository.UserRepository;
 import com.github.PublishInn.model.repository.WorkRepository;
 import lombok.AllArgsConstructor;
-import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
