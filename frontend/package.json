@@ -44,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "@mui/material": "^5.2.8",
     "axios": "^0.24.0",
     "react-data-table-component": "^7.4.5",
     "react-rating-stars-component": "^2.2.0",

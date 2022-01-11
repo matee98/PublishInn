@@ -6,6 +6,8 @@ import MDEditor from "@uiw/react-md-editor";
 import CategoryMenu from "../partial/CategoryMenu";
 import {dateConverter} from "../helpers/DateConverter";
 import SideUserProfile from "../partial/SideUserProfile";
+import {Button} from "react-bootstrap";
+import {useNotification} from "../partial/Notifications/NotificationProvider";
 
 export default function WorkReadingView() {
     const { id } = useParams();
@@ -17,9 +19,53 @@ export default function WorkReadingView() {
         createdOn: ""
     });
 
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(0)
+    const [blocked, setBlocked] = useState(false)
+
+    const dispatch = useNotification()
+
     const ratingChange = (newRating) => {
-        setRating(newRating);
+        if(rating === 0) {
+            axios.post("/ratings", {
+                workId: id,
+                rate: newRating
+            })
+                .then(() => {
+                    dispatch({
+                        type: "SUCCESS",
+                        message: "Zmiany zostały zapisane",
+                        title: "Success"
+                    })
+                })
+                .catch(err => {
+                    dispatch({
+                        type: "ERROR",
+                        message: err.message,
+                        title: "Error"
+                    })
+                })
+        } else {
+            axios.put("/ratings", {
+                workId: id,
+                rate: newRating
+            })
+                .then(() => {
+                    dispatch({
+                        type: "SUCCESS",
+                        message: "Zmiany zostały zapisane",
+                        title: "Success"
+                    })
+                })
+                .catch(err => {
+                    dispatch({
+                        type: "ERROR",
+                        message: err.message,
+                        title: "Error"
+                    })
+                })
+        }
+        setRating(newRating)
+        setBlocked(true)
     }
     const instance = axios.create();
     delete instance.defaults.headers.common["Authorization"];
@@ -35,6 +81,12 @@ export default function WorkReadingView() {
                     ...res.data,
                     author: res.data.userId
                 });
+            })
+
+        axios.get(`/ratings?username=${localStorage.getItem("username")}&work_id=${id}`)
+            .then((res) => {
+                setRating(res.data.rate)
+                setBlocked(true)
             })
     }
 
@@ -58,11 +110,21 @@ export default function WorkReadingView() {
                                     borderBottom: "2px outset"
                                 }}/>
                             {localStorage.getItem("username") ?
+                                (blocked
+                                    ?
+                                    <div className="float-start d-inline-flex">
+                                        <p style={{marginRight: "0.5rem"}}>Twoja ocena: {rating}</p>
+                                        <Button className="btn-sm" onClick={() => {
+                                            setBlocked(false)
+                                        }}>Zmień</Button>
+                                    </div>
+                                    :
                                 <div>
                                     <p className="text-start mt-4 fs-5">Oceń utwór:</p>
                                     <ReactStars
                                         count={10}
                                         size={36}
+                                        value={rating}
                                         onChange={ratingChange}
                                         isHalf={false}
                                         emptyIcon={<i className="far fa-star"></i>}
@@ -70,6 +132,7 @@ export default function WorkReadingView() {
                                         activeColor="#ffd700"
                                     />
                                 </div>
+                                )
                                 :
                                 <div className="text-start mt-4 fs-5">
                                     <Link to="/login">
