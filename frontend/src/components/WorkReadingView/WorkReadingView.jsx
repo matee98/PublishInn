@@ -36,6 +36,8 @@ export default function WorkReadingView() {
                         message: "Zmiany zostały zapisane",
                         title: "Success"
                     })
+                    setRating(newRating)
+                    setBlocked(true)
                 })
                 .catch(err => {
                     dispatch({
@@ -55,6 +57,8 @@ export default function WorkReadingView() {
                         message: "Zmiany zostały zapisane",
                         title: "Success"
                     })
+                    setRating(newRating)
+                    setBlocked(true)
                 })
                 .catch(err => {
                     dispatch({
@@ -64,8 +68,6 @@ export default function WorkReadingView() {
                     })
                 })
         }
-        setRating(newRating)
-        setBlocked(true)
     }
     const instance = axios.create();
     delete instance.defaults.headers.common["Authorization"];
@@ -113,7 +115,9 @@ export default function WorkReadingView() {
                                 (blocked
                                     ?
                                     <div className="float-start d-inline-flex">
-                                        <p style={{marginRight: "0.5rem"}}>Twoja ocena: {rating}</p>
+                                        <p className="fs-6" style={{marginRight: "0.5rem"}}>Twoja ocena:
+                                            <span className="fs-4 mx-1">{rating}</span>
+                                        </p>
                                         <Button className="btn-sm" onClick={() => {
                                             setBlocked(false)
                                         }}>Zmień</Button>
