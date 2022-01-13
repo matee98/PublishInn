@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/registration/**", "/api/login", "/api/token/refresh").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/profile/**").permitAll()
                 .antMatchers("/api/users/admin").hasAuthority("ADMIN")
+                .antMatchers("/api/works/moderator/**").hasAuthority("MODERATOR")
                 .antMatchers(HttpMethod.GET, "/api/works/**").permitAll()
                 .anyRequest().authenticated();
         http

@@ -141,6 +141,28 @@ public class WorkService {
                 .collect(Collectors.toList());
     }
 
+    public void blockWorkById(Long workId, Principal principal) {
+        Optional<Work> work = workRepository.findById(workId);
+        work.ifPresentOrElse(w -> {
+            w.setStatus(WorkStatus.BLOCKED);
+            w.setModifiedBy(userRepository.findByUsername(principal.getName()).get().getId());
+            workRepository.save(w);
+        }, () -> {
+            throw new NoSuchElementException(WORK_NOT_FOUND_MSG);
+        });
+    }
+
+    public void unblockWorkById(Long workId, Principal principal) {
+        Optional<Work> work = workRepository.findById(workId);
+        work.ifPresentOrElse(w -> {
+            w.setStatus(WorkStatus.ACCEPTED);
+            w.setModifiedBy(userRepository.findByUsername(principal.getName()).get().getId());
+            workRepository.save(w);
+        }, () -> {
+            throw new NoSuchElementException(WORK_NOT_FOUND_MSG);
+        });
+    }
+
     private List<Work> filterBlockedWorks(List<Work> works) {
         return works
                 .stream()

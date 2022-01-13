@@ -41,6 +41,18 @@ public class WorkController {
         }
     }
 
+    @PatchMapping("/moderator/block/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void blockWorkById(@PathVariable Long id, Principal principal) {
+        workService.blockWorkById(id, principal);
+    }
+
+    @PatchMapping("/moderator/unblock/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void unblockWorkById(@PathVariable Long id, Principal principal) {
+        workService.unblockWorkById(id, principal);
+    }
+
     @GetMapping()
     public List<WorkInfoDto> findAcceptedWorkInfo(@RequestParam(value="type", required = false) String type) {
         if (type == null) {
