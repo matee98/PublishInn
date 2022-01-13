@@ -77,7 +77,7 @@ export default function WorkReadingView() {
     }, [])
 
     const fetchData = () => {
-        instance.get(`/works/${id}`)
+        instance.get(`/works/details/${id}`)
             .then((res) => {
                 setData({
                     ...res.data,

@@ -4,8 +4,10 @@ import com.github.PublishInn.dto.WorkDetailsDto;
 import com.github.PublishInn.dto.WorkInfoDto;
 import com.github.PublishInn.dto.WorkSaveDto;
 import com.github.PublishInn.dto.mappers.WorkMapper;
+import com.github.PublishInn.exceptions.WorkException;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.Work;
+import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.enums.WorkStatus;
 import com.github.PublishInn.model.entity.enums.WorkType;
 import com.github.PublishInn.model.repository.UserRepository;
@@ -38,7 +40,7 @@ public class WorkService {
         user.ifPresentOrElse(appUser -> {
             work.setUserId(appUser.getId());
             work.setCreatedBy(appUser.getId());
-            work.setStatus(WorkStatus.WAITING);
+            work.setStatus(WorkStatus.ACCEPTED);
         }, () -> {
             throw new UsernameNotFoundException(
                     String.format(USER_NOT_FOUND_MSG, principal.getName()));
@@ -72,42 +74,46 @@ public class WorkService {
                 .collect(Collectors.toList());
     }
 
-    public List<WorkInfoDto> findWorkInfo(String type) {
-        WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
+    public List<WorkInfoDto> findWorkInfo(String type, boolean blocked) {
         WorkType workType = WorkType.valueOf(type.toUpperCase(Locale.ROOT));
 
-        return workRepository.findAllByTypeEquals(workType)
-                .stream()
-                .map(work -> {
-                    WorkInfoDto result = mapper.toWorkInfoDto(work);
-                    Optional<AppUser> user = userRepository.findById(work.getUserId());
-                    user.ifPresent(appUser -> result.setUsername(appUser.getUsername()));
-                    return result;
-                })
-                .collect(Collectors.toList());
+        List<Work> works = workRepository.findAllByTypeEquals(workType);
+
+        if (!blocked) {
+            works = filterBlockedWorks(works);
+        }
+
+        return mapWorksToDtos(works);
     }
 
-    public List<WorkInfoDto> findProseWorkInfo() {
-        WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
+    public List<WorkInfoDto> findProseWorkInfo(boolean blocked) {
+        List<Work> works = workRepository.findAllByTypeIsNotLike(WorkType.POEM);
 
-        return workRepository.findAllByTypeIsNotLike(WorkType.POEM)
-                .stream()
-                .map(work -> {
-                    WorkInfoDto result = mapper.toWorkInfoDto(work);
-                    Optional<AppUser> user = userRepository.findById(work.getUserId());
-                    user.ifPresent(appUser -> result.setUsername(appUser.getUsername()));
-                    return result;
-                })
-                .collect(Collectors.toList());
+        if (!blocked) {
+            works = filterBlockedWorks(works);
+        }
+
+        return mapWorksToDtos(works);
     }
 
-    public WorkDetailsDto findById(Long id) {
+    public WorkDetailsDto findById(Long id, Principal principal) throws WorkException {
         WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
         Optional<Work> work = workRepository.findById(id);
         WorkDetailsDto result = mapper.toDto(work.orElseThrow(() ->
                 new NoSuchElementException(
                         String.format(WORK_NOT_FOUND_MSG, id)
                 )));
+        Optional<AppUser> caller;
+        if (principal != null) {
+            caller = userRepository.findByUsername(principal.getName());
+        } else {
+            caller = Optional.empty();
+        }
+        if (result.getStatus().equals(WorkStatus.BLOCKED)) {
+            if (caller.isEmpty() || !caller.get().getAppUserRole().equals(AppUserRole.MODERATOR)) {
+                throw WorkException.accessForbidden();
+            }
+        }
         userRepository.findById(work.get().getUserId()).ifPresent(appUser -> {
             result.setUsername(appUser.getUsername());
         });
@@ -130,6 +136,27 @@ public class WorkService {
                 .map(work -> {
                     WorkInfoDto result = mapper.toWorkInfoDto(work);
                     result.setUsername(username);
+                    return result;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<Work> filterBlockedWorks(List<Work> works) {
+        return works
+                .stream()
+                .filter(w -> w.getStatus().equals(WorkStatus.ACCEPTED))
+                .collect(Collectors.toList());
+    }
+
+    private List<WorkInfoDto> mapWorksToDtos(List<Work> works) {
+        WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
+
+        return works
+                .stream()
+                .map(work -> {
+                    WorkInfoDto result = mapper.toWorkInfoDto(work);
+                    Optional<AppUser> user = userRepository.findById(work.getUserId());
+                    user.ifPresent(appUser -> result.setUsername(appUser.getUsername()));
                     return result;
                 })
                 .collect(Collectors.toList());

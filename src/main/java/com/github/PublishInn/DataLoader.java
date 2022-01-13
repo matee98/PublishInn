@@ -73,7 +73,7 @@ public class DataLoader implements ApplicationRunner {
 
         Work work5 = new Work();
         work5.setCreatedBy(admin.getId());
-        work5.setStatus(WorkStatus.WAITING);
+        work5.setStatus(WorkStatus.BLOCKED);
         work5.setUserId(1L);
         work5.setTitle("Przykład5");
         work5.setRating(BigDecimal.valueOf(6.87));
