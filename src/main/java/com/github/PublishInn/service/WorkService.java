@@ -12,11 +12,22 @@ import com.github.PublishInn.model.entity.enums.WorkStatus;
 import com.github.PublishInn.model.entity.enums.WorkType;
 import com.github.PublishInn.model.repository.UserRepository;
 import com.github.PublishInn.model.repository.WorkRepository;
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.data.MutableDataSet;
 import lombok.AllArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.helper.W3CDom;
+import org.jsoup.nodes.Document;
 import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
@@ -161,6 +172,37 @@ public class WorkService {
         }, () -> {
             throw new NoSuchElementException(WORK_NOT_FOUND_MSG);
         });
+    }
+
+    public void getWorkAsPdf(Long workId, HttpServletResponse response) throws IOException {
+        Optional<Work> work = workRepository.findById(workId);
+        if (work.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=" + work.get().getTitle() + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        Document document = Jsoup.parse(convertToHtml(work.get().getText()));
+        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+
+        try (OutputStream os = response.getOutputStream()) {
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.toStream(os);
+            builder.withW3cDocument(new W3CDom().fromJsoup(document), "/");
+            builder.run();
+        }
+
+    }
+
+    private String convertToHtml(String text) {
+        MutableDataSet options = new MutableDataSet();
+        Parser parser = Parser.builder(options).build();
+        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+
+        Node document = parser.parse(text);
+        return renderer.render(document);
     }
 
     private List<Work> filterBlockedWorks(List<Work> works) {

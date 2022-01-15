@@ -49,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/users/admin").hasAuthority("ADMIN")
                 .antMatchers("/api/works/moderator/**").hasAuthority("MODERATOR")
                 .antMatchers(HttpMethod.GET, "/api/works/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/works/convert/**").permitAll()
                 .anyRequest().authenticated();
         http
                 .addFilter(customAuthenticationFilter);

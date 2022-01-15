@@ -7,10 +7,14 @@ import com.github.PublishInn.exceptions.WorkException;
 import com.github.PublishInn.service.WorkService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -76,5 +80,13 @@ public class WorkController {
         } catch (WorkException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
+    }
+
+    @GetMapping(
+            path = "/convert/pdf/{id}",
+            produces = "application/pdf"
+    )
+    public void getAsPdf(@PathVariable Long id, HttpServletResponse response) throws IOException {
+        workService.getWorkAsPdf(id, response);
     }
 }
