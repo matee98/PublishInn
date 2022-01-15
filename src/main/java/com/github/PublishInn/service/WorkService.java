@@ -184,7 +184,7 @@ public class WorkService {
         String headerValue = "attachment; filename=" + work.get().getTitle() + ".pdf";
         response.setHeader(headerKey, headerValue);
 
-        Document document = Jsoup.parse(convertToHtml(work.get().getText()));
+        Document document = Jsoup.parse(convertToHtml("# " + work.get().getTitle() + "\n" + work.get().getText()));
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
 
         try (OutputStream os = response.getOutputStream()) {

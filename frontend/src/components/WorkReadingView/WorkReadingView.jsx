@@ -6,9 +6,10 @@ import MDEditor from "@uiw/react-md-editor";
 import CategoryMenu from "../partial/CategoryMenu";
 import {dateConverter} from "../helpers/DateConverter";
 import SideUserProfile from "../partial/SideUserProfile";
-import {Button} from "react-bootstrap";
+import {Button, Dropdown, DropdownButton} from "react-bootstrap";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {getCurrentUser} from "../helpers/GetCurrentUser";
+import {saveAs} from "file-saver";
 
 export default function WorkReadingView() {
     const { id } = useParams();
@@ -129,6 +130,11 @@ export default function WorkReadingView() {
             })
     }
 
+    const handleDownloadPdf = () => {
+        const FileSaver = require('file-saver');
+        FileSaver.saveAs(`http://localhost:8080/api/works/convert/pdf/${id}`, `${data.title}_${data.username}.pdf`)
+    }
+
     return (
         <div className="container-fluid">
             <div className="row">
@@ -138,6 +144,11 @@ export default function WorkReadingView() {
                 <div className="col-md border-start border-end">
                     <div className="p-3 py-3">
                         <div className="mb-3 align-content-md-start">
+                            <p className="float-start">
+                                <DropdownButton title="Pobierz">
+                                    <Dropdown.Item onClick={handleDownloadPdf}>PDF</Dropdown.Item>
+                                </DropdownButton>
+                            </p>
                             <p className="text-end">{dateConverter(data.createdOn, true)}</p>
                             <p className="text-end">Ocena: {data.rating}/10</p>
                             <h2 className="text-center">{data.title}</h2>
