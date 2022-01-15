@@ -17,7 +17,8 @@ export default function WorkReadingView() {
         username: "",
         rating: "",
         text: "",
-        createdOn: ""
+        createdOn: "",
+        status: ""
     });
 
     const [rating, setRating] = useState(0)
@@ -81,18 +82,50 @@ export default function WorkReadingView() {
     }, [])
 
     const fetchData = () => {
-        instance.get(`/works/details/${id}`)
-            .then((res) => {
-                setData({
-                    ...res.data,
-                    author: res.data.userId
-                });
-            })
+        if (user.roles[0] === "GUEST") {
+            instance.get(`/works/details/${id}`)
+                .then((res) => {
+                    setData({
+                        ...res.data,
+                        author: res.data.userId
+                    });
+                })
+        } else {
+            axios.get(`/works/details/${id}`)
+                .then((res) => {
+                    setData({
+                        ...res.data,
+                        author: res.data.userId
+                    });
+                })
 
-        axios.get(`/ratings?username=${user.sub}&work_id=${id}`)
-            .then((res) => {
-                setRating(res.data.rate)
-                setBlocked(true)
+            axios.get(`/ratings?username=${user.sub}&work_id=${id}`)
+                .then((res) => {
+                    setRating(res.data.rate)
+                    setBlocked(true)
+                })
+        }
+    }
+
+    const handleBlock = () => {
+        axios.patch(`/works/moderator/block/${id}`)
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Utwór został zablokowany",
+                    title: "Success"
+                })
+            })
+    }
+
+    const handleUnblock = () => {
+        axios.patch(`/works/moderator/unblock/${id}`)
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Utwór został odblokowany",
+                    title: "Success"
+                })
             })
     }
 
@@ -115,6 +148,15 @@ export default function WorkReadingView() {
                                     padding: "2px",
                                     borderBottom: "2px outset"
                                 }}/>
+                            {user.roles[0] === "MODERATOR" &&
+                                    <p className="text-start mt-2">
+                                        {data.status === "ACCEPTED" ?
+                                            <Button onClick={handleBlock}>Zablokuj utwór</Button>
+                                            :
+                                            <Button onClick={handleUnblock}>Odblokuj utwór</Button>
+                                        }
+                                    </p>
+                            }
                             {localStorage.getItem("token") ?
                                 (blocked
                                     ?
