@@ -21,13 +21,13 @@ export default class Routes extends Component{
                     <Home />
                 </Route>
                 <Route exact path="/login">
-                    {localStorage.getItem('username') ? <Redirect to="/" /> : <Login />}
+                    {localStorage.getItem('token') ? <Redirect to="/" /> : <Login />}
                 </Route>
                 <Route exact path="/register">
-                    {localStorage.getItem('username') ? <Redirect to="/" /> : <SignUp />}
+                    {localStorage.getItem('token') ? <Redirect to="/" /> : <SignUp />}
                 </Route>
                 <Route exact path="/account/info">
-                    {localStorage.getItem('username') ? <AccountInfo /> : <Redirect to="/login" />}
+                    {localStorage.getItem('token') ? <AccountInfo /> : <Redirect to="/login" />}
                 </Route>
                 <Route exact path="/accounts">
                     <UsersAccountsList />
@@ -42,7 +42,7 @@ export default class Routes extends Component{
                     <EditAccount />
                 </Route>
                 <Route exact path='/works/new'>
-                    {localStorage.getItem('username') ? <AddWork /> : <Redirect to="/login" />}
+                    {localStorage.getItem('token') ? <AddWork /> : <Redirect to="/login" />}
                 </Route>
                 <Route exact path='/works/:type'>
                     <BrowseWorksList />

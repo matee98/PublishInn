@@ -33,9 +33,6 @@ function Login() {
             .then((res) => {
                 localStorage.setItem('token', res.data.access_token)
                 localStorage.setItem('refreshToken', res.data.refresh_token)
-                const user = jwt(res.data.access_token)
-                localStorage.setItem('username', user.sub)
-                localStorage.setItem('userRole', user.roles[0])
                 handleRefresh();
                 history.push("/");
                 dispatch({

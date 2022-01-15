@@ -8,6 +8,7 @@ import {dateConverter} from "../helpers/DateConverter";
 import SideUserProfile from "../partial/SideUserProfile";
 import {Button} from "react-bootstrap";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
+import {getCurrentUser} from "../helpers/GetCurrentUser";
 
 export default function WorkReadingView() {
     const { id } = useParams();
@@ -69,6 +70,9 @@ export default function WorkReadingView() {
                 })
         }
     }
+
+    const user = getCurrentUser();
+
     const instance = axios.create();
     delete instance.defaults.headers.common["Authorization"];
 
@@ -85,7 +89,7 @@ export default function WorkReadingView() {
                 });
             })
 
-        axios.get(`/ratings?username=${localStorage.getItem("username")}&work_id=${id}`)
+        axios.get(`/ratings?username=${user.sub}&work_id=${id}`)
             .then((res) => {
                 setRating(res.data.rate)
                 setBlocked(true)
@@ -111,7 +115,7 @@ export default function WorkReadingView() {
                                     padding: "2px",
                                     borderBottom: "2px outset"
                                 }}/>
-                            {localStorage.getItem("username") ?
+                            {localStorage.getItem("token") ?
                                 (blocked
                                     ?
                                     <div className="float-start d-inline-flex">

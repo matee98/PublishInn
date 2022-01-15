@@ -2,6 +2,7 @@ import {Component} from "react";
 import {Button, Container, Form, FormControl, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import logo from '../../assets/logo.png'
+import {getCurrentUser} from "../helpers/GetCurrentUser";
 
 class NavigationBar extends Component {
 
@@ -12,14 +13,16 @@ class NavigationBar extends Component {
     handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
-        localStorage.removeItem('username');
-        localStorage.removeItem('userRole');
         this.handleRefresh();
     }
 
     render() {
+        let user = getCurrentUser();
+        if (user.exp < Date.now()/1000) {
+            this.handleLogout()
+        }
         let authPanel;
-        if (localStorage.getItem('username')) {
+        if (user.roles[0] !== "GUEST") {
             authPanel =
             <div>
                 <Link to="/account/info" className="d-inline-block p-1">
@@ -57,7 +60,7 @@ class NavigationBar extends Component {
                             navbarScroll
                         >
                             <Nav.Link>
-                                {localStorage.getItem("username") &&
+                                {user.roles[0] !== "GUEST" &&
                                 <Link to="/" className="text-decoration-none text-secondary">Panel użytkownika</Link>
                                 }
                             </Nav.Link>
@@ -76,7 +79,7 @@ class NavigationBar extends Component {
                             <Nav.Link>
                                 <Link to="/works/new" className="text-decoration-none text-secondary">Dodaj utwór</Link>
                             </Nav.Link>
-                            {localStorage.getItem('userRole') === 'ADMIN' &&
+                            {user.roles[0] === 'ADMIN' &&
                             <Nav.Link>
                                 <Link to="/accounts" className="text-decoration-none text-secondary">
                                     Zarządzaj użytkownikami

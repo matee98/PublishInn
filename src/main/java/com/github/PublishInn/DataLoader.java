@@ -30,7 +30,7 @@ public class DataLoader implements ApplicationRunner {
         user.setEnabled(true);
         AppUser moderator = new AppUser("moderator", "matz@edu2.pl",
                 "$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK", AppUserRole.MODERATOR);
-        user.setEnabled(true);
+        moderator.setEnabled(true);
         userRepository.save(admin);
         userRepository.save(user);
         userRepository.save(moderator);
