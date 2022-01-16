@@ -10,7 +10,7 @@ export default class Home extends Component{
                     <div className="lander">
                         <h1>Witaj, {localStorage.getItem('username')}</h1>
                         <Button>
-                            <Link to='/works/new'>
+                            <Link to='/test/new'>
                                 Dodaj pracę
                             </Link>
                         </Button>
@@ -22,6 +22,11 @@ export default class Home extends Component{
             <div className="Home">
                 <div className="lander">
                     <h1>Witaj</h1>
+                    <Button>
+                        <Link to='/test/new'>
+                            Dodaj pracę
+                        </Link>
+                    </Button>
                 </div>
             </div>
         );

@@ -1,5 +1,5 @@
 import {Link, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import ReactStars from "react-rating-stars-component";
 import axios from "axios";
 import MDEditor from "@uiw/react-md-editor";
@@ -9,7 +9,9 @@ import SideUserProfile from "../partial/SideUserProfile";
 import {Button, Dropdown, DropdownButton} from "react-bootstrap";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {getCurrentUser} from "../helpers/GetCurrentUser";
-import {saveAs} from "file-saver";
+import {withReact, Slate, Editable} from "slate-react";
+import {createEditor} from "slate";
+import './../AddWork/NewWork.css'
 
 export default function WorkReadingView() {
     const { id } = useParams();
@@ -78,6 +80,26 @@ export default function WorkReadingView() {
     const instance = axios.create();
     delete instance.defaults.headers.common["Authorization"];
 
+    const deserialize = string => {
+        return string.split('\n').map(line => {
+            return {
+                children: [{ text: line}],
+            }
+        })
+    }
+
+    const editor = useMemo(() => withReact(createEditor()), [])
+    const renderElement = useCallback(({ attributes, children, element }) => {
+        return <p
+            className="text-area"
+            {...attributes}
+        >
+            {children}
+        </p>
+    }, [])
+
+    const [textReader, setTextReader] = useState();
+
     useEffect(() => {
         fetchData()
     }, [])
@@ -90,6 +112,11 @@ export default function WorkReadingView() {
                         ...res.data,
                         author: res.data.userId
                     });
+                    setTextReader(
+                        <Slate editor={editor} value={deserialize(res.data.text)} onChange={() => {}}>
+                            <Editable readOnly renderElement={renderElement}/>
+                        </Slate>
+                    )
                 })
         } else {
             axios.get(`/works/details/${id}`)
@@ -98,6 +125,11 @@ export default function WorkReadingView() {
                         ...res.data,
                         author: res.data.userId
                     });
+                    setTextReader(
+                        <Slate editor={editor} value={deserialize(res.data.text)} onChange={() => {}}>
+                            <Editable readOnly renderElement={renderElement}/>
+                        </Slate>
+                    )
                 })
 
             axios.get(`/ratings?username=${user.sub}&work_id=${id}`)
@@ -152,13 +184,7 @@ export default function WorkReadingView() {
                             <p className="text-end">{dateConverter(data.createdOn, true)}</p>
                             <p className="text-end">Ocena: {data.rating}/10</p>
                             <h2 className="text-center">{data.title}</h2>
-                            <MDEditor.Markdown
-                                source={data.text}
-                                style={{
-                                    textAlign: "left",
-                                    padding: "2px",
-                                    borderBottom: "2px outset"
-                                }}/>
+                            {textReader}
                             {user.roles[0] === "MODERATOR" &&
                                     <p className="text-start mt-2">
                                         {data.status === "ACCEPTED" ?

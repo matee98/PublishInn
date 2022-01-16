@@ -12,6 +12,7 @@ import AddWork from "./components/AddWork/AddWork";
 import WorkReadingView from "./components/WorkReadingView/WorkReadingView";
 import BrowseWorksList from "./components/BrowseWorksList/BrowseWorksList";
 import UserProfile from "./components/UserProfile/UserProfile";
+import NewWork from "./components/AddWork/NewWork";
 
 export default class Routes extends Component{
     render() {
@@ -43,6 +44,9 @@ export default class Routes extends Component{
                 </Route>
                 <Route exact path='/works/new'>
                     {localStorage.getItem('token') ? <AddWork /> : <Redirect to="/login" />}
+                </Route>
+                <Route exact path='/test/new'>
+                    <NewWork />
                 </Route>
                 <Route exact path='/works/:type'>
                     <BrowseWorksList />
