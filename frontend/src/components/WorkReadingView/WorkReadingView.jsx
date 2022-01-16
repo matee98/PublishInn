@@ -2,7 +2,6 @@ import {Link, useParams} from "react-router-dom";
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import ReactStars from "react-rating-stars-component";
 import axios from "axios";
-import MDEditor from "@uiw/react-md-editor";
 import CategoryMenu from "../partial/CategoryMenu";
 import {dateConverter} from "../helpers/DateConverter";
 import SideUserProfile from "../partial/SideUserProfile";

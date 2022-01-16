@@ -26,8 +26,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.FileSystems;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
@@ -184,13 +186,17 @@ public class WorkService {
         String headerValue = "attachment; filename=" + work.get().getTitle() + ".pdf";
         response.setHeader(headerKey, headerValue);
 
-        Document document = Jsoup.parse(convertToHtml("# " + work.get().getTitle() + "\n" + work.get().getText()));
+        Document document = Jsoup.parse(convertToHtml("# " + work.get().getTitle() + "\n" + work.get().getText()), "UTF-8");
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
 
         try (OutputStream os = response.getOutputStream()) {
+            String baseUrl = FileSystems.getDefault()
+                    .getPath("src/main/resources/")
+                    .toUri().toURL().toString();
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.toStream(os);
-            builder.withW3cDocument(new W3CDom().fromJsoup(document), "/");
+            builder.withW3cDocument(new W3CDom().fromJsoup(document), baseUrl);
+            builder.useFont(new File(getClass().getClassLoader().getResource("fonts/LiberationSerif-Regular.ttf").getFile()), "serif");
             builder.run();
         }
 
@@ -198,6 +204,7 @@ public class WorkService {
 
     private String convertToHtml(String text) {
         MutableDataSet options = new MutableDataSet();
+        options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
         Parser parser = Parser.builder(options).build();
         HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
