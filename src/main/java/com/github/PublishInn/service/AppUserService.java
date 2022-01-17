@@ -203,5 +203,6 @@ public class AppUserService implements UserDetailsService {
             throw UserException.passwordNotMatch();
         }
         user.setPassword(bCryptPasswordEncoder.encode(model.getNewPassword()));
+        userRepository.save(user);
     }
 }
