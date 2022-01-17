@@ -4,11 +4,16 @@ import com.github.PublishInn.dto.UserDetailsEditDto;
 import com.github.PublishInn.dto.UserInfoDto;
 import com.github.PublishInn.dto.UserShortProfileDto;
 import com.github.PublishInn.dto.mappers.AppUserMapper;
+import com.github.PublishInn.exceptions.UserException;
 import com.github.PublishInn.model.entity.AppUser;
+import com.github.PublishInn.model.entity.OneTimeCode;
 import com.github.PublishInn.model.entity.Work;
 import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.token.ConfirmationToken;
+import com.github.PublishInn.model.repository.OneTimeCodeRepository;
 import com.github.PublishInn.model.repository.UserRepository;
+import com.github.PublishInn.utils.EmailBuilder;
+import com.github.PublishInn.utils.EmailService;
 import lombok.AllArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +23,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,11 +36,15 @@ public class AppUserService implements UserDetailsService {
     private final static String USER_NOT_FOUND_MSG = "User with name %s not found";
     private final static String USER_ALREADY_EXISTS_MSG = "Email address %s already taken";
 
+    private static final String RESET_PASSWORD_LINK = "http://localhost:8080/api/account/password/reset?code=";
+
     private final static int CONFIRMATION_TOKEN_EXPIRATION_TIME = 30;
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final OneTimeCodeRepository codeRepository;
+    private final EmailService emailService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -168,5 +176,18 @@ public class AppUserService implements UserDetailsService {
         }
 
         return result;
+    }
+
+    public void sendResetPasswordCode(String email) throws UserException {
+        AppUser user = userRepository.findByEmail(email).orElseThrow(UserException::notFound);
+        String code = UUID.randomUUID().toString();
+        OneTimeCode token = new OneTimeCode(code, user);
+        codeRepository.save(token);
+        emailService.send(
+                user.getEmail(),
+                EmailBuilder.buildResetPasswordEmail(
+                        user.getUsername(),
+                        RESET_PASSWORD_LINK + token),
+                "Zresetuj swoje hasło");
     }
 }

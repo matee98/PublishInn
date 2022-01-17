@@ -1,7 +1,7 @@
 package com.github.PublishInn.utils;
 
 public class EmailBuilder {
-    public static String buildEmail(String name, String link) {
+    public static String buildRegisterEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -68,5 +68,9 @@ public class EmailBuilder {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
+    }
+
+    public static String buildResetPasswordEmail(String name, String link) {
+        return "Witaj, " + name + ". Kliknij w poniższy link aby zresetować swoje hasło: \n" + link;
     }
 }
