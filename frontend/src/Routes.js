@@ -16,25 +16,29 @@ import NewWork from "./components/AddWork/NewWork";
 import SendResetPassword from "./components/ResetPassword/SendResetPassword";
 import ResetPasswordConfirm from "./components/ResetPassword/ResetPasswordConfirm";
 import BrowseBlocked from "./components/BrowseWorksList/BrowseBlocked";
+import UserPanel from "./components/UserPanel/UserPanel";
 
 export default class Routes extends Component{
     render() {
         return (
             <Switch>
                 <Route exact path="/">
-                    <Home />
+                    {localStorage.getItem('token') ? <Redirect to="/user/panel" /> : <Home />}
+                </Route>
+                <Route path="/user/panel">
+                    {!localStorage.getItem('token') ? <Redirect to="/" /> : <UserPanel />}
                 </Route>
                 <Route exact path="/login">
-                    {localStorage.getItem('token') ? <Redirect to="/" /> : <Login />}
+                    {localStorage.getItem('token') ? <Redirect to="/user/panel" /> : <Login />}
                 </Route>
                 <Route exact path="/password/reset">
-                    {localStorage.getItem('token') ? <Redirect to="/" /> : <SendResetPassword />}
+                    {localStorage.getItem('token') ? <Redirect to="/user/panel" /> : <SendResetPassword />}
                 </Route>
                 <Route exact path="/password/reset/confirm/:code">
-                    {localStorage.getItem('token') ? <Redirect to="/" /> : <ResetPasswordConfirm />}
+                    {localStorage.getItem('token') ? <Redirect to="/user/panel" /> : <ResetPasswordConfirm />}
                 </Route>
                 <Route exact path="/register">
-                    {localStorage.getItem('token') ? <Redirect to="/" /> : <SignUp />}
+                    {localStorage.getItem('token') ? <Redirect to="/user/panel" /> : <SignUp />}
                 </Route>
                 <Route exact path="/account/info">
                     {localStorage.getItem('token') ? <AccountInfo /> : <Redirect to="/login" />}
