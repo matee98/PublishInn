@@ -83,6 +83,9 @@ class NavigationBar extends Component {
                             <Nav.Link>
                                 <Link to="/works/new" className="text-decoration-none text-secondary">Dodaj utwór</Link>
                             </Nav.Link>
+                            <Nav.Link>
+                                <Link to="/test/new" className="text-decoration-none text-secondary">Dodaj utwór</Link>
+                            </Nav.Link>
                             {user.roles[0] === 'ADMIN' &&
                             <Nav.Link>
                                 <Link to="/accounts" className="text-decoration-none text-secondary">

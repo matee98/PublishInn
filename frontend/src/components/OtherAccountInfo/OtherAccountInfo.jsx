@@ -58,6 +58,11 @@ export default function OtherAccountInfo() {
             <div className="row">
                 <div className="col-md-3 border-right">
                     <div className="d-flex flex-column align-items-center text-center p-3 py-5"><img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" /><span className="font-weight-bold">{data.username}</span><span> </span></div>
+                    <div>
+                        <Link to={`/users/profile/${username}`}>
+                            <button className="btn btn-primary profile-button" type="button">Zobacz profil</button>
+                        </Link>
+                    </div>
                 </div>
                 <div className="col-md-5 border-right">
                     <div className="p-3 py-5">
@@ -89,11 +94,6 @@ export default function OtherAccountInfo() {
                                     }
                                 })
                             }}>Zablokuj użytkownika</button>}
-                    </div>
-                    <div className="mt-2 float-start">
-                        <Link to={`/users/profile/${username}`}>
-                            <button className="btn btn-primary profile-button" type="button">Zobacz profil</button>
-                        </Link>
                     </div>
                 </div>
             </div>

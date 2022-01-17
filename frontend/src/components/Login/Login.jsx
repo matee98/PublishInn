@@ -2,14 +2,12 @@ import {useState} from "react";
 import {Button, Form} from "react-bootstrap";
 import axios from 'axios';
 import "./Login.css"
-import {Link, useHistory} from "react-router-dom";
-import jwt from 'jwt-decode';
+import {Link} from "react-router-dom";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const history = useHistory();
     const dispatch = useNotification();
 
     const handleRefresh = () => {
@@ -34,7 +32,6 @@ function Login() {
                 localStorage.setItem('token', res.data.access_token)
                 localStorage.setItem('refreshToken', res.data.refresh_token)
                 handleRefresh();
-                history.push("/");
                 dispatch({
                     type: "SUCCESS",
                     message: "Zalogowano pomyślnie",

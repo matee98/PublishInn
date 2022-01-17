@@ -89,7 +89,7 @@ export default function SignUp() {
                         onChange={(event => setRepeatedPassword(event.target.value))}
                     />
                 </Form.Group>
-                <Button block size="lg" type="submit" disabled={!validateForm()}>
+                <Button className="mt-2" block size="lg" type="submit" disabled={!validateForm()}>
                     Zarejestruj
                 </Button>
             </Form>
