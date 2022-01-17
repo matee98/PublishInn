@@ -1,5 +1,6 @@
 package com.github.PublishInn.controller;
 
+import com.github.PublishInn.dto.ChangePasswordDto;
 import com.github.PublishInn.dto.ResetPasswordDto;
 import com.github.PublishInn.dto.UserEmailDto;
 import com.github.PublishInn.dto.UserInfoDto;
@@ -8,6 +9,7 @@ import com.github.PublishInn.service.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import java.security.Principal;
 
@@ -30,5 +32,10 @@ public class AccountController {
     @PostMapping("/password/reset/confirm")
     public void resetPassword(@RequestBody ResetPasswordDto model) {
         userService.resetPassword(model);
+    }
+
+    @PutMapping("/password/change")
+    public void selfChangePassword(Principal principal, @Valid @RequestBody ChangePasswordDto model) throws UserException {
+        userService.selfChangePassword(model, principal);
     }
 }

@@ -1,9 +1,6 @@
 package com.github.PublishInn.service;
 
-import com.github.PublishInn.dto.ResetPasswordDto;
-import com.github.PublishInn.dto.UserDetailsEditDto;
-import com.github.PublishInn.dto.UserInfoDto;
-import com.github.PublishInn.dto.UserShortProfileDto;
+import com.github.PublishInn.dto.*;
 import com.github.PublishInn.dto.mappers.AppUserMapper;
 import com.github.PublishInn.exceptions.UserException;
 import com.github.PublishInn.model.entity.AppUser;
@@ -24,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -197,5 +195,13 @@ public class AppUserService implements UserDetailsService {
         AppUser user = code.getAppUser();
         user.setPassword(bCryptPasswordEncoder.encode(model.getNewPassword()));
         codeRepository.delete(code);
+    }
+
+    public void selfChangePassword(ChangePasswordDto model, Principal principal) throws UserException {
+        AppUser user = userRepository.findByUsername(principal.getName()).orElseThrow(UserException::notFound);
+        if (!bCryptPasswordEncoder.matches(model.getOldPassword(), user.getPassword())) {
+            throw UserException.passwordNotMatch();
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(model.getNewPassword()));
     }
 }
