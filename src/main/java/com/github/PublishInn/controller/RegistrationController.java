@@ -13,13 +13,13 @@ public class RegistrationController {
     private final RegistrationService registrationService;
 
     @PostMapping
-    public String register(@RequestBody UserRegisterDto model) {
-        return registrationService.register(model);
+    public void register(@RequestBody UserRegisterDto model) {
+        registrationService.register(model);
     }
     //todo: return information about existing username or email
 
     @GetMapping("/confirm")
-    public String confirm(@RequestParam("token") String token) {
-        return registrationService.confirmToken(token);
+    public void confirm(@RequestParam("token") String token) {
+        registrationService.confirmToken(token);
     }
 }

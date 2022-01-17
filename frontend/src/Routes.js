@@ -17,6 +17,7 @@ import SendResetPassword from "./components/ResetPassword/SendResetPassword";
 import ResetPasswordConfirm from "./components/ResetPassword/ResetPasswordConfirm";
 import BrowseBlocked from "./components/BrowseWorksList/BrowseBlocked";
 import UserPanel from "./components/UserPanel/UserPanel";
+import EmailConfirm from "./components/SignUp/EmailConfirm";
 
 export default class Routes extends Component{
     render() {
@@ -39,6 +40,9 @@ export default class Routes extends Component{
                 </Route>
                 <Route exact path="/register">
                     {localStorage.getItem('token') ? <Redirect to="/user/panel" /> : <SignUp />}
+                </Route>
+                <Route exact path="/register/confirm/:token">
+                    {localStorage.getItem('token') ? <Redirect to="/user/panel" /> : <EmailConfirm />}
                 </Route>
                 <Route exact path="/account/info">
                     {localStorage.getItem('token') ? <AccountInfo /> : <Redirect to="/login" />}
