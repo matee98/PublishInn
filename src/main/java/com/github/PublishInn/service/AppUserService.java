@@ -1,5 +1,6 @@
 package com.github.PublishInn.service;
 
+import com.github.PublishInn.dto.ResetPasswordDto;
 import com.github.PublishInn.dto.UserDetailsEditDto;
 import com.github.PublishInn.dto.UserInfoDto;
 import com.github.PublishInn.dto.UserShortProfileDto;
@@ -187,7 +188,14 @@ public class AppUserService implements UserDetailsService {
                 user.getEmail(),
                 EmailBuilder.buildResetPasswordEmail(
                         user.getUsername(),
-                        RESET_PASSWORD_LINK + token),
+                        RESET_PASSWORD_LINK + code),
                 "Zresetuj swoje hasło");
+    }
+
+    public void resetPassword(ResetPasswordDto model) {
+        OneTimeCode code = codeRepository.findByCode(model.getCode()).orElseThrow();
+        AppUser user = code.getAppUser();
+        user.setPassword(bCryptPasswordEncoder.encode(model.getNewPassword()));
+        codeRepository.delete(code);
     }
 }

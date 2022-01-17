@@ -1,5 +1,7 @@
 package com.github.PublishInn.controller;
 
+import com.github.PublishInn.dto.ResetPasswordDto;
+import com.github.PublishInn.dto.UserEmailDto;
 import com.github.PublishInn.dto.UserInfoDto;
 import com.github.PublishInn.exceptions.UserException;
 import com.github.PublishInn.service.AppUserService;
@@ -21,7 +23,12 @@ public class AccountController {
     }
 
     @PostMapping("/password/reset")
-    public void sendResetPasswordCode(@RequestBody @Email String email) throws UserException {
-        userService.sendResetPasswordCode(email);
+    public void sendResetPasswordCode(@RequestBody UserEmailDto model) throws UserException {
+        userService.sendResetPasswordCode(model.getEmail());
+    }
+
+    @PostMapping("/password/reset/confirm")
+    public void resetPassword(@RequestBody ResetPasswordDto model) {
+        userService.resetPassword(model);
     }
 }
