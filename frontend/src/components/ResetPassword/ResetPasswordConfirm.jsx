@@ -2,13 +2,14 @@ import {useState} from "react";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import axios from "axios";
 import {Button, Form} from "react-bootstrap";
-import {useParams} from "react-router-dom";
+import {Redirect, useParams} from "react-router-dom";
 
 export default function ResetPasswordConfirm() {
 
     const { code } = useParams();
     const [password, setPassword] = useState("");
     const [repeatedPassword, setRepeatedPassword] = useState("");
+    const [changed, setChanged] = useState(false);
 
     function validateForm() {
         return password.length > 0
@@ -31,6 +32,7 @@ export default function ResetPasswordConfirm() {
                     message: "Hasło zostało zmienione.",
                     title: "Success"
                 })
+                setChanged(true);
             })
             .catch(() => {
                 dispatch({
@@ -39,6 +41,10 @@ export default function ResetPasswordConfirm() {
                     title: "Error"
                 })
             })
+    }
+
+    if (changed) {
+        return <Redirect to="/login" />
     }
 
     return (

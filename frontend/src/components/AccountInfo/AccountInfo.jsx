@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Button, Form} from "react-bootstrap";
+import {useNotification} from "../partial/Notifications/NotificationProvider";
 
 export default function AccountInfo() {
     const [data, setData] = useState({
@@ -9,6 +11,56 @@ export default function AccountInfo() {
         enabled: false,
         locked: false
     });
+
+    const [editable, setEditable] = useState(false);
+    const [editablePart, setEditablePart] = useState("")
+
+    const [oldPassword, setOldPassword] = useState("");
+    const [password, setPassword] = useState("");
+    const [repeatedPassword, setRepeatedPassword] = useState("");
+    const [newEmail, setNewEmail] = useState("");
+
+    const dispatch = useNotification();
+
+    function validatePasswordForm() {
+        return oldPassword.length > 0
+            && password.length > 0
+            && password === repeatedPassword;
+    }
+
+    function validateEmailForm() {
+        return newEmail.length > 0;
+    }
+
+    const handlePasswordChange = () => {
+        axios.put("/account/password/change", {
+            oldPassword: oldPassword,
+            newPassword: password
+        })
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Zmiany zostały zapisane",
+                    title: "Success"
+                })
+                setEditablePart("")
+                setEditable(false)
+                setOldPassword('')
+                setPassword('')
+                setRepeatedPassword('')
+            })
+            .catch(() => {
+                dispatch({
+                    type: "ERROR",
+                    message: "Coś poszło nie tak. Spróbuj ponownie później.",
+                    title: "Error"
+                })
+            })
+    }
+
+    const handleEmailChange = () => {
+
+    }
 
     useEffect(() => {
         axios.get("/account/info")
@@ -38,7 +90,69 @@ export default function AccountInfo() {
                             <div className="flex-md-row-reverse"><label className="labels float-start">Konto potwierdzone</label><label className="labels float-end">{data.enabled ? "TAK" : "NIE"}</label></div>
                             <div className="flex-md-row-reverse"><label className="labels float-start">Konto zablokowane</label><label className="labels float-end">{data.locked ? "TAK" : "NIE"}</label></div>
                         </div>
-                        <div className="mt-5 text-center"><button className="btn btn-primary profile-button" type="button">Edytuj profil</button></div>
+                        {!editable &&
+                            <div className="mt-5 text-center">
+                                <button onClick={() => {setEditable(true)}} className="btn btn-primary profile-button" type="button">Edytuj profil</button>
+                            </div>
+                        }
+                        {editable &&
+                        <div>
+                            <div className="row mt-3">
+                                <p className="col-4 text-primary border-primary border rounded-1"
+                                   onClick={() => {setEditablePart("password")}}>
+                                    Hasło</p>
+                                <p className="col-4 text-primary border-primary border rounded-1"
+                                   onClick={() => {setEditablePart("email")}}>
+                                    Email</p>
+                            </div>
+                            {editablePart === "password" &&
+                            <Form>
+                                <Form.Group size="lg" controlId="oldPassword">
+                                    <Form.Label>Stare hasło</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        value={oldPassword}
+                                        onChange={(event => setOldPassword(event.target.value))}
+                                    />
+                                </Form.Group>
+                                <Form.Group size="lg" controlId="password">
+                                    <Form.Label>Nowe hasło</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        value={password}
+                                        onChange={(event => setPassword(event.target.value))}
+                                    />
+                                </Form.Group>
+                                <Form.Group size="lg" controlId="repeatedPassword">
+                                    <Form.Label>Powtórz hasło</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        value={repeatedPassword}
+                                        onChange={(event => setRepeatedPassword(event.target.value))}
+                                    />
+                                </Form.Group>
+                                <Button onClick={handlePasswordChange} className="mt-2" block size="lg" disabled={!validatePasswordForm()}>
+                                    Potwierdź
+                                </Button>
+                            </Form>
+                            }
+                            {editablePart === "email" &&
+                            <Form>
+                                <Form.Group size="lg" controlId="email">
+                                    <Form.Label>Nowy adres e-mail</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        value={newEmail}
+                                        onChange={(event => setNewEmail(event.target.value))}
+                                    />
+                                </Form.Group>
+                                <Button onClick={handleEmailChange} className="mt-2" block size="lg" disabled={!validateEmailForm()}>
+                                    Potwierdź
+                                </Button>
+                            </Form>
+                            }
+                        </div>
+                        }
                     </div>
                 </div>
             </div>
