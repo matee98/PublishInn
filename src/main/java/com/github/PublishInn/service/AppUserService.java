@@ -35,7 +35,7 @@ public class AppUserService implements UserDetailsService {
     private final static String USER_NOT_FOUND_MSG = "User with name %s not found";
     private final static String USER_ALREADY_EXISTS_MSG = "Email address %s already taken";
 
-    private static final String RESET_PASSWORD_LINK = "http://localhost:8080/api/account/password/reset?code=";
+    private static final String RESET_PASSWORD_LINK = "http://localhost:8080/password/reset/confirm/";
 
     private final static int CONFIRMATION_TOKEN_EXPIRATION_TIME = 30;
 

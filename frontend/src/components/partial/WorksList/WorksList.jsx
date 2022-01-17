@@ -41,11 +41,13 @@ export default function WorksList(props) {
                         }}
                         loading={loading}
                     >
-                        <p className="text-start">
-                            Autor: <span><Link to={`/users/profile/${value.username}`}>{value.username}</Link></span>
-                        </p>
-                        <p className="text-start">Ocena: {value.rating !== null ? value.rating : "brak"}</p>
-                        <p className="text-start">Dodano: {dateConverter(value.createdOn, true)}</p>
+                        <div className="row">
+                            <p className="text-start col-sm">
+                                Autor: <span><Link to={`/users/profile/${value.username}`}>{value.username}</Link></span>
+                            </p>
+                            <p className="text-sm-center col-sm">Ocena: {value.rating !== null ? value.rating : "brak"}</p>
+                            <p className="text-end col-sm">Dodano: {dateConverter(value.createdOn, true)}</p>
+                        </div>
                     </Card>
                 )))
             }

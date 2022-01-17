@@ -13,6 +13,8 @@ import WorkReadingView from "./components/WorkReadingView/WorkReadingView";
 import BrowseWorksList from "./components/BrowseWorksList/BrowseWorksList";
 import UserProfile from "./components/UserProfile/UserProfile";
 import NewWork from "./components/AddWork/NewWork";
+import SendResetPassword from "./components/ResetPassword/SendResetPassword";
+import ResetPasswordConfirm from "./components/ResetPassword/ResetPasswordConfirm";
 
 export default class Routes extends Component{
     render() {
@@ -23,6 +25,12 @@ export default class Routes extends Component{
                 </Route>
                 <Route exact path="/login">
                     {localStorage.getItem('token') ? <Redirect to="/" /> : <Login />}
+                </Route>
+                <Route exact path="/password/reset">
+                    {localStorage.getItem('token') ? <Redirect to="/" /> : <SendResetPassword />}
+                </Route>
+                <Route exact path="/password/reset/confirm/:code">
+                    {localStorage.getItem('token') ? <Redirect to="/" /> : <ResetPasswordConfirm />}
                 </Route>
                 <Route exact path="/register">
                     {localStorage.getItem('token') ? <Redirect to="/" /> : <SignUp />}

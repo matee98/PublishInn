@@ -54,7 +54,7 @@ export default function BrowseWorksList() {
                     <WorksList
                         data={data}
                         loading={loading}
-                        numberEachpage={3} />
+                        numberEachpage={5} />
                 </div>
             </div>
         </div>

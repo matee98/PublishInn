@@ -82,12 +82,15 @@ function Login() {
                         onChange={(event => setPassword(event.target.value))}
                     />
                 </Form.Group>
-                <Button block size="lg" type="submit" disabled={!validateForm()}>
+                <Button block size="lg" type="submit" className="mt-2" disabled={!validateForm()}>
                     Zaloguj
                 </Button>
                 <p>
                     Nie masz konta?
                     <Link to="/register" className="d-inline-block mx-1">Zarejestruj się</Link>
+                </p>
+                <p>
+                    <Link to="/password/reset">Resetowanie hasła</Link>
                 </p>
             </Form>
         </div>
