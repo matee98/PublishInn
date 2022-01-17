@@ -25,6 +25,7 @@ export default function WorkReadingView() {
 
     const [rating, setRating] = useState(0)
     const [blocked, setBlocked] = useState(false)
+    const [workBlocked, setWorkBlocked] = useState(false)
 
     const dispatch = useNotification()
 
@@ -129,6 +130,11 @@ export default function WorkReadingView() {
                             <Editable readOnly renderElement={renderElement}/>
                         </Slate>
                     )
+                    if (res.data.status === "BLOCKED") {
+                        setWorkBlocked(true);
+                    } else {
+                        setWorkBlocked(false);
+                    }
                 })
 
             axios.get(`/ratings?username=${user.sub}&work_id=${id}`)
@@ -147,6 +153,7 @@ export default function WorkReadingView() {
                     message: "Utwór został zablokowany",
                     title: "Success"
                 })
+                setWorkBlocked(true);
             })
     }
 
@@ -158,6 +165,7 @@ export default function WorkReadingView() {
                     message: "Utwór został odblokowany",
                     title: "Success"
                 })
+                setWorkBlocked(false);
             })
     }
 
@@ -186,10 +194,10 @@ export default function WorkReadingView() {
                             {textReader}
                             {user.roles[0] === "MODERATOR" &&
                                     <p className="text-start mt-2">
-                                        {data.status === "ACCEPTED" ?
-                                            <Button onClick={handleBlock}>Zablokuj utwór</Button>
-                                            :
+                                        {workBlocked ?
                                             <Button onClick={handleUnblock}>Odblokuj utwór</Button>
+                                            :
+                                            <Button onClick={handleBlock}>Zablokuj utwór</Button>
                                         }
                                     </p>
                             }

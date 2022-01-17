@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @AllArgsConstructor
@@ -43,6 +44,11 @@ public class WorkController {
         } else {
             return workService.findWorkInfo(type, true);
         }
+    }
+
+    @GetMapping("/moderator/blocked")
+    public List<WorkInfoDto> findAllBlockedWorkInfo(@RequestParam(value="type", required = false) String type) {
+        return workService.findAllBlockedWorkInfo(Objects.requireNonNullElse(type, ""));
     }
 
     @PatchMapping("/moderator/block/{id}")

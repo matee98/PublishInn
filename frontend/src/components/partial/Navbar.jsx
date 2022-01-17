@@ -71,10 +71,14 @@ class NavigationBar extends Component {
                                 <NavDropdown.Item>
                                     <Link to="/works/poem" className="text-decoration-none text-dark">Poezja</Link>
                                 </NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action5">
-                                    Something else here
-                                </NavDropdown.Item>
+                                { user.roles[0] === "MODERATOR" &&
+                                    <>
+                                        <NavDropdown.Divider/>
+                                        <NavDropdown.Item href="#action5">
+                                            <Link to="/works/blocked" className="text-decoration-none text-dark">Utwory zablokowane</Link>
+                                        </NavDropdown.Item>
+                                    </>
+                                }
                             </NavDropdown>
                             <Nav.Link>
                                 <Link to="/works/new" className="text-decoration-none text-secondary">Dodaj utwór</Link>

@@ -15,6 +15,7 @@ import UserProfile from "./components/UserProfile/UserProfile";
 import NewWork from "./components/AddWork/NewWork";
 import SendResetPassword from "./components/ResetPassword/SendResetPassword";
 import ResetPasswordConfirm from "./components/ResetPassword/ResetPasswordConfirm";
+import BrowseBlocked from "./components/BrowseWorksList/BrowseBlocked";
 
 export default class Routes extends Component{
     render() {
@@ -55,6 +56,9 @@ export default class Routes extends Component{
                 </Route>
                 <Route exact path='/test/new'>
                     <NewWork />
+                </Route>
+                <Route exact path='/works/blocked'>
+                    <BrowseBlocked />
                 </Route>
                 <Route exact path='/works/:type'>
                     <BrowseWorksList />

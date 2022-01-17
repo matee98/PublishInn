@@ -1,13 +1,9 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import CategoryMenu from "../partial/CategoryMenu";
-import {useParams} from "react-router-dom";
 import WorksList from "../partial/WorksList/WorksList";
+import CategoryMenu from "../partial/CategoryMenu";
 
-
-export default function BrowseWorksList() {
-
-    const {type} = useParams()
+export default function BrowseBlocked() {
     const [loading, setLoading] = useState(true)
 
     const [data, setData] = useState([{
@@ -16,14 +12,12 @@ export default function BrowseWorksList() {
         username: "",
         type: "",
         rating: "",
-        createdOn: ""
+        createdOn: "",
+        status: ""
     }])
 
-    const instance = axios.create();
-    delete instance.defaults.headers.common["Authorization"];
-
     const fetchData = () => {
-        instance.get(`/works?type=${type}`)
+        axios.get(`/works/moderator/blocked`)
             .then((res) => {
                 setData(res.data)
             })
@@ -31,7 +25,7 @@ export default function BrowseWorksList() {
 
     useEffect(() => {
         fetchData()
-    }, [type])
+    }, [])
 
     useEffect(() => {
         if (data[0] !== undefined) {
@@ -45,7 +39,6 @@ export default function BrowseWorksList() {
         <div className="container-fluid">
             <div className="row">
                 <div className="col-2 py-5">
-                    <CategoryMenu />
                 </div>
                 <div className="col-md border-start border-end">
                     <WorksList

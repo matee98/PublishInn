@@ -31,10 +31,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.security.Principal;
-import java.util.List;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,6 +82,23 @@ public class WorkService {
                     return result;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public List<WorkInfoDto> findAllBlockedWorkInfo(String type) {
+        List<Work> works;
+        if (!Objects.equals(type, "")) {
+            WorkType workType = WorkType.valueOf(type.toUpperCase(Locale.ROOT));
+            works = workRepository.findAllByTypeEquals(workType);
+        } else {
+            works = workRepository.findAll();
+        }
+
+        works = works
+                .stream()
+                .filter(x -> x.getStatus() == WorkStatus.BLOCKED)
+                .collect(Collectors.toList());
+
+        return mapWorksToDtos(works);
     }
 
     public List<WorkInfoDto> findWorkInfo(String type, boolean blocked) {
