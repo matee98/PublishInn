@@ -1,10 +1,12 @@
 package com.github.PublishInn;
 
 import com.github.PublishInn.model.entity.AppUser;
+import com.github.PublishInn.model.entity.Comment;
 import com.github.PublishInn.model.entity.Work;
 import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.enums.WorkStatus;
 import com.github.PublishInn.model.entity.enums.WorkType;
+import com.github.PublishInn.model.repository.CommentRepository;
 import com.github.PublishInn.model.repository.UserRepository;
 import com.github.PublishInn.model.repository.WorkRepository;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
 public class DataLoader implements ApplicationRunner {
     private final UserRepository userRepository;
     private final WorkRepository workRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -86,5 +89,22 @@ public class DataLoader implements ApplicationRunner {
         workRepository.save(work3);
         workRepository.save(work4);
         workRepository.save(work5);
+
+        Comment comment1 = new Comment();
+        comment1.setCreatedBy(user.getId());
+        comment1.setUserId(2L);
+        comment1.setWorkId(1L);
+        comment1.setText("Bardzo fajne. Polecam");
+        comment1.setVisible(true);
+
+        Comment comment2 = new Comment();
+        comment2.setCreatedBy(admin.getId());
+        comment2.setUserId(1L);
+        comment2.setWorkId(1L);
+        comment2.setText("Całkiem w porządku");
+        comment2.setVisible(true);
+
+        commentRepository.save(comment1);
+        commentRepository.save(comment2);
     }
 }
