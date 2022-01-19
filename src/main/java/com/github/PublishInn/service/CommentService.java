@@ -19,6 +19,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -68,6 +69,7 @@ public class CommentService {
                     user.ifPresent(appUser -> result.setUsername(appUser.getUsername()));
                     return result;
                 })
+                .sorted(Comparator.comparing(CommentDetailsDto::getCreatedOn))
                 .collect(Collectors.toList());
     }
 
@@ -81,6 +83,7 @@ public class CommentService {
                     result.setUsername(username);
                     return result;
                 })
+                .sorted(Comparator.comparing(CommentDetailsDto::getCreatedOn))
                 .collect(Collectors.toList());
     }
 
