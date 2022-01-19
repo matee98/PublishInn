@@ -1,8 +1,9 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import axios from "axios";
 import {Button, Form} from "react-bootstrap";
-import {Redirect, useParams} from "react-router-dom";
+import {Link, Redirect, useParams} from "react-router-dom";
+import BreadCrumb from "../partial/Breadcrumb";
 
 export default function ResetPasswordConfirm() {
 
@@ -51,6 +52,10 @@ export default function ResetPasswordConfirm() {
         <div className="container-fluid" style={{
             maxWidth: "320px"
         }}>
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item active">Potwierdź reset hasła</li>
+            </BreadCrumb>
             <div className="h3 mb-3 pt-3">Zmiana hasła</div>
             <Form>
                 <Form.Group size="lg" controlId="password">

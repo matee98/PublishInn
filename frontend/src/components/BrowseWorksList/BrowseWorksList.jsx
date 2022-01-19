@@ -1,8 +1,9 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import CategoryMenu from "../partial/CategoryMenu";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import WorksList from "../partial/WorksList/WorksList";
+import BreadCrumb from "../partial/Breadcrumb";
 
 
 export default function BrowseWorksList() {
@@ -43,6 +44,10 @@ export default function BrowseWorksList() {
 
     return (
         <div className="container-fluid">
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item active">Przeglądaj</li>
+            </BreadCrumb>
             <div className="row">
                 <div className="col-2 py-5">
                     <CategoryMenu />

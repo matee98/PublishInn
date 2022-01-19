@@ -1,7 +1,9 @@
 import {Button, Form} from "react-bootstrap";
-import {useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
+import {Link} from "react-router-dom";
+import BreadCrumb from "../partial/Breadcrumb";
 
 export default function SendResetPassword() {
     const [email, setEmail] = useState("");
@@ -39,6 +41,10 @@ export default function SendResetPassword() {
         <div className="container-fluid" style={{
             maxWidth: "320px"
         }}>
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item active">Resetuj hasło</li>
+            </BreadCrumb>
             <div className="h3 mb-3 pt-3">Resetowanie hasła</div>
             <Form>
                 <Form.Group size="lg" controlId="email">

@@ -1,9 +1,10 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {Button, Form} from "react-bootstrap";
 import "./SignUp.css"
 import axios from "axios";
-import {Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
+import BreadCrumb from "../partial/Breadcrumb";
 
 export default function SignUp() {
     const [username, setUsername] = useState("");
@@ -54,45 +55,51 @@ export default function SignUp() {
     }
 
     return (
-        <div className="SignUp">
-            <Form onSubmit={handleSubmit}>
-                <Form.Group size="lg" controlId="emailAddress">
-                    <Form.Label>Adres e-mail</Form.Label>
-                    <Form.Control
-                        autoFocus
-                        type="email"
-                        value={email}
-                        onChange={(event => setEmail(event.target.value))}
-                    />
-                </Form.Group>
-                <Form.Group size="lg" controlId="username">
-                    <Form.Label>Nazwa użytkownika</Form.Label>
-                    <Form.Control
-                        type="text"
-                        value={username}
-                        onChange={(event => setUsername(event.target.value))}
-                    />
-                </Form.Group>
-                <Form.Group size="lg" controlId="password">
-                    <Form.Label>Hasło</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={password}
-                        onChange={(event => setPassword(event.target.value))}
-                    />
-                </Form.Group>
-                <Form.Group size="lg" controlId="repeatedPassword">
-                    <Form.Label>Powtórz hasło</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={repeatedPassword}
-                        onChange={(event => setRepeatedPassword(event.target.value))}
-                    />
-                </Form.Group>
-                <Button className="mt-2" block size="lg" type="submit" disabled={!validateForm()}>
-                    Zarejestruj
-                </Button>
-            </Form>
+        <div className="container-fluid">
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item active">Rejestracja</li>
+            </BreadCrumb>
+            <div className="SignUp">
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group size="lg" controlId="emailAddress">
+                        <Form.Label>Adres e-mail</Form.Label>
+                        <Form.Control
+                            autoFocus
+                            type="email"
+                            value={email}
+                            onChange={(event => setEmail(event.target.value))}
+                        />
+                    </Form.Group>
+                    <Form.Group size="lg" controlId="username">
+                        <Form.Label>Nazwa użytkownika</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={username}
+                            onChange={(event => setUsername(event.target.value))}
+                        />
+                    </Form.Group>
+                    <Form.Group size="lg" controlId="password">
+                        <Form.Label>Hasło</Form.Label>
+                        <Form.Control
+                            type="password"
+                            value={password}
+                            onChange={(event => setPassword(event.target.value))}
+                        />
+                    </Form.Group>
+                    <Form.Group size="lg" controlId="repeatedPassword">
+                        <Form.Label>Powtórz hasło</Form.Label>
+                        <Form.Control
+                            type="password"
+                            value={repeatedPassword}
+                            onChange={(event => setRepeatedPassword(event.target.value))}
+                        />
+                    </Form.Group>
+                    <Button className="mt-2" block size="lg" type="submit" disabled={!validateForm()}>
+                        Zarejestruj
+                    </Button>
+                </Form>
+            </div>
         </div>
     )
 }

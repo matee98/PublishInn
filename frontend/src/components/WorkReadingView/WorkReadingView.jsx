@@ -10,6 +10,7 @@ import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {getCurrentUser} from "../helpers/GetCurrentUser";
 import MDEditor from "@uiw/react-md-editor";
 import CommentsList from "../partial/CommentsList/CommentsList";
+import BreadCrumb from "../partial/Breadcrumb";
 
 export default function WorkReadingView() {
     const { id } = useParams();
@@ -200,6 +201,11 @@ export default function WorkReadingView() {
 
     return (
         <div className="container-fluid">
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item"><Link to="/works/prose" className="breadcrumb-item-nonactive">Przeglądaj</Link></li>
+                <li className="breadcrumb-item active">{data.title}</li>
+            </BreadCrumb>
             <div className="row">
                 <div className="col-2 py-5">
                     <CategoryMenu />

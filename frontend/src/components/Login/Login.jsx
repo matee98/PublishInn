@@ -1,9 +1,10 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {Button, Form} from "react-bootstrap";
 import axios from 'axios';
 import "./Login.css"
 import {Link} from "react-router-dom";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
+import BreadCrumb from "../partial/Breadcrumb";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -60,36 +61,42 @@ function Login() {
     }
 
     return (
-        <div className="Login">
-            <Form onSubmit={handleSubmit}>
-                <Form.Group size="lg" controlId="username">
-                    <Form.Label>Nazwa użytkownika</Form.Label>
-                    <Form.Control
-                        autoFocus
-                        type="text"
-                        value={username}
-                        onChange={(event => setUsername(event.target.value))}
+        <div className="container-fluid">
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item active">Logowanie</li>
+            </BreadCrumb>
+            <div className="Login">
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group size="lg" controlId="username">
+                        <Form.Label>Nazwa użytkownika</Form.Label>
+                        <Form.Control
+                            autoFocus
+                            type="text"
+                            value={username}
+                            onChange={(event => setUsername(event.target.value))}
+                            />
+                    </Form.Group>
+                    <Form.Group size="lg" controlId="password">
+                        <Form.Label>Hasło</Form.Label>
+                        <Form.Control
+                            type="password"
+                            value={password}
+                            onChange={(event => setPassword(event.target.value))}
                         />
-                </Form.Group>
-                <Form.Group size="lg" controlId="password">
-                    <Form.Label>Hasło</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={password}
-                        onChange={(event => setPassword(event.target.value))}
-                    />
-                </Form.Group>
-                <Button block size="lg" type="submit" className="mt-2" disabled={!validateForm()}>
-                    Zaloguj
-                </Button>
-                <p>
-                    Nie masz konta?
-                    <Link to="/register" className="d-inline-block mx-1">Zarejestruj się</Link>
-                </p>
-                <p>
-                    <Link to="/password/reset">Resetowanie hasła</Link>
-                </p>
-            </Form>
+                    </Form.Group>
+                    <Button block size="lg" type="submit" className="mt-2" disabled={!validateForm()}>
+                        Zaloguj
+                    </Button>
+                    <p>
+                        Nie masz konta?
+                        <Link to="/register" className="d-inline-block mx-1">Zarejestruj się</Link>
+                    </p>
+                    <p>
+                        <Link to="/password/reset">Resetowanie hasła</Link>
+                    </p>
+                </Form>
+            </div>
         </div>
     )
 }

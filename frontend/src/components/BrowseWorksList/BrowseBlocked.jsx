@@ -1,7 +1,8 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import WorksList from "../partial/WorksList/WorksList";
 import CategoryMenu from "../partial/CategoryMenu";
+import {Link} from "react-router-dom";
 
 export default function BrowseBlocked() {
     const [loading, setLoading] = useState(true)
@@ -37,6 +38,8 @@ export default function BrowseBlocked() {
 
     return (
         <div className="container-fluid">
+            <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+            <li className="breadcrumb-item active">Zablokowane utwory</li>
             <div className="row">
                 <div className="col-2 py-5">
                 </div>

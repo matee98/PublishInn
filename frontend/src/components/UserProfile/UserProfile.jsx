@@ -1,9 +1,10 @@
 import {Link, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import axios from "axios";
 import {dateConverter} from "../helpers/DateConverter";
 import WorksList from "../partial/WorksList/WorksList";
+import BreadCrumb from "../partial/Breadcrumb";
 
 export default function UserProfile() {
 
@@ -88,6 +89,10 @@ export default function UserProfile() {
     }, [workData])
     return(
         <div className="container-fluid">
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item active">Profil użytkownika {username}</li>
+            </BreadCrumb>
             <div className="row">
                 <div className="col-md-3 border-right">
                     <div className="d-flex flex-column align-items-center text-center p-3 py-5"><img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" /><span className="font-weight-bold">{username}</span><span> </span></div>

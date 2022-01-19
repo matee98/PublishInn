@@ -1,8 +1,9 @@
-import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {Link, useParams} from "react-router-dom";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {AppRoles} from "../helpers/AppRoles";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
+import BreadCrumb from "../partial/Breadcrumb";
 
 export default function EditAccount() {
     const { username } = useParams();
@@ -43,6 +44,12 @@ export default function EditAccount() {
 
     return(
         <div className="container-fluid">
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item"><Link to="/accounts" className="breadcrumb-item-nonactive">Lista użytkowników</Link></li>
+                <li className="breadcrumb-item"><Link to={`/users/info/${username}`} className="breadcrumb-item-nonactive">{username}</Link></li>
+                <li className="breadcrumb-item active">Edytuj</li>
+            </BreadCrumb>
             <div className="row">
                 <div className="col-md-3 border-right">
                     <div className="d-flex flex-column align-items-center text-center p-3 py-5"><img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" /><span class="font-weight-bold">{data.username}</span><span> </span></div>

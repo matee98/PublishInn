@@ -1,8 +1,9 @@
-import {Redirect, useParams} from "react-router-dom";
+import {Link, Redirect, useParams} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
-import {useState} from "react";
+import React, {useState} from "react";
+import BreadCrumb from "../partial/Breadcrumb";
 
 export default function EmailConfirm() {
     const { token } = useParams()
@@ -37,6 +38,10 @@ export default function EmailConfirm() {
 
     return (
         <div className="container-fluid">
+            <BreadCrumb>
+                <li className="breadcrumb-item"><Link to="/" className="breadcrumb-item-nonactive">Start</Link></li>
+                <li className="breadcrumb-item active">Potwierdź adres e-mail</li>
+            </BreadCrumb>
             <div className="h5 pt-3">
                 <p>Dziękujemy za rejestrację. Kliknij poniżej, aby potwierdzić konto:</p>
             </div>
