@@ -1,5 +1,5 @@
 import {Link, useParams} from "react-router-dom";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useEffect, useState} from "react";
 import ReactStars from "react-rating-stars-component";
 import axios from "axios";
 import CategoryMenu from "../partial/CategoryMenu";
@@ -8,7 +8,6 @@ import SideUserProfile from "../partial/SideUserProfile";
 import {Button, Dropdown, DropdownButton, Form} from "react-bootstrap";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {getCurrentUser} from "../helpers/GetCurrentUser";
-import './../AddWork/NewWork.css'
 import MDEditor from "@uiw/react-md-editor";
 import CommentsList from "../partial/CommentsList/CommentsList";
 
