@@ -5,7 +5,7 @@ import axios from "axios";
 import CategoryMenu from "../partial/CategoryMenu";
 import {dateConverter} from "../helpers/DateConverter";
 import SideUserProfile from "../partial/SideUserProfile";
-import {Button, Dropdown, DropdownButton} from "react-bootstrap";
+import {Button, Dropdown, DropdownButton, Form} from "react-bootstrap";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {getCurrentUser} from "../helpers/GetCurrentUser";
 import './../AddWork/NewWork.css'
@@ -31,6 +31,8 @@ export default function WorkReadingView() {
             createdOn: ""
         }
     ])
+
+    const [commentContent, setCommentContent] = useState("")
 
     const [rating, setRating] = useState(0)
     const [blocked, setBlocked] = useState(false)
@@ -133,6 +135,7 @@ export default function WorkReadingView() {
                 setCommentData(res.data)
                 setComments(true)
                 setCommentsLoading(false)
+                console.log(res.data)
             })
             .catch(() => {
                 dispatch({
@@ -170,6 +173,29 @@ export default function WorkReadingView() {
     const handleDownloadPdf = () => {
         const FileSaver = require('file-saver');
         FileSaver.saveAs(`http://localhost:8080/api/works/convert/pdf/${id}`, `${data.title}_${data.username}.pdf`)
+    }
+
+    const handleCommentAdd = () => {
+        axios.post("/comments", {
+            workId: id,
+            text: commentContent
+        })
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Komentarz został dodany",
+                    title: "Success"
+                })
+                setCommentContent("")
+                fetchComments()
+            })
+            .catch(() => {
+                dispatch({
+                    type: "ERROR",
+                    message: "Wystąpił błąd. Spróbuj ponownie później",
+                    title: "Error"
+                })
+            })
     }
 
     return (
@@ -245,6 +271,25 @@ export default function WorkReadingView() {
                         {comments ?
                             <div>
                                 <p className="h5">Komentarze: </p>
+                                {localStorage.getItem("token") &&
+                                <div>
+                                    <p className="h6 mt-4">
+                                        Dodaj komentarz:
+                                    </p>
+                                    <textarea
+                                        value={commentContent}
+                                        onChange={
+                                            (event) => {
+                                                setCommentContent(event.target.value)
+                                            }}
+                                        style={{
+                                            minWidth: "50%"
+                                        }}
+                                        rows={3}
+                                    />
+                                    <Button className="mx-3 mb-2" onClick={handleCommentAdd}>Zapisz</Button>
+                                </div>
+                                }
                                 <CommentsList
                                     data={commentData}
                                     loading={commentsLoading}
