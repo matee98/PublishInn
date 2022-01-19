@@ -17,6 +17,8 @@ import ResetPasswordConfirm from "./components/ResetPassword/ResetPasswordConfir
 import BrowseBlocked from "./components/BrowseWorksList/BrowseBlocked";
 import UserPanel from "./components/UserPanel/UserPanel";
 import EmailConfirm from "./components/SignUp/EmailConfirm";
+import {getCurrentUser} from "./components/helpers/GetCurrentUser";
+import Forbidden from "./components/commonPages/Forbidden";
 
 export default class Routes extends Component{
     render() {
@@ -47,28 +49,31 @@ export default class Routes extends Component{
                     {localStorage.getItem('token') ? <AccountInfo /> : <Redirect to="/login" />}
                 </Route>
                 <Route exact path="/accounts">
-                    <UsersAccountsList />
+                    {getCurrentUser().roles[0] === "ADMIN" ? <UsersAccountsList /> : <Redirect to='/common/forbidden' />}
                 </Route>
                 <Route path='/users/profile/:username'>
                     <UserProfile />
                 </Route>
                 <Route path='/users/info/:username'>
-                    <OtherAccountInfo />
+                    {getCurrentUser().roles[0] === "ADMIN" ? <OtherAccountInfo /> : <Redirect to='/common/forbidden' />}
                 </Route>
                 <Route path='/users/edit/:username'>
-                    <EditAccount />
+                    {getCurrentUser().roles[0] === "ADMIN" ? <EditAccount /> : <Redirect to='/common/forbidden' />}
                 </Route>
                 <Route exact path='/works/new'>
                     {localStorage.getItem('token') ? <AddWork /> : <Redirect to="/login" />}
                 </Route>
                 <Route exact path='/works/blocked'>
-                    <BrowseBlocked />
+                    {getCurrentUser().roles[0] === "MODERATOR" ? <BrowseBlocked /> : <Redirect to='/common/forbidden' />}
                 </Route>
                 <Route exact path='/works/:type'>
                     <BrowseWorksList />
                 </Route>
                 <Route path='/works/read/:id'>
                     <WorkReadingView />
+                </Route>
+                <Route path='/common/forbidden'>
+                    <Forbidden />
                 </Route>
                 <Route>
                     <NotFound />
