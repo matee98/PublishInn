@@ -20,6 +20,7 @@ export default function CommentsList(props) {
 
     const dispatch = useNotification();
     const dispatchDialog = useDialogPermanentChange();
+    const blockedComment = "Ten komentarz został usunięty przez moderatora."
 
     const refreshData = () => {
         axios.get(`/comments/work/${data[0].workId}`)
@@ -86,6 +87,25 @@ export default function CommentsList(props) {
             })
     }
 
+    const handleChangeVis = (commentId) => {
+        axios.patch(`/comments/changeVisibility/${commentId}`)
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: "Widoczność komentarza została zmieniona",
+                    title: "Success"
+                })
+                refreshData()
+            })
+            .catch(() => {
+                dispatch({
+                    type: "ERROR",
+                    message: "Wystąpił błąd. Spróbuj ponownie później",
+                    title: "Error"
+                })
+            })
+    }
+
     return (
         <div>
             {
@@ -128,22 +148,39 @@ export default function CommentsList(props) {
                                     </div>
                                 </> :
                                 <>
-                                    <p className="text-start col-10">{value.text}</p>
-                                    {
-                                        value.username === getCurrentUser().sub &&
-                                            <div className="col">
-                                                <Button className="float-end mb-2" onClick={() => {
-                                                    handleEdit(value.id, value.text)
-                                                }}>Edytuj</Button>
-                                                <Button className="float-end" onClick={() => {
-                                                    dispatchDialog({
-                                                        callbackOnSave:() => {
-                                                            handleDelete(value.id)
-                                                        }
-                                                    })
-                                                }}>Usuń</Button>
-                                            </div>
+                                    {value.visible ?
+                                        <p className="text-start col-10">{value.text}</p>
+                                        :
+                                        <p className="text-start col-10">{blockedComment}</p>
                                     }
+                                    <div className="col">
+                                        <div className="row">
+                                        {
+                                            value.username === getCurrentUser().sub &&
+                                                <>
+                                                    <Button className="col mb-2 mx-1" onClick={() => {
+                                                        handleEdit(value.id, value.text)
+                                                    }}>Edytuj</Button>
+                                                    <Button className="col mb-2 mx-1" onClick={() => {
+                                                        dispatchDialog({
+                                                            callbackOnSave:() => {
+                                                                handleDelete(value.id)
+                                                            }
+                                                        })
+                                                    }}>Usuń</Button>
+                                                </>
+                                        }
+                                        {
+                                            getCurrentUser().roles[0] === "MODERATOR" &&
+                                            <Button className="col mx-1" onClick={() => {
+                                                handleChangeVis(value.id)
+                                            }}>
+                                                {value.visible ? 'Zablokuj' : 'Odblokuj' }
+                                            </Button>
+                                        }
+                                        </div>
+                                    </div>
+
                                 </>
                             }
                         </div>
