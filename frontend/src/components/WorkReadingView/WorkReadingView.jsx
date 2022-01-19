@@ -134,8 +134,9 @@ export default function WorkReadingView() {
             .then((res) => {
                 setCommentData(res.data)
                 setComments(true)
+            })
+            .then(() => {
                 setCommentsLoading(false)
-                console.log(res.data)
             })
             .catch(() => {
                 dispatch({
@@ -276,24 +277,26 @@ export default function WorkReadingView() {
                                     <p className="h6 mt-4">
                                         Dodaj komentarz:
                                     </p>
-                                    <textarea
-                                        value={commentContent}
-                                        onChange={
-                                            (event) => {
-                                                setCommentContent(event.target.value)
+                                    <div>
+                                        <textarea
+                                            value={commentContent}
+                                            onChange={
+                                                (event) => {
+                                                    setCommentContent(event.target.value)
+                                                }}
+                                            style={{
+                                                minWidth: "50%"
                                             }}
-                                        style={{
-                                            minWidth: "50%"
-                                        }}
-                                        rows={3}
-                                    />
-                                    <Button className="mx-3 mb-2" onClick={handleCommentAdd}>Zapisz</Button>
+                                            rows={3}
+                                        />
+                                        <Button className="mx-3 mb-4" onClick={handleCommentAdd}>Zapisz</Button>
+                                    </div>
                                 </div>
                                 }
                                 <CommentsList
                                     data={commentData}
                                     loading={commentsLoading}
-                                    numberEachPage={3}
+                                    numberEachPage={10}
                                 />
                             </div> :
                             <p><a className="text-decoration-none" onClick={fetchComments}>Pokaż komentarze</a></p>

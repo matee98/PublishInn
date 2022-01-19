@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Card, Pagination} from "antd";
 import {dateConverter} from "../../helpers/DateConverter";
 import {Link} from "react-router-dom";
@@ -9,7 +9,7 @@ import {useNotification} from "../Notifications/NotificationProvider";
 import {useDialogPermanentChange} from "../CriticalOperations/CriticalOperationsProvider";
 
 export default function CommentsList(props) {
-    const [data, setData] = useState(props.data);
+    const [data, setData] = useState({...props.data});
     const loading = props.loading;
     const numEachPage = props.numberEachPage;
     const [minValue, setMinValue] = useState(0)
@@ -21,6 +21,10 @@ export default function CommentsList(props) {
     const dispatch = useNotification();
     const dispatchDialog = useDialogPermanentChange();
     const blockedComment = "Ten komentarz został usunięty przez moderatora."
+
+    useEffect(() => {
+        setData(props.data)
+    }, [props.data])
 
     const refreshData = () => {
         axios.get(`/comments/work/${data[0].workId}`)
@@ -151,7 +155,9 @@ export default function CommentsList(props) {
                                     {value.visible ?
                                         <p className="text-start col-10">{value.text}</p>
                                         :
-                                        <p className="text-start col-10">{blockedComment}</p>
+                                        <p className="text-start col-10" style={{
+                                            fontStyle: "italic"
+                                        }}>{blockedComment}</p>
                                     }
                                     <div className="col">
                                         <div className="row">
