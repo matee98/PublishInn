@@ -1,12 +1,10 @@
+import {useState} from "react";
 import {Card, Pagination} from "antd";
-import {Link} from "react-router-dom";
-import {Button} from "react-bootstrap";
 import {dateConverter} from "../../helpers/DateConverter";
-import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
-export default function WorksList(props) {
-
-    const [data, setData] = [props.data];
+export default function CommentsList(props) {
+    const [data] = [props.data];
     const loading = props.loading;
     const numEachPage = props.numberEachPage;
     const [minValue, setMinValue] = useState(0)
@@ -17,10 +15,6 @@ export default function WorksList(props) {
         setMaxValue(value * numEachPage)
     }
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
-
     return (
         <div>
             {
@@ -28,26 +22,20 @@ export default function WorksList(props) {
                 data.length > 0 &&
                 data.slice(minValue, maxValue).map((value => (
                     <Card
-                        title={value.title}
+                        type="inner"
+                        title={
+                            <Link to={`/users/profile/${value.username}`}>{value.username}</Link>
+                        }
+                        loading={loading}
                         extra={
-                            <Link to={`/works/read/${value.id}`}>
-                                <Button>
-                                    Czytaj >>>
-                                </Button>
-                            </Link>
+                            <p>Dodano: {dateConverter(value.createdOn, true)}</p>
                         }
                         style={{
-                            width: "auto",
                             marginBottom: 16
                         }}
-                        loading={loading}
                     >
                         <div className="row">
-                            <p className="text-start col-sm">
-                                Autor: <span><Link to={`/users/profile/${value.username}`}>{value.username}</Link></span>
-                            </p>
-                            <p className="text-sm-center col-sm">Ocena: {value.rating !== null ? value.rating : "brak"}</p>
-                            <p className="text-end col-sm">Dodano: {dateConverter(value.createdOn, true)}</p>
+                            <p className="text-start">{value.text}</p>
                         </div>
                     </Card>
                 )))
@@ -58,7 +46,8 @@ export default function WorksList(props) {
                 onChange={handleChange}
                 total={data.length}
                 style={{
-                    marginBottom: 16
+                    marginBottom: 16,
+                    textAlign: "center"
                 }}
             />
         </div>

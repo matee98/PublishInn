@@ -8,9 +8,9 @@ import SideUserProfile from "../partial/SideUserProfile";
 import {Button, Dropdown, DropdownButton} from "react-bootstrap";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {getCurrentUser} from "../helpers/GetCurrentUser";
-import {withReact, Slate, Editable} from "slate-react";
-import {createEditor} from "slate";
 import './../AddWork/NewWork.css'
+import MDEditor from "@uiw/react-md-editor";
+import CommentsList from "../partial/CommentsList/CommentsList";
 
 export default function WorkReadingView() {
     const { id } = useParams();
@@ -23,9 +23,20 @@ export default function WorkReadingView() {
         status: ""
     });
 
+    const [commentData, setCommentData] = useState([
+        {
+            username: "",
+            text: "",
+            visible: "",
+            createdOn: ""
+        }
+    ])
+
     const [rating, setRating] = useState(0)
     const [blocked, setBlocked] = useState(false)
     const [workBlocked, setWorkBlocked] = useState(false)
+    const [comments, setComments] = useState(false)
+    const [commentsLoading, setCommentsLoading] = useState(false);
 
     const dispatch = useNotification()
 
@@ -80,26 +91,6 @@ export default function WorkReadingView() {
     const instance = axios.create();
     delete instance.defaults.headers.common["Authorization"];
 
-    const deserialize = string => {
-        return string.split('\n').map(line => {
-            return {
-                children: [{ text: line}],
-            }
-        })
-    }
-
-    const editor = useMemo(() => withReact(createEditor()), [])
-    const renderElement = useCallback(({ attributes, children, element }) => {
-        return <p
-            className="text-area"
-            {...attributes}
-        >
-            {children}
-        </p>
-    }, [])
-
-    const [textReader, setTextReader] = useState();
-
     useEffect(() => {
         fetchData()
     }, [])
@@ -112,11 +103,6 @@ export default function WorkReadingView() {
                         ...res.data,
                         author: res.data.userId
                     });
-                    setTextReader(
-                        <Slate editor={editor} value={deserialize(res.data.text)} onChange={() => {}}>
-                            <Editable readOnly renderElement={renderElement}/>
-                        </Slate>
-                    )
                 })
         } else {
             axios.get(`/works/details/${id}`)
@@ -125,11 +111,6 @@ export default function WorkReadingView() {
                         ...res.data,
                         author: res.data.userId
                     });
-                    setTextReader(
-                        <Slate editor={editor} value={deserialize(res.data.text)} onChange={() => {}}>
-                            <Editable readOnly renderElement={renderElement}/>
-                        </Slate>
-                    )
                     if (res.data.status === "BLOCKED") {
                         setWorkBlocked(true);
                     } else {
@@ -143,6 +124,23 @@ export default function WorkReadingView() {
                     setBlocked(true)
                 })
         }
+    }
+
+    const fetchComments = () => {
+        setCommentsLoading(true)
+        instance.get(`/comments/work/${id}`)
+            .then((res) => {
+                setCommentData(res.data)
+                setComments(true)
+                setCommentsLoading(false)
+            })
+            .catch(() => {
+                dispatch({
+                    type: "ERROR",
+                    message: "Wystąpił błąd. Spróbuj ponownie później",
+                    title: "Error"
+                })
+            })
     }
 
     const handleBlock = () => {
@@ -191,7 +189,13 @@ export default function WorkReadingView() {
                             <p className="text-end">{dateConverter(data.createdOn, true)}</p>
                             <p className="text-end">Ocena: {data.rating}/10</p>
                             <h2 className="text-center">{data.title}</h2>
-                            {textReader}
+                            <MDEditor.Markdown
+                                source={data.text}
+                                style={{
+                                    textAlign: "left",
+                                    padding: "2px",
+                                    borderBottom: "2px outset"
+                                }}/>
                             {user.roles[0] === "MODERATOR" &&
                                     <p className="text-start mt-2">
                                         {workBlocked ?
@@ -236,6 +240,19 @@ export default function WorkReadingView() {
                                 </div>
                             }
                         </div>
+                    </div>
+                    <div className="text-start mx-3">
+                        {comments ?
+                            <div>
+                                <p className="h5">Komentarze: </p>
+                                <CommentsList
+                                    data={commentData}
+                                    loading={commentsLoading}
+                                    numberEachPage={3}
+                                />
+                            </div> :
+                            <p><a className="text-decoration-none" onClick={fetchComments}>Pokaż komentarze</a></p>
+                        }
                     </div>
                 </div>
                 <div className="col-2 py-5">
