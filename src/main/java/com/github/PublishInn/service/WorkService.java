@@ -168,6 +168,11 @@ public class WorkService {
                 .collect(Collectors.toList());
     }
 
+    public List<WorkInfoDto> searchWorks(String query) {
+        List<Work> works = workRepository.findAllByTitleContainsIgnoreCaseAndStatusEquals(query, WorkStatus.ACCEPTED);
+        return mapWorksToDtos(works);
+    }
+
     public void blockWorkById(Long workId, Principal principal) {
         Optional<Work> work = workRepository.findById(workId);
         work.ifPresentOrElse(w -> {

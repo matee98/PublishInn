@@ -79,6 +79,11 @@ public class WorkController {
         return workService.findWorksByUsername(username);
     }
 
+    @GetMapping("/search")
+    public List<WorkInfoDto> searchWorks(@RequestParam(value = "name") String name) {
+        return workService.searchWorks(name);
+    }
+
     @GetMapping("/details/{id}")
     public WorkDetailsDto findById(@PathVariable Long id, Principal principal) {
         try {

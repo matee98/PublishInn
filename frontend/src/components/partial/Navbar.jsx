@@ -1,10 +1,16 @@
-import {Component} from "react";
+import {Component, useState} from "react";
 import {Button, Container, Form, FormControl, Nav, Navbar, NavDropdown} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import logo from '../../assets/logo.png'
 import {getCurrentUser} from "../helpers/GetCurrentUser";
 
 class NavigationBar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            query: ""
+        }
+    }
 
     handleRefresh = () => {
         window.location.reload();
@@ -96,8 +102,15 @@ class NavigationBar extends Component {
                                     placeholder="Szukaj..."
                                     className="me-2"
                                     aria-label="Search"
+                                    onChange={(event => {
+                                        this.setState({
+                                            query: event.target.value
+                                        })
+                                    })}
                                 />
-                                <Button variant="outline-success">Szukaj</Button>
+                                <Link to={`/search/${this.state.query}`}>
+                                    <Button variant="outline-success">Szukaj</Button>
+                                </Link>
                             </Form>
                         </Nav>
                         {authPanel}

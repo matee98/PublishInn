@@ -19,6 +19,7 @@ import UserPanel from "./components/UserPanel/UserPanel";
 import EmailConfirm from "./components/SignUp/EmailConfirm";
 import {getCurrentUser} from "./components/helpers/GetCurrentUser";
 import Forbidden from "./components/commonPages/Forbidden";
+import SearchResults from "./components/Search/SearchResults";
 
 export default class Routes extends Component{
     render() {
@@ -65,6 +66,9 @@ export default class Routes extends Component{
                 </Route>
                 <Route exact path='/works/blocked'>
                     {getCurrentUser().roles[0] === "MODERATOR" ? <BrowseBlocked /> : <Redirect to='/common/forbidden' />}
+                </Route>
+                <Route path='/search/:query'>
+                    <SearchResults />
                 </Route>
                 <Route exact path='/works/:type'>
                     <BrowseWorksList />
