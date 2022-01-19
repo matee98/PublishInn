@@ -41,6 +41,8 @@ public class AppUser extends AbstractEntity implements UserDetails {
     private boolean enabled = false;
     @OneToMany(mappedBy = "userId")
     private List<Work> works;
+    @OneToMany(mappedBy = "userId")
+    private List<Comment> comments;
 
     public AppUser(String username, String email, String password,
                    AppUserRole appUserRole) {

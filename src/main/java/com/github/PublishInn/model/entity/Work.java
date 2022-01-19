@@ -48,6 +48,9 @@ public class Work extends AbstractEntity {
     @OneToMany(mappedBy = "workId")
     private List<Rating> ratingList;
 
+    @OneToMany(mappedBy = "workId")
+    private List<Comment> comments;
+
     @Min(value = 1)
     @Max(value = 10)
     @Digits(integer = 1, fraction = 2)
