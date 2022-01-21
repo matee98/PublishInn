@@ -1,5 +1,6 @@
 package com.github.PublishInn.dto;
 
+import com.github.PublishInn.validation.Password;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
@@ -8,9 +9,9 @@ import javax.validation.constraints.Size;
 @Getter
 public class ChangePasswordDto {
     @NotBlank
-    @Size(min = 8)
+    @Password
     private String oldPassword;
     @NotBlank
-    @Size(min = 8)
+    @Password
     private String newPassword;
 }

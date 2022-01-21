@@ -1,6 +1,8 @@
 package com.github.PublishInn.model.entity;
 
 import com.github.PublishInn.model.entity.enums.AppUserRole;
+import com.github.PublishInn.validation.UserEmail;
+import com.github.PublishInn.validation.Username;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,8 +33,10 @@ public class AppUser extends AbstractEntity implements UserDetails {
     )
     private Long id;
     @Column(unique = true)
+    @Username
     private String username;
     @Column(unique = true)
+    @UserEmail
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)

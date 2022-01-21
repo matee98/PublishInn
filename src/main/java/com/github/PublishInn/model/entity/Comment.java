@@ -1,5 +1,6 @@
 package com.github.PublishInn.model.entity;
 
+import com.github.PublishInn.validation.CommentText;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +29,7 @@ public class Comment extends AbstractEntity {
     private Long id;
 
     @NotBlank
-    @Size(min = 1)
+    @CommentText
     private String text;
 
     @NotNull

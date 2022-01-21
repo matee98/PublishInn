@@ -6,7 +6,6 @@ import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.token.ConfirmationToken;
 import com.github.PublishInn.utils.EmailBuilder;
 import com.github.PublishInn.utils.EmailSender;
-import com.github.PublishInn.validation.EmailValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,16 +23,11 @@ public class RegistrationService {
 
     private static final String CONFIRMATION_LINK = "http://localhost:8080/register/confirm/";
 
-    private final EmailValidator emailValidator;
     private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
     public void register(UserRegisterDto model) {
-        boolean isEmailValid = emailValidator.test(model.getEmail());
-        if (!isEmailValid) {
-            throw new IllegalStateException(EMAIL_NOT_VALID);
-        }
         String token = appUserService.signUpUser(
                 new AppUser(
                         model.getUsername(),

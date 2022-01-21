@@ -2,6 +2,7 @@ package com.github.PublishInn.model.entity;
 
 import com.github.PublishInn.model.entity.enums.WorkStatus;
 import com.github.PublishInn.model.entity.enums.WorkType;
+import com.github.PublishInn.validation.Title;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +35,7 @@ public class Work extends AbstractEntity {
 
     @NotBlank
     @Size(min = 1, max = 63)
+    @Title
     @Column(nullable = false)
     private String title;
 
