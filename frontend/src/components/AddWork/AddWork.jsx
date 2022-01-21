@@ -6,6 +6,7 @@ import BreadCrumb from "../partial/Breadcrumb";
 import axios from "axios";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {useDialogPermanentChange} from "../partial/CriticalOperations/CriticalOperationsProvider";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 export default function AddWork() {
     const [title, setTitle] = useState("");
@@ -44,14 +45,14 @@ export default function AddWork() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Zmiany zostały zapisane",
+                    message: ResponseMessages.CHANGES_SAVED,
                     title: "Success"
                 })
             })
             .catch(err => {
                 dispatch({
                     type: "ERROR",
-                    message: err.message,
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })

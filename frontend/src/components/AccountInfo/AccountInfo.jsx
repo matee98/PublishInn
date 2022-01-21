@@ -4,6 +4,7 @@ import {Button, Form} from "react-bootstrap";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {Link} from "react-router-dom";
 import BreadCrumb from "../partial/Breadcrumb";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 export default function AccountInfo() {
     const [data, setData] = useState({
@@ -42,7 +43,7 @@ export default function AccountInfo() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Zmiany zostały zapisane",
+                    message: ResponseMessages.CHANGES_SAVED,
                     title: "Success"
                 })
                 setEditablePart("")
@@ -54,7 +55,7 @@ export default function AccountInfo() {
             .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: "Coś poszło nie tak. Spróbuj ponownie później.",
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })

@@ -7,4 +7,9 @@
         margin: 0 auto;
         max-width: 320px;
     }
+
+    .info-label {
+        font-size: 11px;
+        color: cornflowerblue;
+    }
 }
