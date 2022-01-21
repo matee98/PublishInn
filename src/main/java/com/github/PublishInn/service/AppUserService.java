@@ -13,6 +13,7 @@ import com.github.PublishInn.model.repository.UserRepository;
 import com.github.PublishInn.utils.EmailBuilder;
 import com.github.PublishInn.utils.EmailService;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,9 +33,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
 
-    private final static String USER_NOT_FOUND_MSG = "User with name %s not found";
-    private final static String USER_ALREADY_EXISTS_MSG = "Email address %s already taken";
-
     private static final String RESET_PASSWORD_LINK = "http://localhost:8080/password/reset/confirm/";
 
     private final static int CONFIRMATION_TOKEN_EXPIRATION_TIME = 30;
@@ -45,30 +43,23 @@ public class AppUserService implements UserDetailsService {
     private final OneTimeCodeRepository codeRepository;
     private final EmailService emailService;
 
+    @SneakyThrows
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException(
-                                String.format(USER_NOT_FOUND_MSG, username)));
+                .orElseThrow(UserException::notFound);
     }
 
-    public UserInfoDto getUserAccountInfo(String username) {
+    public UserInfoDto getUserAccountInfo(String username) throws UserException {
         Optional<AppUser> user = userRepository.findByUsername(username);
         AppUserMapper mapper = Mappers.getMapper(AppUserMapper.class);
-        return mapper.toUserInfoDto(user.orElseThrow( () ->
-                new UsernameNotFoundException(
-                        String.format(USER_NOT_FOUND_MSG, username)
-                )));
+        return mapper.toUserInfoDto(user.orElseThrow(UserException::notFound));
     }
 
-    public UserInfoDto getUserAccountInfo(Long id) {
+    public UserInfoDto getUserAccountInfo(Long id) throws UserException {
         Optional<AppUser> user = userRepository.findById(id);
         AppUserMapper mapper = Mappers.getMapper(AppUserMapper.class);
-        return mapper.toUserInfoDto(user.orElseThrow( () ->
-                new UsernameNotFoundException(
-                        String.format(USER_NOT_FOUND_MSG, id)
-                )));
+        return mapper.toUserInfoDto(user.orElseThrow(UserException::notFound));
     }
 
     public List<UserInfoDto> findAllUsers() {
@@ -80,12 +71,16 @@ public class AppUserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    public String signUpUser(AppUser appUser) {
-        boolean userExists = userRepository.findByEmail(appUser.getEmail())
-                .isPresent();
+    public String signUpUser(AppUser appUser) throws UserException {
+        Optional<AppUser> byEmail = userRepository.findByEmail(appUser.getEmail());
+        Optional<AppUser> byUsername = userRepository.findByUsername(appUser.getUsername());
 
-        if (userExists) {
-            throw new IllegalStateException(String.format(USER_ALREADY_EXISTS_MSG, appUser.getEmail()));
+        if (byEmail.isPresent()) {
+            throw UserException.emailExists();
+        }
+
+        if (byUsername.isPresent()) {
+            throw UserException.usernameExists();
         }
 
         appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
@@ -111,52 +106,48 @@ public class AppUserService implements UserDetailsService {
         });
     }
 
-    public void grantRoleToAppUser(String username, String role) {
+    public void grantRoleToAppUser(String username, String role) throws UserException {
         Optional<AppUser> user = userRepository.findByUsername(username);
-        user.ifPresentOrElse(appUser -> {
-            appUser.setAppUserRole(AppUserRole.valueOf(role));
-            userRepository.save(appUser);
-        },
-                () -> {
-            throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
-                });
+        if (user.isPresent()){
+            user.get().setAppUserRole(AppUserRole.valueOf(role));
+            userRepository.save(user.get());
+        } else {
+            throw UserException.notFound();
+        }
     }
 
-    public void blockUser(String username) {
+    public void blockUser(String username) throws UserException {
         Optional<AppUser> user = userRepository.findByUsername(username);
-        user.ifPresentOrElse(appUser -> {
-            appUser.setLocked(true);
-            userRepository.save(appUser);
-        },
-                () -> {
-                    throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
-                });
+        if (user.isPresent()) {
+            user.get().setLocked(true);
+            userRepository.save(user.get());
+        } else {
+            throw UserException.notFound();
+        }
     }
 
-    public void unblockUser(String username) {
+    public void unblockUser(String username) throws UserException {
         Optional<AppUser> user = userRepository.findByUsername(username);
-        user.ifPresentOrElse(appUser -> {
-                    appUser.setLocked(false);
-                    userRepository.save(appUser);
-                },
-                () -> {
-                    throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
-                });
+        if (user.isPresent()) {
+            user.get().setLocked(false);
+            userRepository.save(user.get());
+        } else {
+            throw UserException.notFound();
+        }
     }
 
-    public void editUserAccountDetails(String username, UserDetailsEditDto model) {
+    public void editUserAccountDetails(String username, UserDetailsEditDto model) throws UserException {
         Optional<AppUser> user = userRepository.findByUsername(username);
-        user.ifPresentOrElse(appUser -> {
-                    appUser.setEmail(model.getMailAddress());
-                    appUser.setAppUserRole(AppUserRole.valueOf(model.getUserRole()));
-                    userRepository.save(appUser);
-                },
-                () -> {
-                    throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
-                });
+        if (user.isPresent()) {
+            user.get().setEmail(model.getMailAddress());
+            user.get().setAppUserRole(AppUserRole.valueOf(model.getUserRole()));
+            userRepository.save(user.get());
+        } else {
+            throw UserException.notFound();
+        }
     }
 
-    public UserShortProfileDto getShortProfileByUsername(String username) {
+    public UserShortProfileDto getShortProfileByUsername(String username) throws UserException {
         Optional<AppUser> user = userRepository.findByUsername(username);
         AppUserMapper mapper = Mappers.getMapper(AppUserMapper.class);
         UserShortProfileDto result;
@@ -171,7 +162,7 @@ public class AppUserService implements UserDetailsService {
             result.setWorksCount(userWorks.size());
             result.setRatingAverage(worksRatingSum.divide(BigDecimal.valueOf(userWorks.size())));
         } else {
-            throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
+            throw UserException.notFound();
         }
 
         return result;

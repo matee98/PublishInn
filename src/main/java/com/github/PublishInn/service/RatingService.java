@@ -4,6 +4,8 @@ import com.github.PublishInn.dto.NewRatingDto;
 import com.github.PublishInn.dto.RatingDetailsDto;
 import com.github.PublishInn.dto.mappers.RatingMapper;
 import com.github.PublishInn.exceptions.RatingException;
+import com.github.PublishInn.exceptions.UserException;
+import com.github.PublishInn.exceptions.WorkException;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.Rating;
 import com.github.PublishInn.model.entity.Work;
@@ -27,20 +29,15 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class RatingService {
-
-    private final static String USER_NOT_FOUND_MSG = "User with name %s not found";
-    private final static String WORK_NOT_FOUND_MSG = "Work with id %s not found";
-    private final static String RATING_NOT_FOUND_MSG = "Rating not found";
-
     private final RatingRepository ratingRepository;
     private final WorkRepository workRepository;
     private final UserRepository userRepository;
 
 
-    public RatingDetailsDto getRating(String username, Long workId) {
+    public RatingDetailsDto getRating(String username, Long workId) throws UserException, RatingException {
         Optional<AppUser> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username));
+            throw UserException.notFound();
         }
         RatingMapper mapper = Mappers.getMapper(RatingMapper.class);
         return ratingRepository.findRatingByUserIdAndWorkId(user.get().getId(), workId)
@@ -54,10 +51,10 @@ public class RatingService {
                     ratingDetailsDto.setUsername(username);
                     return ratingDetailsDto;
                 })
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(RatingException::notFound);
     }
 
-    public List<RatingDetailsDto> getRatingsByUsername(String username) {
+    public List<RatingDetailsDto> getRatingsByUsername(String username) throws UserException {
         Optional<AppUser> user = userRepository.findByUsername(username);
         RatingMapper mapper = Mappers.getMapper(RatingMapper.class);
         if (user.isPresent()) {
@@ -75,24 +72,26 @@ public class RatingService {
                     .peek(ratingDetailsDto -> ratingDetailsDto.setUsername(username))
                     .collect(Collectors.toList());
         } else {
-            throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username));
+            throw UserException.notFound();
         }
     }
 
-    public void addNewRating(@Valid NewRatingDto model, Principal principal) throws RatingException {
+    public void addNewRating(@Valid NewRatingDto model, Principal principal) throws RatingException, UserException, WorkException {
         RatingMapper mapper = Mappers.getMapper(RatingMapper.class);
         Rating rating = mapper.fromNewRatingDto(model);
         Optional<AppUser> user = userRepository.findByUsername(principal.getName());
-        user.ifPresentOrElse(appUser -> {
-            rating.setUserId(appUser.getId());
-            rating.setCreatedBy(appUser.getId());
-        }, () -> {
-            throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, principal.getName()));
-        });
+        if (user.isPresent()){
+            rating.setUserId(user.get().getId());
+            rating.setCreatedBy(user.get().getId());
+        } else {
+            throw UserException.notFound();
+        }
         Optional<Work> work = workRepository.findById(model.getWorkId());
-        work.ifPresentOrElse(x -> rating.setWorkId(x.getId()), () -> {
-            throw new NoSuchElementException(String.format(WORK_NOT_FOUND_MSG, model.getWorkId()));
-        });
+        if (work.isPresent()) {
+            rating.setWorkId(work.get().getId());
+        } else {
+            throw WorkException.notFound();
+        }
         if(ratingRepository.findRatingByUserIdAndWorkId(user.get().getId(), work.get().getId()).isPresent()) {
             throw RatingException.ratingAlreadyExists();
         } else if(Objects.equals(work.get().getUserId(), user.get().getId())) {
@@ -102,10 +101,10 @@ public class RatingService {
         calculateWorkRating(rating.getWorkId());
     }
 
-    public void updateRating(NewRatingDto model, Principal principal) {
+    public void updateRating(NewRatingDto model, Principal principal) throws UserException, RatingException {
         Optional<AppUser> user = userRepository.findByUsername(principal.getName());
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, principal.getName()));
+            throw UserException.notFound();
         }
         Optional<Rating> rating = ratingRepository.findRatingByUserIdAndWorkId(user.get().getId(), model.getWorkId());
         if (rating.isPresent()) {
@@ -114,7 +113,7 @@ public class RatingService {
             ratingRepository.save(rating.get());
             calculateWorkRating(rating.get().getWorkId());
         } else {
-            throw new NoSuchElementException(RATING_NOT_FOUND_MSG);
+            throw RatingException.notFound();
         }
     }
 

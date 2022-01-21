@@ -1,8 +1,8 @@
 package com.github.PublishInn.exceptions;
 
 public class WorkException extends Exception{
-    private static final String ACCESS_FORBIDDEN = "exception.work.access.forbidden";
-    private static final String NOT_FOUND = "exception.work.not_found";
+    public static final String ACCESS_FORBIDDEN = "exception.work.access.forbidden";
+    public static final String NOT_FOUND = "exception.work.not_found";
 
     private WorkException(String message, Throwable cause) {
         super(message, cause);

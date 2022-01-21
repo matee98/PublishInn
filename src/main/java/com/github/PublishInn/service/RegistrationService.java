@@ -1,6 +1,7 @@
 package com.github.PublishInn.service;
 
 import com.github.PublishInn.dto.UserRegisterDto;
+import com.github.PublishInn.exceptions.UserException;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.entity.token.ConfirmationToken;
@@ -27,7 +28,7 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    public void register(UserRegisterDto model) {
+    public void register(UserRegisterDto model) throws UserException {
         String token = appUserService.signUpUser(
                 new AppUser(
                         model.getUsername(),

@@ -4,6 +4,7 @@ import com.github.PublishInn.dto.WorkDetailsDto;
 import com.github.PublishInn.dto.WorkInfoDto;
 import com.github.PublishInn.dto.WorkSaveDto;
 import com.github.PublishInn.dto.mappers.WorkMapper;
+import com.github.PublishInn.exceptions.UserException;
 import com.github.PublishInn.exceptions.WorkException;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.Work;
@@ -37,24 +38,20 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class WorkService {
-    private final static String USER_NOT_FOUND_MSG = "User with name %s not found";
-    private final static String WORK_NOT_FOUND_MSG = "Work with id %s not found";
-
     private final WorkRepository workRepository;
     private final UserRepository userRepository;
 
-    public void saveWork (WorkSaveDto model, Principal principal){
+    public void saveWork (WorkSaveDto model, Principal principal) throws UserException {
         WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
         Work work = mapper.fromWorkSaveDto(model);
         Optional<AppUser> user = userRepository.findByUsername(principal.getName());
-        user.ifPresentOrElse(appUser -> {
-            work.setUserId(appUser.getId());
-            work.setCreatedBy(appUser.getId());
+        if (user.isPresent()) {
+            work.setUserId(user.get().getId());
+            work.setCreatedBy(user.get().getId());
             work.setStatus(WorkStatus.ACCEPTED);
-        }, () -> {
-            throw new UsernameNotFoundException(
-                    String.format(USER_NOT_FOUND_MSG, principal.getName()));
-        });
+        } else {
+            throw UserException.notFound();
+        }
         workRepository.save(work);
     }
 
@@ -126,10 +123,7 @@ public class WorkService {
     public WorkDetailsDto findById(Long id, Principal principal) throws WorkException {
         WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
         Optional<Work> work = workRepository.findById(id);
-        WorkDetailsDto result = mapper.toDto(work.orElseThrow(() ->
-                new NoSuchElementException(
-                        String.format(WORK_NOT_FOUND_MSG, id)
-                )));
+        WorkDetailsDto result = mapper.toDto(work.orElseThrow(WorkException::notFound));
         Optional<AppUser> caller;
         if (principal != null) {
             caller = userRepository.findByUsername(principal.getName());
@@ -147,15 +141,14 @@ public class WorkService {
         return result;
     }
 
-    public List<WorkInfoDto> findWorksByUsername(String username) {
+    public List<WorkInfoDto> findWorksByUsername(String username) throws UserException {
         List<Work> resultWorks;
         WorkMapper mapper = Mappers.getMapper(WorkMapper.class);
         Optional<AppUser> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
             resultWorks = workRepository.findAllByUserIdEquals(user.get().getId());
         } else {
-            throw new UsernameNotFoundException(
-                    String.format(USER_NOT_FOUND_MSG, username));
+            throw UserException.notFound();
         }
 
         return resultWorks
@@ -173,32 +166,32 @@ public class WorkService {
         return mapWorksToDtos(works);
     }
 
-    public void blockWorkById(Long workId, Principal principal) {
+    public void blockWorkById(Long workId, Principal principal) throws WorkException {
         Optional<Work> work = workRepository.findById(workId);
-        work.ifPresentOrElse(w -> {
-            w.setStatus(WorkStatus.BLOCKED);
-            w.setModifiedBy(userRepository.findByUsername(principal.getName()).get().getId());
-            workRepository.save(w);
-        }, () -> {
-            throw new NoSuchElementException(WORK_NOT_FOUND_MSG);
-        });
+        if (work.isPresent()) {
+            work.get().setStatus(WorkStatus.BLOCKED);
+            work.get().setModifiedBy(userRepository.findByUsername(principal.getName()).get().getId());
+            workRepository.save(work.get());
+        } else {
+            throw WorkException.notFound();
+        }
     }
 
-    public void unblockWorkById(Long workId, Principal principal) {
+    public void unblockWorkById(Long workId, Principal principal) throws WorkException {
         Optional<Work> work = workRepository.findById(workId);
-        work.ifPresentOrElse(w -> {
-            w.setStatus(WorkStatus.ACCEPTED);
-            w.setModifiedBy(userRepository.findByUsername(principal.getName()).get().getId());
-            workRepository.save(w);
-        }, () -> {
-            throw new NoSuchElementException(WORK_NOT_FOUND_MSG);
-        });
+        if (work.isPresent()) {
+            work.get().setStatus(WorkStatus.ACCEPTED);
+            work.get().setModifiedBy(userRepository.findByUsername(principal.getName()).get().getId());
+            workRepository.save(work.get());
+        } else {
+            throw WorkException.notFound();
+        }
     }
 
-    public void getWorkAsPdf(Long workId, HttpServletResponse response) throws IOException {
+    public void getWorkAsPdf(Long workId, HttpServletResponse response) throws IOException, WorkException {
         Optional<Work> work = workRepository.findById(workId);
         if (work.isEmpty()) {
-            throw new NoSuchElementException();
+            throw WorkException.notFound();
         }
 
         String headerKey = "Content-Disposition";

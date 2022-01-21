@@ -2,10 +2,10 @@ package com.github.PublishInn.exceptions;
 
 public class UserException extends Exception{
 
-    private static final String USER_NOT_FOUND = "User not found.";
-    private static final String USERNAME_ALREADY_EXISTS = "Username already exists.";
-    private static final String EMAIL_ALREADY_EXISTS = "Email already exists.";
-    private static final String PASSWORD_NOT_MATCH = "Old password does not match.";
+    public static final String USER_NOT_FOUND = "exception.user.not_found";
+    public static final String PASSWORD_NOT_MATCH = "exception.user.password.not_match";
+    public static final String EMAIL_ALREADY_EXISTS = "exception.user.email.exists";
+    public static final String USERNAME_ALREADY_EXISTS = "exception.user.username.exists";
 
     public UserException (String message) {
         super(message);

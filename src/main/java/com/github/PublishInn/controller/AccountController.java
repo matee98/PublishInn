@@ -7,7 +7,9 @@ import com.github.PublishInn.dto.UserInfoDto;
 import com.github.PublishInn.exceptions.UserException;
 import com.github.PublishInn.service.AppUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -21,12 +23,20 @@ public class AccountController {
 
     @GetMapping("/info")
     public UserInfoDto getOwnAccountInfo(Principal principal) {
-        return userService.getUserAccountInfo(principal.getName());
+        try {
+            return userService.getUserAccountInfo(principal.getName());
+        } catch (UserException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/password/reset")
-    public void sendResetPasswordCode(@RequestBody UserEmailDto model) throws UserException {
-        userService.sendResetPasswordCode(model.getEmail());
+    public void sendResetPasswordCode(@RequestBody UserEmailDto model) {
+        try {
+            userService.sendResetPasswordCode(model.getEmail());
+        } catch (UserException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/password/reset/confirm")

@@ -3,6 +3,7 @@ package com.github.PublishInn.controller;
 import com.github.PublishInn.dto.WorkDetailsDto;
 import com.github.PublishInn.dto.WorkInfoDto;
 import com.github.PublishInn.dto.WorkSaveDto;
+import com.github.PublishInn.exceptions.UserException;
 import com.github.PublishInn.exceptions.WorkException;
 import com.github.PublishInn.service.WorkService;
 import com.github.PublishInn.validation.Username;
@@ -28,7 +29,11 @@ public class WorkController {
 
     @PostMapping
     public void saveWork(@RequestBody @Valid WorkSaveDto model, Principal principal) {
-        workService.saveWork(model, principal);
+        try {
+            workService.saveWork(model, principal);
+        } catch (UserException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @GetMapping("/moderator/all")
@@ -55,13 +60,21 @@ public class WorkController {
     @PatchMapping("/moderator/block/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void blockWorkById(@PathVariable Long id, Principal principal) {
-        workService.blockWorkById(id, principal);
+        try {
+            workService.blockWorkById(id, principal);
+        } catch (WorkException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PatchMapping("/moderator/unblock/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void unblockWorkById(@PathVariable Long id, Principal principal) {
-        workService.unblockWorkById(id, principal);
+        try {
+            workService.unblockWorkById(id, principal);
+        } catch (WorkException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @GetMapping()
@@ -77,7 +90,11 @@ public class WorkController {
 
     @GetMapping("/user/{username}")
     public List<WorkInfoDto> findWorkInfoByUsername(@PathVariable @Valid @Username String username) {
-        return workService.findWorksByUsername(username);
+        try {
+            return workService.findWorksByUsername(username);
+        } catch (UserException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @GetMapping("/search")
@@ -90,7 +107,11 @@ public class WorkController {
         try {
             return workService.findById(id, principal);
         } catch (WorkException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            if (Objects.equals(e.getMessage(), WorkException.ACCESS_FORBIDDEN)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            }
         }
     }
 
@@ -99,6 +120,10 @@ public class WorkController {
             produces = "application/pdf"
     )
     public void getAsPdf(@PathVariable Long id, HttpServletResponse response) throws IOException {
-        workService.getWorkAsPdf(id, response);
+        try {
+            workService.getWorkAsPdf(id, response);
+        } catch (WorkException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 }
