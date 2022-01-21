@@ -5,6 +5,7 @@ import com.github.PublishInn.dto.WorkInfoDto;
 import com.github.PublishInn.dto.WorkSaveDto;
 import com.github.PublishInn.exceptions.WorkException;
 import com.github.PublishInn.service.WorkService;
+import com.github.PublishInn.validation.Username;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -75,12 +76,12 @@ public class WorkController {
     }
 
     @GetMapping("/user/{username}")
-    public List<WorkInfoDto> findWorkInfoByUsername(@PathVariable String username) {
+    public List<WorkInfoDto> findWorkInfoByUsername(@PathVariable @Valid @Username String username) {
         return workService.findWorksByUsername(username);
     }
 
     @GetMapping("/search")
-    public List<WorkInfoDto> searchWorks(@RequestParam(value = "name") String name) {
+    public List<WorkInfoDto> searchWorks(@RequestParam(value = "name") @Valid @Username String name) {
         return workService.searchWorks(name);
     }
 

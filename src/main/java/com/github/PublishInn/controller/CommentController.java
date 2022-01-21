@@ -7,11 +7,13 @@ import com.github.PublishInn.exceptions.CommentException;
 import com.github.PublishInn.exceptions.UserException;
 import com.github.PublishInn.exceptions.WorkException;
 import com.github.PublishInn.service.CommentService;
+import com.github.PublishInn.validation.Username;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +39,7 @@ public class CommentController {
     }
 
     @GetMapping("/user/{username}")
-    public List<CommentDetailsDto> findAllByUsername(@PathVariable String username) {
+    public List<CommentDetailsDto> findAllByUsername(@PathVariable @Valid @Username String username) {
         try {
             return commentService.findAllByUsername(username);
         } catch (UserException e) {
@@ -52,7 +54,7 @@ public class CommentController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void addComment(@RequestBody NewCommentDto model, Principal principal) {
+    public void addComment(@RequestBody @Valid NewCommentDto model, Principal principal) {
         try {
             commentService.addComment(model, principal);
         } catch (WorkException e) {
@@ -64,7 +66,7 @@ public class CommentController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping
-    public void editComment(@RequestBody EditCommentDto model, Principal principal) {
+    public void editComment(@RequestBody @Valid EditCommentDto model, Principal principal) {
         try {
             commentService.editComment(model, principal);
         } catch (UserException e) {

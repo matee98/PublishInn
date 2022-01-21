@@ -30,7 +30,7 @@ public class AccountController {
     }
 
     @PostMapping("/password/reset/confirm")
-    public void resetPassword(@RequestBody ResetPasswordDto model) {
+    public void resetPassword(@RequestBody @Valid ResetPasswordDto model) {
         userService.resetPassword(model);
     }
 
