@@ -103,6 +103,9 @@ export default function AccountInfo() {
                     userRole: res.data.appUserRole,
                 });
             })
+            .catch(err => {
+                console.log(err.response)
+            })
     }, [])
 
     return(

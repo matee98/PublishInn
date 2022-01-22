@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Slf4j
 @AllArgsConstructor
@@ -38,7 +39,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 } catch (Exception e) {
                     log.error("Error logging in: {}", e.getMessage());
                     response.setHeader("error", e.getMessage());
-                    response.setStatus(FORBIDDEN.value());
+                    response.setStatus(UNAUTHORIZED.value());
                     Map<String, String> errors = new HashMap<>();
                     errors.put("error", e.getMessage());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);

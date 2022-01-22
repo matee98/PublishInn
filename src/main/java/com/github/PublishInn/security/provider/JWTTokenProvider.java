@@ -24,7 +24,8 @@ import static java.util.Arrays.stream;
 public class JWTTokenProvider {
     private final UserRepository userRepository;
     private final String JWT_SECRET_KEY = "ajs^@*sdalASHA@!#!#@FHdska73#$kdf";
-    private final long JWT_VALIDITY_TIME = 120;
+    private final long JWT_VALIDITY_TIME = 1;
+    private final long JWT_REFRESH_VALIDITY_TIME = 1440;
     private final String JWT_ISSUER = "publishinn-app";
     private final Algorithm ALGORITHM = Algorithm.HMAC256(JWT_SECRET_KEY.getBytes());
     private final JWTVerifier verifier = JWT.require(ALGORITHM).build();
@@ -56,7 +57,7 @@ public class JWTTokenProvider {
     public String getRefreshToken(AppUser user) {
         return JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JWT_VALIDITY_TIME * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + JWT_REFRESH_VALIDITY_TIME * 60 * 1000))
                 .withIssuer(JWT_ISSUER)
                 .sign(ALGORITHM);
     }
