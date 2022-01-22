@@ -17,11 +17,11 @@ import lombok.SneakyThrows;
 import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -156,11 +156,17 @@ public class AppUserService implements UserDetailsService {
             result = mapper.toUserShortProfileDto(user.get());
             List<Work> userWorks = user.get().getWorks();
             BigDecimal worksRatingSum = BigDecimal.ZERO;
+            int count = 0;
             for (Work work : userWorks) {
-                worksRatingSum = worksRatingSum.add(work.getRating());
+                if (work.getRating() != null) {
+                    worksRatingSum = worksRatingSum.add(work.getRating());
+                    count++;
+                }
             }
             result.setWorksCount(userWorks.size());
-            result.setRatingAverage(worksRatingSum.divide(BigDecimal.valueOf(userWorks.size())));
+            if (userWorks.size() != 0) {
+                result.setRatingAverage(worksRatingSum.divide(BigDecimal.valueOf(count), RoundingMode.HALF_UP));
+            }
         } else {
             throw UserException.notFound();
         }
