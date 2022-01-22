@@ -7,6 +7,7 @@ import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.OneTimeCode;
 import com.github.PublishInn.model.entity.Work;
 import com.github.PublishInn.model.entity.enums.AppUserRole;
+import com.github.PublishInn.model.entity.enums.WorkStatus;
 import com.github.PublishInn.model.entity.token.ConfirmationToken;
 import com.github.PublishInn.model.repository.OneTimeCodeRepository;
 import com.github.PublishInn.model.repository.UserRepository;
@@ -158,7 +159,7 @@ public class AppUserService implements UserDetailsService {
             BigDecimal worksRatingSum = BigDecimal.ZERO;
             int count = 0;
             for (Work work : userWorks) {
-                if (work.getRating() != null) {
+                if (work.getRating() != null && work.getStatus() == WorkStatus.ACCEPTED) {
                     worksRatingSum = worksRatingSum.add(work.getRating());
                     count++;
                 }

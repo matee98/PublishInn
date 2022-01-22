@@ -153,6 +153,7 @@ public class WorkService {
 
         return resultWorks
                 .stream()
+                .filter(work -> work.getStatus() == WorkStatus.ACCEPTED)
                 .map(work -> {
                     WorkInfoDto result = mapper.toWorkInfoDto(work);
                     result.setUsername(username);

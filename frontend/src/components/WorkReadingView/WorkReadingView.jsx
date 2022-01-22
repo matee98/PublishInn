@@ -250,7 +250,7 @@ export default function WorkReadingView() {
                             {localStorage.getItem("token") ?
                                 (blocked
                                     ?
-                                    <div className="float-start d-inline-flex">
+                                    <div className="mt-2 d-inline-flex">
                                         <p className="fs-6" style={{marginRight: "0.5rem"}}>Twoja ocena:
                                             <span className="fs-4 mx-1">{rating}</span>
                                         </p>
