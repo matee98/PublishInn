@@ -5,6 +5,7 @@ import axios from "axios";
 import {Link} from "react-router-dom";
 import BreadCrumb from "../partial/Breadcrumb";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 function UsersAccountsList() {
 
@@ -75,10 +76,10 @@ function UsersAccountsList() {
             .then(res => {
                 setData(res.data);
             })
-            .catch((err) => {
+            .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: err.message,
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })

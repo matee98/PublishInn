@@ -33,7 +33,7 @@ export default function SignUp() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Konto zostało zarejestrowane. Sprawdź swoją pocztę.",
+                    message: ResponseMessages.ACCOUNT_REGISTERED,
                     title: "Success"
                 })
                 setRegistered(true);

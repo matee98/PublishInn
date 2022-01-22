@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import WorksList from "../partial/WorksList/WorksList";
-import CategoryMenu from "../partial/CategoryMenu";
 import {Link} from "react-router-dom";
 
 export default function BrowseBlocked() {

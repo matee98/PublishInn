@@ -4,6 +4,7 @@ import axios from "axios";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {Link} from "react-router-dom";
 import BreadCrumb from "../partial/Breadcrumb";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 export default function SendResetPassword() {
     const [email, setEmail] = useState("");
@@ -24,14 +25,14 @@ export default function SendResetPassword() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Na podany adres e-mail została wysłana wiadomość z linkiem resetującym.",
+                    message: ResponseMessages.PASS_CODE_SENT,
                     title: "Success"
                 })
             })
             .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: "Coś poszło nie tak. Spróbuj ponownie później.",
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })

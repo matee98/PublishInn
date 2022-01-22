@@ -4,6 +4,7 @@ import axios from "axios";
 import {AppRoles} from "../helpers/AppRoles";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import BreadCrumb from "../partial/Breadcrumb";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 export default function EditAccount() {
     const { username } = useParams();
@@ -28,14 +29,14 @@ export default function EditAccount() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Zmiany zostały zapisane",
+                    message: ResponseMessages.CHANGES_SAVED,
                     title: "Success"
                 })
             })
             .catch(err => {
                 dispatch({
                     type: "ERROR",
-                    message: err.message,
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })

@@ -7,6 +7,7 @@ import {Button} from "react-bootstrap";
 import axios from "axios";
 import {useNotification} from "../Notifications/NotificationProvider";
 import {useDialogPermanentChange} from "../CriticalOperations/CriticalOperationsProvider";
+import {ResponseMessages} from "../../helpers/ResponseMessages";
 
 export default function CommentsList(props) {
     const [data, setData] = useState({...props.data});
@@ -51,7 +52,7 @@ export default function CommentsList(props) {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Komentarz został edytowany",
+                    message: ResponseMessages.COMMENT_ADDED,
                     title: "Success"
                 })
                 setCommentContent("")
@@ -61,7 +62,7 @@ export default function CommentsList(props) {
             .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: "Wystąpił błąd. Spróbuj ponownie później",
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })
@@ -77,7 +78,7 @@ export default function CommentsList(props) {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Komentarz został usunięty",
+                    message: ResponseMessages.COMMENT_DELETED,
                     title: "Success"
                 })
                 refreshData()
@@ -85,7 +86,7 @@ export default function CommentsList(props) {
             .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: "Wystąpił błąd. Spróbuj ponownie później",
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })
@@ -96,7 +97,7 @@ export default function CommentsList(props) {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Widoczność komentarza została zmieniona",
+                    message: ResponseMessages.COMMENT_HIDESHOW,
                     title: "Success"
                 })
                 refreshData()
@@ -104,7 +105,7 @@ export default function CommentsList(props) {
             .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: "Wystąpił błąd. Spróbuj ponownie później",
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })

@@ -5,6 +5,7 @@ import axios from "axios";
 import {dateConverter} from "../helpers/DateConverter";
 import WorksList from "../partial/WorksList/WorksList";
 import BreadCrumb from "../partial/Breadcrumb";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 export default function UserProfile() {
 
@@ -40,10 +41,10 @@ export default function UserProfile() {
                         role: res.data.userRole
                     })
                 })
-                .catch(err => {
+                .catch(() => {
                     dispatch({
                         type: "ERROR",
-                        message: err.message,
+                        message: ResponseMessages.ERROR,
                         title: "Error"
                     })
                 })

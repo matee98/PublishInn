@@ -4,6 +4,7 @@ import axios from "axios";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import React, {useState} from "react";
 import BreadCrumb from "../partial/Breadcrumb";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 export default function EmailConfirm() {
     const { token } = useParams()
@@ -18,7 +19,7 @@ export default function EmailConfirm() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Konto zostało potwierdzone. Możesz się zalogować.",
+                    message: ResponseMessages.ACCOUNT_CONFIRMED,
                     title: "Success"
                 })
                 setConfirmed(true)
@@ -26,7 +27,7 @@ export default function EmailConfirm() {
             .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: "Wystąpił bład. Spróbuj ponownie później",
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })

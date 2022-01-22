@@ -11,6 +11,7 @@ import {getCurrentUser} from "../helpers/GetCurrentUser";
 import MDEditor from "@uiw/react-md-editor";
 import CommentsList from "../partial/CommentsList/CommentsList";
 import BreadCrumb from "../partial/Breadcrumb";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 export default function WorkReadingView() {
     const { id } = useParams();
@@ -51,18 +52,27 @@ export default function WorkReadingView() {
                 .then(() => {
                     dispatch({
                         type: "SUCCESS",
-                        message: "Zmiany zostały zapisane",
+                        message: ResponseMessages.CHANGES_SAVED,
                         title: "Success"
                     })
                     setRating(newRating)
                     setBlocked(true)
                 })
                 .catch(err => {
-                    dispatch({
-                        type: "ERROR",
-                        message: err.message,
-                        title: "Error"
-                    })
+                    if (err.response.status === 409) {
+                        dispatch({
+                            type: "ERROR",
+                            message: ResponseMessages.RATE_OWN_WORK_TRY,
+                            title: "Error"
+                        })
+                    } else {
+                        dispatch({
+                            type: "ERROR",
+                            message: ResponseMessages.ERROR,
+                            title: "Error"
+                        })
+                    }
+                    setRating(0)
                 })
         } else {
             axios.put("/ratings", {
@@ -72,7 +82,7 @@ export default function WorkReadingView() {
                 .then(() => {
                     dispatch({
                         type: "SUCCESS",
-                        message: "Zmiany zostały zapisane",
+                        message: ResponseMessages.CHANGES_SAVED,
                         title: "Success"
                     })
                     setRating(newRating)
@@ -141,7 +151,7 @@ export default function WorkReadingView() {
             .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: "Wystąpił błąd. Spróbuj ponownie później",
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })
@@ -152,7 +162,7 @@ export default function WorkReadingView() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Utwór został zablokowany",
+                    message: ResponseMessages.WORK_BLOCKED,
                     title: "Success"
                 })
                 setWorkBlocked(true);
@@ -164,7 +174,7 @@ export default function WorkReadingView() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Utwór został odblokowany",
+                    message: ResponseMessages.WORK_UNBLOCKED,
                     title: "Success"
                 })
                 setWorkBlocked(false);
@@ -184,7 +194,7 @@ export default function WorkReadingView() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Komentarz został dodany",
+                    message: ResponseMessages.COMMENT_ADDED,
                     title: "Success"
                 })
                 setCommentContent("")
@@ -193,7 +203,7 @@ export default function WorkReadingView() {
             .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: "Wystąpił błąd. Spróbuj ponownie później",
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })

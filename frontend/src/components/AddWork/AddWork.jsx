@@ -1,7 +1,7 @@
 import {Button, Form, FormCheck} from "react-bootstrap";
 import React, {useState} from "react";
 import MDEditor from '@uiw/react-md-editor';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import BreadCrumb from "../partial/Breadcrumb";
 import axios from "axios";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
@@ -13,7 +13,7 @@ export default function AddWork() {
     const [category, setCategory] = useState("");
     const [genre, setGenre] = useState("");
     const [content, setContent] = useState("");
-    const [comDis, setComDis] = useState(false);
+    const [added, setAdded] = useState(false);
 
     const dispatch = useNotification();
     const dispatchDialog = useDialogPermanentChange();
@@ -48,14 +48,19 @@ export default function AddWork() {
                     message: ResponseMessages.CHANGES_SAVED,
                     title: "Success"
                 })
+                setAdded(true)
             })
-            .catch(err => {
+            .catch(() => {
                 dispatch({
                     type: "ERROR",
                     message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })
+    }
+
+    if (added) {
+        return <Redirect to="/works/prose" />
     }
 
     return(
@@ -99,19 +104,6 @@ export default function AddWork() {
                     height="550"
                 />
             </Form.Group>
-            <FormCheck className="mb-2">
-                <input
-                    className="form-check-input mx-1"
-                    type="checkbox"
-                    id="comDisCheck"
-                    value={comDis}
-                    onChange={() => setComDis(!comDis)}/>
-                <label
-                    className="form-check-label"
-                    for="comDisCheck">
-                    Wyłącz możliwość komentowania
-                </label>
-            </FormCheck>
             <Button
                 onClick={() => dispatchDialog({
                     callbackOnSave:() => {

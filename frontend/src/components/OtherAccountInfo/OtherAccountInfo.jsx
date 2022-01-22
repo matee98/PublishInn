@@ -4,6 +4,7 @@ import axios from "axios";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {useDialogPermanentChange} from "../partial/CriticalOperations/CriticalOperationsProvider";
 import BreadCrumb from "../partial/Breadcrumb";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 export default function OtherAccountInfo() {
     const { username } = useParams();
@@ -37,8 +38,15 @@ export default function OtherAccountInfo() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Konto zostało zablokowane",
+                    message: ResponseMessages.ACCOUNT_BLOCKED,
                     title: "Success"
+                })
+            })
+            .catch(() => {
+                dispatch({
+                    type: "ERROR",
+                    message: ResponseMessages.ERROR,
+                    title: "Error"
                 })
             })
     }
@@ -48,8 +56,15 @@ export default function OtherAccountInfo() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Konto zostało odblokowane",
+                    message: ResponseMessages.ACCOUNT_UNBLOCKED,
                     title: "Success"
+                })
+            })
+            .catch(() => {
+                dispatch({
+                    type: "ERROR",
+                    message: ResponseMessages.ERROR,
+                    title: "Error"
                 })
             })
     }

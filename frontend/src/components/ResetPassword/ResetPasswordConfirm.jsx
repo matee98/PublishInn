@@ -4,6 +4,7 @@ import axios from "axios";
 import {Button, Form} from "react-bootstrap";
 import {Link, Redirect, useParams} from "react-router-dom";
 import BreadCrumb from "../partial/Breadcrumb";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 export default function ResetPasswordConfirm() {
 
@@ -30,7 +31,7 @@ export default function ResetPasswordConfirm() {
             .then(() => {
                 dispatch({
                     type: "SUCCESS",
-                    message: "Hasło zostało zmienione.",
+                    message: ResponseMessages.PASSWORD_CHANGED,
                     title: "Success"
                 })
                 setChanged(true);
@@ -38,7 +39,7 @@ export default function ResetPasswordConfirm() {
             .catch(() => {
                 dispatch({
                     type: "ERROR",
-                    message: "Coś poszło nie tak. Spróbuj ponownie później.",
+                    message: ResponseMessages.ERROR,
                     title: "Error"
                 })
             })
