@@ -200,6 +200,19 @@ public class WorkService {
         response.setHeader(headerKey, headerValue);
 
         Document document = Jsoup.parse(convertToHtml("# " + work.get().getTitle() + "\n" + work.get().getText()), "UTF-8");
+        document.head().append("""
+                <meta charset='UTF-8' /><style>
+                            @font-face {
+                                font-family: 'source-sans';
+                                font-style: normal;
+                                font-weight: 150;
+                                src: url(../../main/resources/fonts/SourceSans3-Regular.ttf);
+                                -fs-font-subset: complete-font;
+                            }
+                            body {
+                                font-family: "source-sans";
+                            }
+                        </style>""");
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
 
         try (OutputStream os = response.getOutputStream()) {
@@ -209,7 +222,6 @@ public class WorkService {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.toStream(os);
             builder.withW3cDocument(new W3CDom().fromJsoup(document), baseUrl);
-            builder.useFont(new File(getClass().getClassLoader().getResource("fonts/LiberationSerif-Regular.ttf").getFile()), "serif");
             builder.run();
         }
 
