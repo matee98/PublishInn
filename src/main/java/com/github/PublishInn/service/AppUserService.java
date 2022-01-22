@@ -196,4 +196,14 @@ public class AppUserService implements UserDetailsService {
         user.setPassword(bCryptPasswordEncoder.encode(model.getNewPassword()));
         userRepository.save(user);
     }
+
+    public void selfChangeEmail(UserEmailDto model, Principal principal) throws UserException {
+        AppUser user = userRepository.findByUsername(principal.getName()).orElseThrow(UserException::notFound);
+        Optional<AppUser> byEmail = userRepository.findByEmail(model.getEmail());
+        if (byEmail.isPresent()) {
+            throw UserException.emailExists();
+        }
+        user.setEmail(model.getEmail());
+        userRepository.save(user);
+    }
 }

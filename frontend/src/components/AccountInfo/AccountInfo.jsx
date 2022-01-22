@@ -5,6 +5,7 @@ import {useNotification} from "../partial/Notifications/NotificationProvider";
 import {Link} from "react-router-dom";
 import BreadCrumb from "../partial/Breadcrumb";
 import {ResponseMessages} from "../helpers/ResponseMessages";
+import {useDialogPermanentChange} from "../partial/CriticalOperations/CriticalOperationsProvider";
 
 export default function AccountInfo() {
     const [data, setData] = useState({
@@ -24,6 +25,7 @@ export default function AccountInfo() {
     const [newEmail, setNewEmail] = useState("");
 
     const dispatch = useNotification();
+    const dispatchDialog = useDialogPermanentChange();
 
     function validatePasswordForm() {
         return oldPassword.length > 0
@@ -62,7 +64,34 @@ export default function AccountInfo() {
     }
 
     const handleEmailChange = () => {
-
+        axios.put("/account/email/change", {
+            email: newEmail
+        })
+            .then(() => {
+                dispatch({
+                    type: "SUCCESS",
+                    message: ResponseMessages.CHANGES_SAVED,
+                    title: "Success"
+                })
+                setEditablePart("")
+                setEditable(false)
+                setNewEmail("")
+            })
+            .catch((err) => {
+                if (err.response.status === 409) {
+                    dispatch({
+                        type: "ERROR",
+                        message: ResponseMessages.EMAIL_EXISTS,
+                        title: "Error"
+                    })
+                } else {
+                    dispatch({
+                        type: "ERROR",
+                        message: ResponseMessages.ERROR,
+                        title: "Error"
+                    })
+                }
+            })
     }
 
     useEffect(() => {
@@ -138,7 +167,13 @@ export default function AccountInfo() {
                                         onChange={(event => setRepeatedPassword(event.target.value))}
                                     />
                                 </Form.Group>
-                                <Button onClick={handlePasswordChange} className="mt-2" block size="lg" disabled={!validatePasswordForm()}>
+                                <Button onClick={() => {
+                                    dispatchDialog({
+                                        callbackOnSave: () => {
+                                            handlePasswordChange()
+                                        }
+                                    })
+                                }} className="mt-2" block size="lg" disabled={!validatePasswordForm()}>
                                     Potwierdź
                                 </Button>
                             </Form>
@@ -153,7 +188,13 @@ export default function AccountInfo() {
                                         onChange={(event => setNewEmail(event.target.value))}
                                     />
                                 </Form.Group>
-                                <Button onClick={handleEmailChange} className="mt-2" block size="lg" disabled={!validateEmailForm()}>
+                                <Button onClick={() => {
+                                    dispatchDialog({
+                                        callbackOnSave: () => {
+                                            handleEmailChange()
+                                        }
+                                    })
+                                }} className="mt-2" block size="lg" disabled={!validateEmailForm()}>
                                     Potwierdź
                                 </Button>
                             </Form>
