@@ -205,7 +205,7 @@ public class WorkService {
                             @font-face {
                                 font-family: 'source-sans';
                                 font-style: normal;
-                                font-weight: 150;
+                                font-weight: 300;
                                 src: url(../../main/resources/fonts/SourceSans3-Regular.ttf);
                                 -fs-font-subset: complete-font;
                             }
