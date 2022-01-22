@@ -20,8 +20,6 @@ axios.interceptors.response.use(response => {
         if (error.response.status === 401 && error.config && !originalReq._retry) {
             originalReq._retry = true
 
-            console.log("refreshing...")
-
             let res = fetch("http://localhost:8080/api/token/refresh", {
                 method: "GET",
                 headers: {
@@ -39,7 +37,7 @@ axios.interceptors.response.use(response => {
             resolve(res);
         }
 
-        return Promise.reject(error)
+        throw error;
     })
 })
 

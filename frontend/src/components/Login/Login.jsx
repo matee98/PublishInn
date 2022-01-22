@@ -5,6 +5,7 @@ import "./Login.css"
 import {Link} from "react-router-dom";
 import {useNotification} from "../partial/Notifications/NotificationProvider";
 import BreadCrumb from "../partial/Breadcrumb";
+import {ResponseMessages} from "../helpers/ResponseMessages";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -32,24 +33,18 @@ function Login() {
             .then((res) => {
                 localStorage.setItem('token', res.data.access_token)
                 localStorage.setItem('refreshToken', res.data.refresh_token)
-                handleRefresh();
                 dispatch({
                     type: "SUCCESS",
-                    message: "Zalogowano pomyślnie",
+                    message: ResponseMessages.LOGIN_SUCCESS,
                     title: "Success"
                 })
+                handleRefresh();
             })
-            .catch(err => {
-                if (err.response) {
+            .catch((err) => {
+                if (err.response.status === 403) {
                     dispatch({
                         type: "ERROR",
-                        message: "Dane logowania są niepoprawne lub konto nie jest aktywne",
-                        title: "Error"
-                    });
-                } else if (err.request) {
-                    dispatch({
-                        type: "ERROR",
-                        message: err.message,
+                        message: ResponseMessages.LOGIN_FAILED,
                         title: "Error"
                     })
                 }

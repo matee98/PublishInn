@@ -24,7 +24,7 @@ import static java.util.Arrays.stream;
 public class JWTTokenProvider {
     private final UserRepository userRepository;
     private final String JWT_SECRET_KEY = "ajs^@*sdalASHA@!#!#@FHdska73#$kdf";
-    private final long JWT_VALIDITY_TIME = 1;
+    private final long JWT_VALIDITY_TIME = 15;
     private final long JWT_REFRESH_VALIDITY_TIME = 1440;
     private final String JWT_ISSUER = "publishinn-app";
     private final Algorithm ALGORITHM = Algorithm.HMAC256(JWT_SECRET_KEY.getBytes());
