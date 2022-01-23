@@ -12,12 +12,14 @@ import com.github.PublishInn.model.repository.WorkRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
 @Component
 @AllArgsConstructor
+@Profile("test")
 public class DataLoader implements ApplicationRunner {
     private final UserRepository userRepository;
     private final WorkRepository workRepository;
@@ -25,13 +27,13 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        AppUser admin = new AppUser("matz98", "matix3578@gmail.com",
+        AppUser admin = new AppUser("matz98", "matz98@edu.pl",
                 "$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK", AppUserRole.ADMIN);
         admin.setEnabled(true);
         AppUser user = new AppUser("user", "matt@edu.pl",
                 "$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK", AppUserRole.USER);
         user.setEnabled(true);
-        AppUser moderator = new AppUser("moderator", "matz@edu2.pl",
+        AppUser moderator = new AppUser("moderator", "matz@edu.pl",
                 "$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK", AppUserRole.MODERATOR);
         moderator.setEnabled(true);
         userRepository.save(admin);

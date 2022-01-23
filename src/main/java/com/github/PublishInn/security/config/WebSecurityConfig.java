@@ -37,22 +37,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), tokenProvider);
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http
-                .csrf().disable();
+                .csrf().disable()
+                .headers().frameOptions().disable();
         http
                 .cors();
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
                 .authorizeRequests()
-                .antMatchers("/api/registration/**", "/api/login", "/api/token/refresh").permitAll()
+                .antMatchers("/api/registration/**", "/api/login", "/api/token/refresh", "/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/profile/**").permitAll()
-                .antMatchers("/api/users/admin").hasAuthority("ADMIN")
+                .antMatchers("/api/users/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/api/works/moderator/**").hasAuthority("MODERATOR")
                 .antMatchers("/api/comments/changeVisibility/**").hasAuthority("MODERATOR")
+                .antMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/works/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/works/convert/**").permitAll()
                 .antMatchers("/api/account/password/reset/**").permitAll()
-                .antMatchers("/api/comments/**").permitAll()
                 .anyRequest().authenticated();
         http
                 .addFilter(customAuthenticationFilter);
