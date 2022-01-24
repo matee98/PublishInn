@@ -197,7 +197,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+							<outputDirectory>${project.build.outputDirectory}/public</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${frontend-src-dir}/build</directory>
