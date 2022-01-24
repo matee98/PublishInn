@@ -7,6 +7,6 @@ public class EmailBuilder {
     }
 
     public static String buildResetPasswordEmail(String name, String link) {
-        return "Witaj, " + name + ". Kliknij w poniższy link aby zresetować swoje hasło: \n" + link;
+        return "Witaj, " + name + ". Kliknij w poniższy link aby zresetować swoje hasło:  \n" + link;
     }
 }
