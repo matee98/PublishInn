@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
 
-    private static final String RESET_PASSWORD_LINK = "http://localhost:8080/password/reset/confirm/";
+    private static final String RESET_PASSWORD_LINK = "https://publish-inn.herokuapp.com/password/reset/confirm/";
 
     private final static int CONFIRMATION_TOKEN_EXPIRATION_TIME = 30;
 

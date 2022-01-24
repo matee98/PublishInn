@@ -22,7 +22,7 @@ public class RegistrationService {
     private static final String EMAIL_ALREADY_CONFIRMED_MSG = "Email has been already confirmed";
     private static final String TOKEN_EXPIRED_MSG = "Token has been expired already";
 
-    private static final String CONFIRMATION_LINK = "http://localhost:8080/register/confirm/";
+    private static final String CONFIRMATION_LINK = "https://publish-inn.herokuapp.com/register/confirm/";
 
     private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
