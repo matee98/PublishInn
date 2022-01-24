@@ -24,7 +24,7 @@ export default function SignUp() {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        await instance.post('registration/',
+        instance.post('registration/',
             {
                 username,
                 email,
