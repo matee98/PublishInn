@@ -9,7 +9,7 @@ import NotificationProvider from "./components/partial/Notifications/Notificatio
 import CriticalOperationProvider from "./components/partial/CriticalOperations/CriticalOperationsProvider";
 import "antd/dist/antd.css"
 
-axios.defaults.baseURL = "https://publish-inn.herokuapp.com/api";
+axios.defaults.baseURL = "https://publish-inn.herokuapp.com/api/";
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
 
 axios.interceptors.response.use(response => {

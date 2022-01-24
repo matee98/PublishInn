@@ -170,7 +170,7 @@
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>install</arguments>
+							<arguments>install --no-audit</arguments>
 						</configuration>
 					</execution>
 					<execution>
@@ -180,7 +180,7 @@
 						</goals>
 						<phase>prepare-package</phase>
 						<configuration>
-							<arguments>build</arguments>
+							<arguments>run build</arguments>
 						</configuration>
 					</execution>
 				</executions>
@@ -197,11 +197,11 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.outputDirectory}/public</outputDirectory>
+							<outputDirectory>${project.build.directory}/classes/public</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${frontend-src-dir}/build</directory>
-									<filtering>false</filtering>
+									<directory>${frontend.directory.build}</directory>
+									<filtering>true</filtering>
 								</resource>
 							</resources>
 						</configuration>
