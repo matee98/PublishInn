@@ -13,11 +13,11 @@ DROP SEQUENCE IF EXISTS user_sequence;
 DROP SEQUENCE IF EXISTS work_sequence;
 
 CREATE SEQUENCE code_sequence START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE comment_sequence START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE rating_sequence START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE comment_sequence START WITH 5 INCREMENT BY 1;
+CREATE SEQUENCE rating_sequence START WITH 7 INCREMENT BY 1;
 CREATE SEQUENCE token_sequence START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE user_sequence START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE work_sequence START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE user_sequence START WITH 4 INCREMENT BY 1;
+CREATE SEQUENCE work_sequence START WITH 4 INCREMENT BY 1;
 
 create table app_user (
       id bigint not null,
@@ -109,9 +109,9 @@ alter table one_time_code
 
 insert into app_user (created_on, version, app_user_role, email, enabled, locked, password, username, id)
 values
-    (now(), 0, 'ADMIN', 'admin@edu.pl', true, false, '$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK', 'admin', user_sequence.nextval),
-    (now(), 0, 'USER', 'matz@edu.pl', true, false, '$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK', 'user', user_sequence.nextval),
-    (now(), 0, 'ADMIN', 'moderator@edu.pl', true, false, '$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK', 'moderator', user_sequence.nextval);
+    (now(), 0, 'ADMIN', 'admin@edu.pl', true, false, '$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK', 'admin', 1),
+    (now(), 0, 'USER', 'matz@edu.pl', true, false, '$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK', 'user', 2),
+    (now(), 0, 'ADMIN', 'moderator@edu.pl', true, false, '$2a$10$zeO42jMBl3pI2hj8Ylp8p.Kds5UrQ80Sh30Bg0MmiCKPpoTGvlDjK', 'moderator', 3);
 
 insert into work
 (created_by, created_on, modified_by, modified_on, version, rating, status, text, title, type, user_id, id)
@@ -126,7 +126,7 @@ values
      'et magnis dis parturient montes, nascetur ridiculus mus. In eu aliquam dolor, ac ultricies sapien. ' ||
      'Pellentesque vitae elit eget tellus pellentesque pretium vel vitae neque. In cursus odio ut odio pulvinar, eu ' ||
      'vestibulum tellus bibendum. Donec eget turpis consectetur, vulputate neque tempor, tempus nisi.',
-     'Test 1', 'FANTASY', 2, work_sequence.nextval),
+     'Test 1', 'FANTASY', 2, 1),
     (2, now(), null, null, 0, 7.00, 'ACCEPTED',
      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus placerat nec metus quis suscipit. ' ||
      'Aenean dictum tempus nibh in consectetur. Etiam ut lobortis elit. Sed sit amet lectus et sem euismod molestie non at eros. ' ||
@@ -137,7 +137,7 @@ values
      'et magnis dis parturient montes, nascetur ridiculus mus. In eu aliquam dolor, ac ultricies sapien. ' ||
      'Pellentesque vitae elit eget tellus pellentesque pretium vel vitae neque. In cursus odio ut odio pulvinar, eu ' ||
      'vestibulum tellus bibendum. Donec eget turpis consectetur, vulputate neque tempor, tempus nisi.',
-     'Test 1', 'FANTASY', 2, work_sequence.nextval),
+     'Test 1', 'FANTASY', 2, 2),
     (2, now(), null, null, 0, 3.50, 'ACCEPTED',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus placerat nec metus quis suscipit. ' ||
     'Aenean dictum tempus nibh in consectetur. Etiam ut lobortis elit. Sed sit amet lectus et sem euismod molestie non at eros. ' ||
@@ -148,23 +148,23 @@ values
     'et magnis dis parturient montes, nascetur ridiculus mus. In eu aliquam dolor, ac ultricies sapien. ' ||
     'Pellentesque vitae elit eget tellus pellentesque pretium vel vitae neque. In cursus odio ut odio pulvinar, eu ' ||
     'vestibulum tellus bibendum. Donec eget turpis consectetur, vulputate neque tempor, tempus nisi.',
-    'Kryminał', 'CRIME', 2, work_sequence.nextval);
+    'Kryminał', 'CRIME', 2, 3);
 
 insert into comment (created_by, created_on, modified_by, modified_on, version, text, user_id, visible, work_id, id)
 values
-    (1, now(), null, null, 0, 'Bardzo fajne.', 1, true, 1, comment_sequence.nextval),
-    (2, now(), null, null, 0, 'Może być.', 2, true, 1, comment_sequence.nextval),
-    (2, now(), null, null, 0, 'Słabe.', 2, true, 3, comment_sequence.nextval),
-    (2, now(), null, null, 0, 'Beznadzieja. Naucz się pisać.', 2, false, 3, comment_sequence.nextval);
+    (1, now(), null, null, 0, 'Bardzo fajne.', 1, true, 1, 1),
+    (2, now(), null, null, 0, 'Może być.', 2, true, 1, 2),
+    (2, now(), null, null, 0, 'Słabe.', 2, true, 3, 3),
+    (2, now(), null, null, 0, 'Beznadzieja. Naucz się pisać.', 2, false, 3, 4);
 
 insert into rating (id, created_by, created_on, modified_by, modified_on, version, rate, user_id, work_id)
 values
-    (rating_sequence.nextval, 1, now(), null, null, 0, 7, 1, 1),
-    (rating_sequence.nextval, 1, now(), null, null, 0, 8, 3, 1),
-    (rating_sequence.nextval, 1, now(), null, null, 0, 1, 2, 3),
-    (rating_sequence.nextval, 1, now(), null, null, 0, 6, 1, 2),
-    (rating_sequence.nextval, 1, now(), null, null, 0, 8, 3, 2),
-    (rating_sequence.nextval, 1, now(), null, null, 0, 6, 2, 3)
+    (1, 1, now(), null, null, 0, 7, 1, 1),
+    (2, 1, now(), null, null, 0, 8, 3, 1),
+    (3, 1, now(), null, null, 0, 1, 2, 3),
+    (4, 1, now(), null, null, 0, 6, 1, 2),
+    (5, 1, now(), null, null, 0, 8, 3, 2),
+    (6, 1, now(), null, null, 0, 6, 2, 3);
 
 
 
