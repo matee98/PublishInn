@@ -9,7 +9,7 @@ import NotificationProvider from "./components/partial/Notifications/Notificatio
 import CriticalOperationProvider from "./components/partial/CriticalOperations/CriticalOperationsProvider";
 import "antd/dist/antd.css"
 
-axios.defaults.baseURL = "http://localhost:8080/api/";
+axios.defaults.baseURL = "https://publish-inn.herokuapp.com/api";
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
 
 axios.interceptors.response.use(response => {
@@ -20,7 +20,7 @@ axios.interceptors.response.use(response => {
         if (error.response.status === 401 && error.config && !originalReq._retry) {
             originalReq._retry = true
 
-            let res = fetch("http://localhost:8080/api/token/refresh", {
+            let res = fetch("https://publish-inn.herokuapp.com/api/token/refresh", {
                 method: "GET",
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('refreshToken')
