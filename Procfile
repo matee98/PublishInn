@@ -1,1 +1,0 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/PublishInn-0.9.5-SNAPSHOT.jar
