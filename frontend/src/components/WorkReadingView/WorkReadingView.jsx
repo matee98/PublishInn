@@ -183,7 +183,7 @@ export default function WorkReadingView() {
 
     const handleDownloadPdf = () => {
         const FileSaver = require('file-saver');
-        FileSaver.saveAs(`http://localhost:8080/api/works/convert/pdf/${id}`, `${data.title}_${data.username}.pdf`)
+        FileSaver.saveAs(`https://publish-inn.herokuapp.com/api/works/convert/pdf/${id}`, `${data.title}_${data.username}.pdf`)
     }
 
     const handleCommentAdd = () => {
