@@ -14,7 +14,7 @@ public class WorkControllerTests {
     private static String token;
 
     @BeforeAll
-    static void setup() throws JSONException {
+    static void setup() {
         RestAssured.baseURI = "http://localhost:8080/api/works/";
         token = AuthenticationHelpers.getToken("moderator", "zaq1@WSX");
     }

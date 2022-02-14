@@ -1,12 +1,12 @@
 package com.github.PublishInn.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
+@AllArgsConstructor
 public class NewRatingDto {
     @NotNull
     private Long workId;

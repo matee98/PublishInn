@@ -3,14 +3,15 @@ package com.github.PublishInn.unitTests.repository;
 import com.github.PublishInn.model.entity.AppUser;
 import com.github.PublishInn.model.entity.enums.AppUserRole;
 import com.github.PublishInn.model.repository.UserRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -36,16 +37,23 @@ class UserRepositoryTest {
     void findByEmail() {
         AppUser user = userRepository.findByEmail("john@example.com").orElseThrow();
 
-        assertThat(user).isEqualTo(appUser);
+        assertThat(user.getUsername()).isEqualTo(appUser.getUsername());
+        assertThat(user.getPassword()).isEqualTo(appUser.getPassword());
+        assertThat(user.getEmail()).isEqualTo(appUser.getEmail());
+        assertThat(user.isLocked()).isEqualTo(appUser.isLocked());
         assertThat(user.getCreatedOn()).isBefore(LocalDateTime.now());
         assertThat(user.getId()).isNotNull();
+        assertThat(user.getModifiedOn()).isNull();
+        assertThat(user.getVersion()).isEqualTo(0);
     }
 
     @Test
     void findByUsername() {
         AppUser user = userRepository.findByUsername("john1223").orElseThrow();
 
-        assertThat(user).isEqualTo(appUser);
+        assertThat(user.getUsername()).isEqualTo(appUser.getUsername());
+        assertThat(user.getPassword()).isEqualTo(appUser.getPassword());
+        assertThat(user.getEmail()).isEqualTo(appUser.getEmail());
         assertThat(user.getCreatedOn()).isBefore(LocalDateTime.now());
         assertThat(user.getId()).isNotNull();
     }
