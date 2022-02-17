@@ -34,7 +34,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void findByEmail() {
+    void findByEmailTest() {
         AppUser user = userRepository.findByEmail("john@example.com").orElseThrow();
 
         assertThat(user.getUsername()).isEqualTo(appUser.getUsername());
@@ -48,7 +48,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void findByUsername() {
+    void findByUsernameTest() {
         AppUser user = userRepository.findByUsername("john1223").orElseThrow();
 
         assertThat(user.getUsername()).isEqualTo(appUser.getUsername());
