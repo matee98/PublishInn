@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class WorkControllerTests {
+class WorkControllerTests {
 
     private static String token;
 
@@ -20,7 +20,7 @@ public class WorkControllerTests {
     }
 
     @Test
-    public void successfulFindAll() throws JSONException {
+    void successfulFindAll() throws JSONException {
         Response result = RestAssured.get();
         result.then()
                 .statusCode(200);
@@ -28,29 +28,29 @@ public class WorkControllerTests {
         JSONArray array = new JSONArray(result.body().asString());
         JSONObject object = new JSONObject(array.get(0).toString());
 
-        Assertions.assertEquals(object.get("id"), 1);
-        Assertions.assertEquals(object.get("title"), "Przykład1");
-        Assertions.assertEquals(object.get("username"), "user");
-        Assertions.assertEquals(object.get("type"), "FANTASY");
+        Assertions.assertEquals(1, object.get("id"));
+        Assertions.assertEquals("Przykład1", object.get("title"));
+        Assertions.assertEquals("user", object.get("username"));
+        Assertions.assertEquals("FANTASY", object.get("type"));
     }
 
     @Test
-    public void successfulGetById() throws JSONException {
+    void successfulGetById() throws JSONException {
         Response result = RestAssured.get("details/2");
         result.then()
                 .assertThat()
                 .statusCode(200);
         var obj = new JSONObject(result.body().asString());
 
-        Assertions.assertEquals(obj.get("username"), "user");
-        Assertions.assertEquals(obj.get("rating"), 8.27);
-        Assertions.assertEquals(obj.get("type"), "OTHER");
-        Assertions.assertEquals(obj.get("title"), "Przykład2");
-        Assertions.assertEquals(obj.get("status"), "ACCEPTED");
+        Assertions.assertEquals("user", obj.get("username"));
+        Assertions.assertEquals(8.27, obj.get("rating"));
+        Assertions.assertEquals("OTHER", obj.get("type"));
+        Assertions.assertEquals("Przykład2", obj.get("title"));
+        Assertions.assertEquals("ACCEPTED", obj.get("status"));
     }
 
     @Test
-    public void unsuccessfulGetById() {
+    void unsuccessfulGetById() {
         Response result = RestAssured.get("details/21");
         result.then()
                 .assertThat()
@@ -58,7 +58,7 @@ public class WorkControllerTests {
     }
 
     @Test
-    public void successfulGetWorksByUsername() throws JSONException {
+    void successfulGetWorksByUsername() throws JSONException {
         Response result = RestAssured.get("user/user");
         result.then()
                 .assertThat()
@@ -66,16 +66,16 @@ public class WorkControllerTests {
         JSONArray array = new JSONArray(result.body().asString());
         JSONObject object = new JSONObject(array.get(1).toString());
 
-        Assertions.assertEquals(array.length(), 2);
-        Assertions.assertEquals(object.get("id"), 2);
-        Assertions.assertEquals(object.get("title"), "Przykład2");
-        Assertions.assertEquals(object.get("username"), "user");
-        Assertions.assertEquals(object.get("type"), "OTHER");
-        Assertions.assertEquals(object.get("rating"), 8.27);
+        Assertions.assertEquals(2, array.length());
+        Assertions.assertEquals(2, object.get("id"));
+        Assertions.assertEquals("Przykład2", object.get("title"));
+        Assertions.assertEquals("user", object.get("username"));
+        Assertions.assertEquals("OTHER", object.get("type"));
+        Assertions.assertEquals(8.27, object.get("rating"));
     }
 
     @Test
-    public void successfulSaveWork() throws JSONException {
+    void successfulSaveWork() throws JSONException {
         Response result = RestAssured.get();
         result.then()
                 .statusCode(200);

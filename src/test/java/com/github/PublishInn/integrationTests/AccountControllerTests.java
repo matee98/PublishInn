@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class AccountControllerTests {
+class AccountControllerTests {
     private static String token;
 
     @BeforeAll
@@ -27,10 +27,10 @@ public class AccountControllerTests {
         JSONObject obj = new JSONObject(result.body().asString());
 
         result.then().statusCode(200);
-        Assertions.assertEquals(obj.get("username"), "user");
-        Assertions.assertEquals(obj.get("email"), "matt@edu.pl");
+        Assertions.assertEquals("user", obj.get("username"));
+        Assertions.assertEquals("matt@edu.pl", obj.get("email"));
         Assertions.assertEquals(obj.get("appUserRole"), AppUserRole.USER.toString());
-        Assertions.assertEquals(obj.get("locked"), false);
-        Assertions.assertEquals(obj.get("enabled"), true);
+        Assertions.assertEquals(false, obj.get("locked"));
+        Assertions.assertEquals(true, obj.get("enabled"));
     }
 }
