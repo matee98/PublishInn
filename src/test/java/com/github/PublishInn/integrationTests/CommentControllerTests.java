@@ -9,15 +9,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class CommentControllerTests {
+class CommentControllerTests {
     private static String userToken;
-    private static String modToken;
 
     @BeforeAll
     static void setup() {
         RestAssured.baseURI = "http://localhost:8080/api/comments/";
         userToken = AuthenticationHelpers.getToken("user", "zaq1@WSX");
-        modToken = AuthenticationHelpers.getToken("moderator", "zaq1@WSX");
     }
 
     @Test
@@ -29,11 +27,11 @@ public class CommentControllerTests {
         JSONArray array = new JSONArray(result.body().asString());
         JSONObject object = new JSONObject(array.get(0).toString());
 
-        Assertions.assertEquals(object.get("id"), 1);
-        Assertions.assertEquals(object.get("username"), "user");
-        Assertions.assertEquals(object.get("workId"), 1);
-        Assertions.assertEquals(object.get("text"), "Bardzo fajne. Polecam");
-        Assertions.assertEquals(object.get("visible"), true);
+        Assertions.assertEquals(1, object.get("id"));
+        Assertions.assertEquals("user", object.get("username"));
+        Assertions.assertEquals(1, object.get("workId"));
+        Assertions.assertEquals("Bardzo fajne. Polecam", object.get("text"));
+        Assertions.assertEquals(true, object.get("visible"));
     }
 
     @Test
@@ -43,11 +41,11 @@ public class CommentControllerTests {
                 .statusCode(200);
         JSONObject obj = new JSONObject(result.body().asString());
 
-        Assertions.assertEquals(obj.get("id"), 2);
-        Assertions.assertEquals(obj.get("username"), "matz98");
-        Assertions.assertEquals(obj.get("workId"), 1);
-        Assertions.assertEquals(obj.get("text"), "Całkiem w porządku");
-        Assertions.assertEquals(obj.get("visible"), true);
+        Assertions.assertEquals(2, obj.get("id"));
+        Assertions.assertEquals("matz98", obj.get("username"));
+        Assertions.assertEquals(1, obj.get("workId"));
+        Assertions.assertEquals("Całkiem w porządku", obj.get("text"));
+        Assertions.assertEquals(true, obj.get("visible"));
     }
 
     @Test
@@ -92,11 +90,11 @@ public class CommentControllerTests {
                 .statusCode(200);
         JSONObject obj = new JSONObject(result3.body().asString());
 
-        Assertions.assertEquals(obj.get("id"), 3);
-        Assertions.assertEquals(obj.get("username"), "user");
-        Assertions.assertEquals(obj.get("workId"), 1);
-        Assertions.assertEquals(obj.get("text"), "Zmieniony tekst");
-        Assertions.assertEquals(obj.get("visible"), true);
+        Assertions.assertEquals(3, obj.get("id"));
+        Assertions.assertEquals("user", obj.get("username"));
+        Assertions.assertEquals(1, obj.get("workId"));
+        Assertions.assertEquals("Zmieniony tekst", obj.get("text"));
+        Assertions.assertEquals(true, obj.get("visible"));
 
         //usunięcie
         Response deleteResponse = request.delete("/delete/3");
