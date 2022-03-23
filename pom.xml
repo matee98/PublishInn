@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.github</groupId>
 	<artifactId>PublishInn</artifactId>
-	<version>0.9.5-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>PublishInn</name>
 	<description>Web app for publishing one&apos;s own literary works.</description>
 	<properties>
